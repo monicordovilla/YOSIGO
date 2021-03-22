@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "32273505683",
+    "firebase_url": "https://actividades-vale-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "actividades-vale",
+    "storage_bucket": "actividades-vale.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32273505683:android:41c3b77fcb84fd2854dc66",
+        "android_client_info": {
+          "package_name": "com.example.app_pfg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32273505683-fu25fpe0alh2mnojd69ubl956g5bkm1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz2jGwOMt8iyDVgCLj8hiQGExjssLZCG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32273505683-fu25fpe0alh2mnojd69ubl956g5bkm1c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:32273505683:android:8a45824439fe6af854dc66",
+        "android_client_info": {
+          "package_name": "com.example.yosigo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "32273505683-fu25fpe0alh2mnojd69ubl956g5bkm1c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz2jGwOMt8iyDVgCLj8hiQGExjssLZCG0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "32273505683-fu25fpe0alh2mnojd69ubl956g5bkm1c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
