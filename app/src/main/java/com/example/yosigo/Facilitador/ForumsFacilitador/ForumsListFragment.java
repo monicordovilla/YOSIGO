@@ -1,4 +1,4 @@
-package com.example.yosigo.Facilitador.slideshow;
+package com.example.yosigo.Facilitador.ForumsFacilitador;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,14 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.yosigo.R;
 
-public class SlideshowFragment extends Fragment {
+public class ForumsListFragment extends Fragment {
 
-    private SlideshowViewModel slideshowFragment;
+    private ForumsListViewModel slideshowFragment;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         slideshowFragment =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+                new ViewModelProvider(this).get(ForumsListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
         slideshowFragment.getText().observe(getViewLifecycleOwner(), new Observer<String>() {

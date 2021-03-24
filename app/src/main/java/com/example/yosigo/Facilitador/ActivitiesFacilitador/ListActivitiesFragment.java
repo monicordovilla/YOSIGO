@@ -1,13 +1,13 @@
-package com.example.yosigo.Facilitador.gallery;
+package com.example.yosigo.Facilitador.ActivitiesFacilitador;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,25 +16,26 @@ import com.example.yosigo.R;
 
 import java.util.List;
 
-public class GalleryFragment extends Fragment {
+public class ListActivitiesFragment extends Fragment {
 
-    private GalleryViewModel listActivitiesViewModel;
+    private ListActivitiesViewModel listActivitiesViewModel;
+    private ListView list;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         listActivitiesViewModel =
-                new ViewModelProvider(this).get(GalleryViewModel.class);
+                new ViewModelProvider(this).get(ListActivitiesViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        final TextView textView = root.findViewById(R.id.text_gallery);
+
+        list = root.findViewById(R.id.list_activities);
         listActivitiesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                for (String string : strings) {
-                    TextView t = null;
-                    t.setText(string);
-                }
+                ArrayAdapter<String> adapter = new ActivityListAdapter(root.getContext(), strings);
+                list.setAdapter(adapter);
             }
         });
+
         return root;
     }
 }

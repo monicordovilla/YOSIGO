@@ -20,13 +20,13 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.yosigo.Facilitador.gallery.GalleryFragment"
+        android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.ListActivitiesFragment"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.yosigo.Facilitador.slideshow.SlideshowFragment"
+        android:name="com.example.yosigo.Facilitador.ForumsFacilitador.ForumsListFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 </navigation>
