@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".LoginActivity">
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="start"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="32dp"
+        android:foreground="@drawable/siguiente"
+        android:onClick="LogIn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.743"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/reescribir"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="start"
+        android:layout_marginStart="48dp"
+        android:layout_marginBottom="32dp"
+        android:foreground="@drawable/reescribir"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/login"
+        app:layout_constraintHorizontal_bias="0.432"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/camara"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/camera"
+        android:onClick="setCamera"
+        app:layout_constraintBottom_toTopOf="@+id/woman"
+        app:layout_constraintEnd_toStartOf="@+id/cassete"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Password"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/pumpkin"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="5dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/pumpkin"
+        android:onClick="setPumpkin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/phone"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/cassete"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="5dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/casette"
+        android:onClick="setCassete"
+        app:layout_constraintBottom_toTopOf="@+id/phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Password"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/cat"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/cat"
+        android:onClick="setCat"
+        app:layout_constraintBottom_toTopOf="@+id/pumpkin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cassete"
+        app:layout_constraintTop_toBottomOf="@+id/Password"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/woman"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="5dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/woman"
+        android:onClick="setWoman"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/phone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/witch"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="5dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/witch"
+        android:onClick="setWitch"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/flower"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/flor"
+        android:onClick="setFlor"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toEndOf="@+id/witch"
+        app:layout_constraintTop_toBottomOf="@+id/pumpkin"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/phone"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/phone"
+        android:onClick="setPhone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/santa"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="#FFFFFF"
+        android:foreground="@drawable/santa"
+        android:onClick="setSanta"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toStartOf="@+id/witch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/woman"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/Password"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="Contraseña"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/password" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,20 +12,20 @@
         tools:layout="@layout/fragment_home_persona" >
         <action
             android:id="@+id/action_nav_home_to_nav_gallery"
-            app:destination="@id/nav_gallery" />
+            app:destination="@id/nav_activity" />
         <action
             android:id="@+id/action_nav_home_to_nav_slideshow"
-            app:destination="@id/nav_slideshow" />
+            app:destination="@id/nav_forums" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_activity"
         android:name="com.example.yosigo.Persona.ActivitiesPersona.ListActivitiesPersona"
         android:label="@string/menu_gallery"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_forums"
         android:name="com.example.yosigo.Persona.ForumsPersona.ListForumsPersona"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />

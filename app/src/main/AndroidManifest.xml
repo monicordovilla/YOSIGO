@@ -9,8 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NavigationDrawerActivity">
+        <activity android:name=".SaveEmail"></activity>
+        <activity android:name=".LoginActivity" />
         <activity
-            android:name="com.example.yosigo.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.NavigationDrawerActivity.NoActionBar">
             <intent-filter>

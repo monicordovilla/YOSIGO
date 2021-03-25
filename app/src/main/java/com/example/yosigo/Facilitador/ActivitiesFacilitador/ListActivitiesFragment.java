@@ -1,5 +1,6 @@
 package com.example.yosigo.Facilitador.ActivitiesFacilitador;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,17 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavAction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.yosigo.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -33,6 +41,14 @@ public class ListActivitiesFragment extends Fragment {
             public void onChanged(List<String> strings) {
                 ArrayAdapter<String> adapter = new ActivityListAdapter(root.getContext(), strings);
                 list.setAdapter(adapter);
+            }
+        });
+
+        FloatingActionButton fab = root.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_nav_gallery_to_createActivity);
             }
         });
 

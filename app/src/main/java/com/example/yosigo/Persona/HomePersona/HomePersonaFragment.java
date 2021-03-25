@@ -36,8 +36,8 @@ public class HomePersonaFragment extends Fragment {
 
         btn_activities = (Button) root.findViewById(R.id.button_persona_activities);
         btn_forums = (Button) root.findViewById(R.id.button_persona_forum);
-        btn_activities.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_gallery, null));
-        btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_slideshow, null));
+        btn_activities.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_activity, null));
+        btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_forums, null));
 
 
         return root;
