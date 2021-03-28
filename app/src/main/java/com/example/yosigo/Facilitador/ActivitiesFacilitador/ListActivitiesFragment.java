@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavAction;
@@ -22,12 +23,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.yosigo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ListActivitiesFragment extends Fragment {
 
     private ListActivitiesViewModel listActivitiesViewModel;
     private ListView list;
+    private List<String> nameList = new ArrayList<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -36,10 +40,16 @@ public class ListActivitiesFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
 
         list = root.findViewById(R.id.list_activities);
-        listActivitiesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+
+        listActivitiesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
             @Override
-            public void onChanged(List<String> strings) {
-                ArrayAdapter<String> adapter = new ActivityListAdapter(root.getContext(), strings);
+            public void onChanged(Map<String, String> strings) {
+                for (String key : strings.keySet()) {
+                    System.out.println(key + " : " + strings.get(key).toString());
+                    nameList.add( (String) strings.get(key).toString() );
+                }
+
+                ArrayAdapter<String> adapter = new ActivityListAdapter(root.getContext(), strings, nameList);
                 list.setAdapter(adapter);
             }
         });

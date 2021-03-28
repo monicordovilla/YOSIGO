@@ -10,16 +10,21 @@ import android.widget.TextView;
 import com.example.yosigo.R;
 
 import java.util.List;
+import java.util.Map;
 
 public class ActivityListAdapter extends ArrayAdapter {
 
     private final Context context;
-    private final List<String> valuesList;
+    private final Map<String,String> valuesList;
+    List<String> nameList;
 
-    public ActivityListAdapter(Context context, List valuesList) {
-        super(context, R.layout.list_activities_item, valuesList);
+
+    public ActivityListAdapter(Context context, Map<String,String> valuesList, List<String>nameList) {
+        super(context, R.layout.list_activities_item, nameList);
+
         this.context = context;
         this.valuesList = valuesList;
+        this.nameList = nameList;
     }
 
     @Override
@@ -29,7 +34,7 @@ public class ActivityListAdapter extends ArrayAdapter {
 
         View rowView = inflater.inflate(R.layout.list_activities_item, parent, false);
 
-        String name = valuesList.get(position);
+        String name = nameList.get(position);
 
         TextView textViewAlias = (TextView) rowView.findViewById(R.id.textViewAlias);
         textViewAlias.setText(name);

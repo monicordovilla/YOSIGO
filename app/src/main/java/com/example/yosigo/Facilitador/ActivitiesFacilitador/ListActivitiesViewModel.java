@@ -14,11 +14,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ListActivitiesViewModel extends ViewModel {
 
-    private MutableLiveData<List<String>> mText;
+    private MutableLiveData<Map<String, String>> mText;
+    private MutableLiveData<List<String>> list;
     private static final String TAG = "ACTIVIDADES ";
 
     public ListActivitiesViewModel() {
@@ -26,12 +29,12 @@ public class ListActivitiesViewModel extends ViewModel {
         loadActivities();
     }
 
-    public LiveData<List<String>> getText() {
+    public LiveData<Map<String, String>> getText() {
         return mText;
     }
 
     private void loadActivities(){
-        List <String> activitiesList = new ArrayList<>();
+        Map<String, String> activitiesList = new HashMap<>();
 
         FirebaseFirestore.getInstance().collection("activities")
                 .get()
@@ -40,7 +43,7 @@ public class ListActivitiesViewModel extends ViewModel {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                activitiesList.add((String) document.getData().get("Nombre"));
+                                activitiesList.put((String) document.getId(), (String) document.getData().get("Nombre"));
 
                                 Log.d(TAG, document.getId() + " => " + document.getData() + ". Cuyo nombre es: " + document.getData().get("Nombre"));
                             }
