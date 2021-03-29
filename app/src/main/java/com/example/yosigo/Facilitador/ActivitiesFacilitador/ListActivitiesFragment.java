@@ -44,9 +44,10 @@ public class ListActivitiesFragment extends Fragment {
         listActivitiesViewModel.getText().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
             @Override
             public void onChanged(Map<String, String> strings) {
+                nameList.clear();
                 for (String key : strings.keySet()) {
                     System.out.println(key + " : " + strings.get(key).toString());
-                    nameList.add( (String) strings.get(key).toString() );
+                    nameList.add( (String) key);
                 }
 
                 ArrayAdapter<String> adapter = new ActivityListAdapter(root.getContext(), strings, nameList);

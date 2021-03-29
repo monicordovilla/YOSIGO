@@ -43,7 +43,6 @@ public class CreateActivity extends Fragment {
     private EditText nombre_actividad;
     private final String TAG = "Crear actividad";
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    private StorageReference picto_file, meta_file, categoria_file;
     private String picto, meta, categoría;
     private Button btn_picto, btn_meta, btn_categoria, btn_actividad, btn_create;
     private static final int PICTO_INTENT = 1;

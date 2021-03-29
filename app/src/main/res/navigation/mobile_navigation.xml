@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_nav_gallery_to_createActivity"
             app:destination="@id/createActivity" />
+        <action
+            android:id="@+id/action_nav_activity_to_activityViewFragment"
+            app:destination="@id/activityViewFragment" />
     </fragment>
 
     <fragment
@@ -38,4 +41,15 @@
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.CreateActivity"
         android:label="@string/create_activity"
         tools:layout="@layout/fragment_create_activity" />
+    <fragment
+        android:id="@+id/activityViewFragment"
+        android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.ActivityViewFragment"
+        android:label="@string/ver_actividad"
+        tools:layout="@layout/fragment_activity_view" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+    </fragment>
 </navigation>

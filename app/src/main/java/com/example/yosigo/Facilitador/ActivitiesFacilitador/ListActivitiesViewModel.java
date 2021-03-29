@@ -43,7 +43,7 @@ public class ListActivitiesViewModel extends ViewModel {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                activitiesList.put((String) document.getId(), (String) document.getData().get("Nombre"));
+                                activitiesList.put((String) document.getData().get("Nombre"), (String) document.getId());
 
                                 Log.d(TAG, document.getId() + " => " + document.getData() + ". Cuyo nombre es: " + document.getData().get("Nombre"));
                             }
