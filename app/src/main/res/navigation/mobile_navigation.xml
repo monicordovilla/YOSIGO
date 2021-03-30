@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_nav_activity_to_activityViewFragment"
             app:destination="@id/activityViewFragment" />
+        <action
+            android:id="@+id/action_nav_activity_to_asociateFragment"
+            app:destination="@id/asociateFragment" />
     </fragment>
 
     <fragment
@@ -46,6 +49,17 @@
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.ActivityViewFragment"
         android:label="@string/ver_actividad"
         tools:layout="@layout/fragment_activity_view" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/asociateFragment"
+        android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.AsociateFragment"
+        android:label="Asociar personas"
+        tools:layout="@layout/asociate_fragment" >
         <argument
             android:name="param1"
             app:argType="string"

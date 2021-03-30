@@ -60,6 +60,15 @@ public class ActivityListAdapter extends ArrayAdapter {
             }
         });
 
+        btn_asociate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", valuesList.get(name));
+                Navigation.findNavController(view).navigate(R.id.action_nav_activity_to_asociateFragment, bundle);
+            }
+        });
+
         return rowView;
     }
 }
