@@ -15,13 +15,11 @@ import com.example.yosigo.R;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
     private Button btn_activities, btn_forums;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home_facilitador, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
 
         btn_activities = (Button) root.findViewById(R.id.button_facilitador_activities);
         btn_forums = (Button) root.findViewById(R.id.button_facilitador_forum);

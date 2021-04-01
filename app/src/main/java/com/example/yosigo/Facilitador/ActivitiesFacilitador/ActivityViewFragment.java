@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +46,7 @@ import java.util.List;
 public class ActivityViewFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String TAG = "VER ACTIVIDAD" ;
+    private PersonasViewModel mViewModel;
 
     private String mParam1;
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -50,7 +54,8 @@ public class ActivityViewFragment extends Fragment {
 
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
-    private ListView list;
+    private ListView list_actividades, list_usurarios;
+    List<String> users = new ArrayList<>();
 
     public ActivityViewFragment() {
         // Required empty public constructor
@@ -85,12 +90,27 @@ public class ActivityViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_activity_view, container, false);
+        mViewModel = new ViewModelProvider(this).get(PersonasViewModel.class);
 
         text_name = (TextView) root.findViewById(R.id.show_activity_name);
         img_picto = (ImageView) root.findViewById(R.id.show_picto_activity);
         img_meta = (ImageView) root.findViewById(R.id.show_meta_pic);
         img_cat = (ImageView) root.findViewById(R.id.show_cat_pic);
-        list = root.findViewById(R.id.show_activity_pic);
+        list_actividades = root.findViewById(R.id.show_activity_pic);
+        list_usurarios = root.findViewById(R.id.show_activity_name_users);
+
+        mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>(){
+            @Override
+            public void onChanged(List<String> strings) {
+                ArrayAdapter<String> adapter = new ArrayAdapter(
+                        root.getContext(),
+                        android.R.layout.simple_list_item_1,
+                        strings
+                );
+
+                list_usurarios.setAdapter(adapter);
+            }
+        });
 
         getDatos();
 
@@ -144,8 +164,8 @@ public class ActivityViewFragment extends Fragment {
                                 android.R.layout.simple_list_item_1,
                                 (List<String>) document.getData().get("Tarea")
                         );
-                        list.setAdapter(adapter);
-                        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        list_actividades.setAdapter(adapter);
+                        list_actividades.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             ArrayList<String> tareas = (ArrayList<String>) document.getData().get("Tarea");
 
                             @Override
@@ -170,4 +190,5 @@ public class ActivityViewFragment extends Fragment {
             }
         });
     }
+
 }

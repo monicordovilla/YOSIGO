@@ -22,7 +22,7 @@
         android:id="@+id/nav_activity"
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.ListActivitiesFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" >
+        tools:layout="@layout/list_activities_facilitador" >
         <action
             android:id="@+id/action_nav_gallery_to_createActivity"
             app:destination="@id/createActivity" />

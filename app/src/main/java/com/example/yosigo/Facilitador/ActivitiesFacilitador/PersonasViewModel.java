@@ -29,7 +29,7 @@ public class PersonasViewModel extends ViewModel {
         loadUsers();
     }
 
-    //public LiveData<Map<String, String>> getUsers() { return mText; }
+    public LiveData<Map<String, String>> getUsers() { return mText; }
     public LiveData<List<String>> getNames() {
         return list;
     }
@@ -38,6 +38,7 @@ public class PersonasViewModel extends ViewModel {
         Map<String, String> userMap = new HashMap<>();
         List<String> userList = new ArrayList<String>();
 
+        // TODO: Cargar los asociados al facilitador actual (variable session de SharedPreferences)
         FirebaseFirestore.getInstance().collection("users")
                 .whereEqualTo("Rol", "Persona")
                 .get()

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation_persona"
@@ -11,18 +12,18 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home_persona" >
         <action
-            android:id="@+id/action_nav_home_to_nav_gallery"
-            app:destination="@id/nav_activity" />
-        <action
             android:id="@+id/action_nav_home_to_nav_slideshow"
             app:destination="@id/nav_forums" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_calendar"
+            app:destination="@id/nav_calendar" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_activity"
-        android:name="com.example.yosigo.Persona.ActivitiesPersona.ListActivitiesPersona"
+        android:id="@+id/nav_calendar"
+        android:name="com.example.yosigo.Persona.CalendarPersona.CalendarFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/list_activities_facilitador" />
 
     <fragment
         android:id="@+id/nav_forums"

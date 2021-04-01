@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    tools:context=".Persona.CalendarPersona.CalendarFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_lunes"
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:background="#FFFFFF"
+            android:color="@color/white"
+            android:foreground="@drawable/lunes"
+            android:text="Lunes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_martes"
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:foreground="@drawable/martes"
+            android:text="Martes"
+            app:layout_constraintEnd_toStartOf="@+id/button_miercoles"
+            app:layout_constraintStart_toEndOf="@+id/button_lunes"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_miercoles"
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:text="Miercoles"
+            android:foreground="@drawable/miercoles"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/button_jueves"
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:foreground="@drawable/jueves"
+            android:text="Jueves"
+            app:layout_constraintEnd_toStartOf="@+id/button_martes"
+            app:layout_constraintStart_toEndOf="@+id/button_lunes"
+            app:layout_constraintTop_toBottomOf="@+id/button_lunes" />
+
+        <Button
+            android:id="@+id/button_viernes"
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:foreground="@drawable/viernes"
+            android:text="Viernes"
+            app:layout_constraintEnd_toStartOf="@+id/button_miercoles"
+            app:layout_constraintStart_toEndOf="@+id/button_martes"
+            app:layout_constraintTop_toBottomOf="@+id/button_miercoles" />
+
+        <Button
+            android:id="@+id/button_sabado"
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:foreground="@drawable/sabado"
+            android:text="Sabado"
+            app:layout_constraintEnd_toEndOf="@+id/button_viernes"
+            app:layout_constraintStart_toStartOf="@+id/button_viernes"
+            app:layout_constraintTop_toBottomOf="@+id/button_viernes" />
+
+        <Button
+            android:id="@+id/button_domingo"
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:foreground="@drawable/domingo"
+            android:text="Domingo"
+            app:layout_constraintEnd_toEndOf="@+id/button_jueves"
+            app:layout_constraintStart_toStartOf="@+id/button_jueves"
+            app:layout_constraintTop_toBottomOf="@+id/button_jueves" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

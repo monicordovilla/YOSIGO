@@ -1,14 +1,11 @@
 package com.example.yosigo.Facilitador.ActivitiesFacilitador;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,7 +30,7 @@ public class ListActivitiesFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         listActivitiesViewModel =
                 new ViewModelProvider(this).get(ListActivitiesViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_gallery, container, false);
+        View root = inflater.inflate(R.layout.list_activities_facilitador, container, false);
 
         list = root.findViewById(R.id.list_activities);
 

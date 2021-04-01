@@ -11,7 +11,7 @@
     <string name="menu_gallery">Actividades</string>
     <string name="menu_slideshow">Foros</string>
     <string name="create_activity">Crear actividad</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ver_actividad">Ver Actividad</string>
+    <string name="menu_calendar">Calendario</string>
 </resources>
