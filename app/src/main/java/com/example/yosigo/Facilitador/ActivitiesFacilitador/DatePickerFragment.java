@@ -36,7 +36,4 @@ public class DatePickerFragment extends DialogFragment{
         return new DatePickerDialog(getActivity(), listener, year, month, day);
     }
 
-    public void show(FragmentManager supportFragmentManager, String date_picker) {
-        show(supportFragmentManager, date_picker);
-    }
 }

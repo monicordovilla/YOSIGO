@@ -1,8 +1,10 @@
 package com.example.yosigo.Facilitador.ActivitiesFacilitador;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,6 +27,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -104,10 +107,6 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onChanged(List<String> strings) {
                 users = strings;
-                users.add("prueba 1");
-                users.add("prueba 2");
-                users.add("prueba 3");
-                users.add("prueba 4");
 
                 list.setAdapter(new ArrayAdapter<String>(
                                 root.getContext(),
@@ -122,18 +121,33 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
         btn_asociar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Comprobar si se han introducido las fechas
+                if(fecha_inicio == null){
+                    Toast.makeText(getContext(), "No se ha escogido fecha inicio", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(fecha_fin == null){
+                    Toast.makeText(getContext(), "No se ha escogido fecha final", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 //Escoger dias de la semana
                 SparseBooleanArray checked = list_dias_semana.getCheckedItemPositions();
                 int len = checked.size();
+                int dias_semana = 0;
                 for (int i = 0; i < len; i++) {
                     if (checked.get(i)) {
-
-                    } else {
-
+                        dias_semana += Math.pow(2,i);
                     }
                 }
+                Log.w(TAG, "Dias de la semana: " + dias_semana);
 
+                if(dias_semana == 0){
+                    Toast.makeText(getContext(), "No se ha escogido día de la semana", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Agregar datos a cada usuario
                 asociados.clear();
                 checked = list.getCheckedItemPositions();
                 len = checked.size();
@@ -146,7 +160,8 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
                         Map<String, Object> data = new HashMap<>();
                         data.put("Fecha Inicio", fecha_inicio.getText());
                         data.put("Fecha Fin", fecha_fin.getText());
-                        data.put("Dias semana", "USA");
+                        data.put("Dias semana", dias_semana);
+                        Log.w(TAG, "Datos introducidos: " + dias_semana);
                         /*FirebaseFirestore.getInstance()
                                 .collection("users")
                                 .document(item)
@@ -202,6 +217,6 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        newFragment.show(getActivity().getSupportFragmentManager(), "Date Picker");
+        newFragment.show( getActivity().getFragmentManager(), "Date Picker");
     }
 }

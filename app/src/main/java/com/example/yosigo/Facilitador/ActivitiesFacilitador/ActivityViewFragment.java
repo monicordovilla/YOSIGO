@@ -30,11 +30,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +58,8 @@ public class ActivityViewFragment extends Fragment {
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
     private ListView list_actividades, list_usurarios;
-    List<String> users = new ArrayList<>();
+    List<String> participantes = new ArrayList<>();
+    Map<String, String> usuarios = new HashMap<>();
 
     public ActivityViewFragment() {
         // Required empty public constructor
@@ -99,22 +103,65 @@ public class ActivityViewFragment extends Fragment {
         list_actividades = root.findViewById(R.id.show_activity_pic);
         list_usurarios = root.findViewById(R.id.show_activity_name_users);
 
-        mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>(){
-            @Override
-            public void onChanged(List<String> strings) {
-                ArrayAdapter<String> adapter = new ArrayAdapter(
-                        root.getContext(),
-                        android.R.layout.simple_list_item_1,
-                        strings
-                );
-
-                list_usurarios.setAdapter(adapter);
-            }
-        });
-
+        getParticipantes();
         getDatos();
 
         return root;
+    }
+
+    private void getParticipantes(){
+        FirebaseFirestore.getInstance().collection("users")
+                .whereEqualTo("Rol", "Persona")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String full_name = document.getData().get("Nombre") + " " +
+                                        document.getData().get("Apellidos") + " (" +
+                                        document.getData().get("Apodo") + ")";
+
+                                Log.d(TAG,  "Veo: " + full_name + " y llevo " + usuarios);
+                                usuarios.put(document.getId(), full_name);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
+        usuarios.forEach((k,v) -> {
+            System.out.println("Key: " + k + ": Value: " + v);
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(k)
+                    .collection("activities")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> act) {
+                            if (act.isSuccessful()) {
+                                for (QueryDocumentSnapshot doc : act.getResult()) {
+                                    if(doc.getId() == mParam1) {
+                                        Log.d(TAG, doc.getId() + " == " + mParam1);
+                                        participantes.add(v);
+                                    }
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", act.getException());
+                            }
+                        }
+                    });
+        });
+
+        Log.d(TAG, "Participantes " + participantes);
+        ArrayAdapter<String> adapter = new ArrayAdapter(
+                root.getContext(),
+                android.R.layout.simple_list_item_1,
+                participantes
+        );
+        list_usurarios.setAdapter(adapter);
     }
 
     private void getDatos(){
@@ -129,57 +176,65 @@ public class ActivityViewFragment extends Fragment {
                         text_name.setText(document.getData().get("Nombre").toString());
 
                         // Create a reference to a file from a Google Cloud Storage URI
-                        storageRef.child((String) document.getData().get("Pictograma")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Log.d(TAG, "Mostando: " + document.getData().get("Pictograma").toString());
-                                Glide.with(root)
-                                        .load(uri)
-                                        .into(img_picto);
-                            }
-                        });
+                        if(document.getData().get("Pictograma") != null) {
+                            storageRef.child((String) document.getData().get("Pictograma")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Log.d(TAG, "Mostando: " + document.getData().get("Pictograma").toString());
+                                    Glide.with(root)
+                                            .load(uri)
+                                            .into(img_picto);
+                                }
+                            });
+                        }
 
-                        storageRef.child((String) document.getData().get("Categoria")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Log.d(TAG, "Mostando: " + document.getData().get("Categoria").toString());
-                                Glide.with(root)
-                                        .load(uri)
-                                        .into(img_cat);
-                            }
-                        });
+                        if(document.getData().get("Categoria") != null) {
+                            storageRef.child((String) document.getData().get("Categoria")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Log.d(TAG, "Mostando: " + document.getData().get("Categoria").toString());
+                                    Glide.with(root)
+                                            .load(uri)
+                                            .into(img_cat);
+                                }
+                            });
+                        }
 
-                        storageRef.child((String) document.getData().get("Meta")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                Log.d(TAG, "Mostando: " + document.getData().get("Meta").toString());
-                                Glide.with(root)
-                                        .load(uri)
-                                        .into(img_meta);
-                            }
-                        });
+                        if(document.getData().get("Meta") != null) {
+                            storageRef.child((String) document.getData().get("Meta")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Log.d(TAG, "Mostando: " + document.getData().get("Meta").toString());
+                                    Glide.with(root)
+                                            .load(uri)
+                                            .into(img_meta);
+                                }
+                            });
+                        }
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                root.getContext(),
-                                android.R.layout.simple_list_item_1,
-                                (List<String>) document.getData().get("Tarea")
-                        );
-                        list_actividades.setAdapter(adapter);
-                        list_actividades.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            ArrayList<String> tareas = (ArrayList<String>) document.getData().get("Tarea");
+                        if(document.getData().get("Meta") != null) {
+                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                    root.getContext(),
+                                    android.R.layout.simple_list_item_1,
+                                    (List<String>) document.getData().get("Tarea")
+                            );
+                            list_actividades.setAdapter(adapter);
+                            list_actividades.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                ArrayList<String> tareas = (ArrayList<String>) document.getData().get("Tarea");
 
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                                String tarea = tareas.get(position);
-                                storageRef.child((String) tarea).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uri);
-                                        startActivity(launchBrowser);
-                                    }
-                                });
-                            }
-                        });
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                                    String tarea = tareas.get(position);
+                                    storageRef.child((String) tarea).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uri);
+                                            startActivity(launchBrowser);
+                                        }
+                                    });
+                                }
+                            });
+                        }
 
                     } else {
                         Log.d(TAG, "No such document");

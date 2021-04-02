@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -16,14 +17,18 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         boolean facilitador = true;
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         if(facilitador) {
+            mAuth.signInWithEmailAndPassword("e.monicordovilla@go.ugr.es", "123456");
             setContentView(R.layout.activity_main_facilitador);
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
         } else {
+            mAuth.signInWithEmailAndPassword("monicordovilla@correo.ugr.es", "123456");
             setContentView(R.layout.activity_main_persona);
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
