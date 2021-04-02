@@ -45,6 +45,8 @@ public class CreateActivity extends Fragment {
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private String picto, meta, categoría;
     private Button btn_picto, btn_meta, btn_categoria, btn_actividad, btn_create;
+    private Uri uri_picto, uri_meta, uri_categoria;
+    private ArrayList<Uri> uri_activities = new ArrayList<>();
     private static final int PICTO_INTENT = 1;
     private static final int META_INTENT = 2;
     private static final int CAT_INTENT = 3;
@@ -114,6 +116,46 @@ public class CreateActivity extends Fragment {
 
     private void agregarActividad() {
         Map<String, Object> data = new HashMap<>();
+
+        //Guardar fotos en firestore storage
+        StorageReference filePath_picto = storageRef.child("pictogramas").child(uri_picto.getLastPathSegment());
+        filePath_picto.putFile(uri_picto).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                picto = filePath_picto.getPath();
+            }
+        });
+
+        StorageReference filePath_meta = storageRef.child("metas").child(uri_meta.getLastPathSegment());
+        filePath_meta.putFile(uri_meta).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                meta = filePath_meta.getPath();
+            }
+        });
+
+        StorageReference filePath_cat = storageRef.child("categoria").child(uri_categoria.getLastPathSegment());
+        filePath_cat.putFile(uri_categoria).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                categoría = filePath_cat.getPath();
+            }
+        });
+
+        for(Uri uri : uri_activities){
+            StorageReference filePath = storageRef.child("actividades").child(uri.getLastPathSegment());
+            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getContext(), "Se ha la actividad con exito", Toast.LENGTH_SHORT).show();
+                    String activityPath = filePath.getPath();
+                    Log.w(TAG, "Subido: " + activityPath);
+                    activities.add(activityPath);
+                }
+            });
+        }
+
+        //Guardar datos para Cloud firestore
         data.put("Nombre", nombre_actividad.getText().toString());
         data.put("Pictograma", picto);
         data.put("Meta", meta);
@@ -144,48 +186,13 @@ public class CreateActivity extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == PICTO_INTENT && resultCode == RESULT_OK ){
-            Uri uri = data.getData();
-            StorageReference filePath = storageRef.child("pictogramas").child(uri.getLastPathSegment());
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), "Se ha subido la foto con éxito", Toast.LENGTH_SHORT).show();
-                    picto = filePath.getPath();
-                }
-            });
+            uri_picto = data.getData();
         } else if(requestCode == META_INTENT && resultCode == RESULT_OK ){
-            Uri uri = data.getData();
-            StorageReference filePath = storageRef.child("metas").child(uri.getLastPathSegment());
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), "Se ha subido la foto con éxito", Toast.LENGTH_SHORT).show();
-                    meta = filePath.getPath();
-                }
-            });
+            uri_meta = data.getData();
         } else if(requestCode == CAT_INTENT && resultCode == RESULT_OK ){
-            Uri uri = data.getData();
-            StorageReference filePath = storageRef.child("categoria").child(uri.getLastPathSegment());
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), "Se ha subido la foto con éxito: " + filePath.getPath() , Toast.LENGTH_SHORT).show();
-                    Log.w(TAG, "Get: " + filePath.getPath());
-                    categoría = filePath.getPath();
-                }
-            });
+            uri_categoria = data.getData();
         } else if(requestCode == ACT_INTENT && resultCode == RESULT_OK ){
-            Uri uri = data.getData();
-            StorageReference filePath = storageRef.child("actividades").child(uri.getLastPathSegment());
-            filePath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), "Se ha la actividad con exito", Toast.LENGTH_SHORT).show();
-                    String activityPath = filePath.getPath();
-                    Log.w(TAG, "Subido: " + activityPath);
-                    activities.add(activityPath);
-                }
-            });
+            uri_activities.add(data.getData());
         }
     }
 }
