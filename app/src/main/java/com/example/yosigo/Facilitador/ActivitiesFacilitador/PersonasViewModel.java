@@ -59,8 +59,6 @@ public class PersonasViewModel extends ViewModel {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        Log.d(TAG,  "List: " + userList);
-                        Log.d(TAG,  "Map: " + userMap);
                         mText.setValue(userMap);
                         list.setValue(userList);
                     }

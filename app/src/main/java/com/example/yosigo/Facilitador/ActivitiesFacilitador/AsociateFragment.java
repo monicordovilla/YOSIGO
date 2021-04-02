@@ -34,8 +34,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +75,6 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            Log.d(TAG, "Recibido id: " + mParam1);
         }
     }
 
@@ -122,25 +126,56 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(View view) {
                 //Comprobar si se han introducido las fechas
+                Timestamp timestamp_inicio, timestamp_fin;
                 if(fecha_inicio == null){
                     Toast.makeText(getContext(), "No se ha escogido fecha inicio", Toast.LENGTH_SHORT).show();
                     return;
+                } else {
+                    String inDate = fecha_inicio.getText().toString();
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    Date date = new Date();
+                    try {
+                        date = df.parse(inDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long time = date.getTime();
+
+                    timestamp_inicio = new Timestamp(time);
                 }
                 if(fecha_fin == null){
                     Toast.makeText(getContext(), "No se ha escogido fecha final", Toast.LENGTH_SHORT).show();
                     return;
+                } else {
+                    String inDate = fecha_fin.getText().toString();
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    Date date = new Date();
+                    try {
+                        date = df.parse(inDate);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    long time = date.getTime();
+
+                    timestamp_fin = new Timestamp(time);
                 }
 
                 //Escoger dias de la semana
                 SparseBooleanArray checked = list_dias_semana.getCheckedItemPositions();
                 int len = checked.size();
+                /*BIT FLAG DIAS DE LA SEMANA
+                * LUNES - 1
+                * MARTES - 2
+                * MIERCOLES - 4
+                *
+                * Los días son potencias de 2
+                * */
                 int dias_semana = 0;
                 for (int i = 0; i < len; i++) {
                     if (checked.get(i)) {
                         dias_semana += Math.pow(2,i);
                     }
                 }
-                Log.w(TAG, "Dias de la semana: " + dias_semana);
 
                 if(dias_semana == 0){
                     Toast.makeText(getContext(), "No se ha escogido día de la semana", Toast.LENGTH_SHORT).show();
@@ -154,17 +189,19 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
                 for (int i = 0; i < len; i++) {
                     if (checked.get(i)) {
                         String item = users.get(i);
-                        Log.d(TAG, " Item => " + item);
-                        asociados.add(userMap.get(item));
+                        Log.d(TAG, "Item=>: " + item);
+                        String id_user = userMap.get(item);
+                        asociados.add(id_user);
+                        Log.d(TAG, "Asociados: " + asociados);
 
                         Map<String, Object> data = new HashMap<>();
-                        data.put("Fecha Inicio", fecha_inicio.getText());
-                        data.put("Fecha Fin", fecha_fin.getText());
+                        data.put("Fecha Inicio", timestamp_inicio);
+                        data.put("Fecha Fin", timestamp_fin);
                         data.put("Dias semana", dias_semana);
                         Log.w(TAG, "Datos introducidos: " + dias_semana);
-                        /*FirebaseFirestore.getInstance()
+                        FirebaseFirestore.getInstance()
                                 .collection("users")
-                                .document(item)
+                                .document(id_user)
                                 .collection("activities")
                                 .document(mParam1)
                                 .set(data)
@@ -179,10 +216,9 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
                                     public void onFailure(@NonNull Exception e) {
                                         Log.w(TAG, "Error writing document", e);
                                     }
-                                });*/
+                                });
                     }
                 }
-                Log.d(TAG, " Seleccionados => " + asociados);
             }
         });
 
