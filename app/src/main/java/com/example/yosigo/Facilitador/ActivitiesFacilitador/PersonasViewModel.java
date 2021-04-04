@@ -53,8 +53,8 @@ public class PersonasViewModel extends ViewModel {
                                 userList.add(full_name);
                                 userMap.put(full_name, document.getId());
 
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                Log.d(TAG,  "Guardo: " + full_name);
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                //Log.d(TAG,  "Guardo: " + full_name);
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

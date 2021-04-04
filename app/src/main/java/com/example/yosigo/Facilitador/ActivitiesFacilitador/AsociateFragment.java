@@ -32,9 +32,9 @@ import android.widget.Toast;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -127,7 +127,7 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
             public void onClick(View view) {
                 //Comprobar si se han introducido las fechas
                 Timestamp timestamp_inicio, timestamp_fin;
-                if(fecha_inicio == null){
+                if(fecha_inicio.equals("")){
                     Toast.makeText(getContext(), "No se ha escogido fecha inicio", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -138,12 +138,12 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
                         date = df.parse(inDate);
                     } catch (ParseException e) {
                         e.printStackTrace();
+                        Toast.makeText(getContext(), "No se ha escogido fecha inicio", Toast.LENGTH_SHORT).show();
                     }
-                    long time = date.getTime();
 
-                    timestamp_inicio = new Timestamp(time);
+                    timestamp_inicio = new Timestamp(date);
                 }
-                if(fecha_fin == null){
+                if(fecha_fin.equals("")){
                     Toast.makeText(getContext(), "No se ha escogido fecha final", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -154,11 +154,13 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
                         date = df.parse(inDate);
                     } catch (ParseException e) {
                         e.printStackTrace();
+                        Toast.makeText(getContext(), "No se ha escogido fecha final", Toast.LENGTH_SHORT).show();
                     }
-                    long time = date.getTime();
 
-                    timestamp_fin = new Timestamp(time);
+                    timestamp_fin = new Timestamp(date);
                 }
+                Log.d(TAG, "Fecha inicio: " + timestamp_inicio);
+                Log.d(TAG, "Fecha fin: " + timestamp_fin);
 
                 //Escoger dias de la semana
                 SparseBooleanArray checked = list_dias_semana.getCheckedItemPositions();
@@ -198,7 +200,7 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
                         data.put("Fecha Inicio", timestamp_inicio);
                         data.put("Fecha Fin", timestamp_fin);
                         data.put("Dias semana", dias_semana);
-                        Log.w(TAG, "Datos introducidos: " + dias_semana);
+                        Log.d(TAG, "Datos introducidos: " + data);
                         FirebaseFirestore.getInstance()
                                 .collection("users")
                                 .document(id_user)
@@ -248,11 +250,19 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // +1 because January is zero
-                final String selectedDate = day + " / " + (month+1) + " / " + year;
+                final String selectedDate =
+                                twoDigits(day) + "/" +
+                                twoDigits(month+1) +
+                                "/" + year;
                 edit_text.setText(selectedDate);
             }
         });
 
         newFragment.show( getActivity().getFragmentManager(), "Date Picker");
+    }
+
+    private String twoDigits(int number){
+        if (number <= 9) return "0" + number;
+        else return String.valueOf(number);
     }
 }

@@ -13,8 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -27,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,11 +34,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.sql.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,7 +56,6 @@ public class ActivityViewFragment extends Fragment {
     private ImageView img_picto, img_meta, img_cat;
     private ListView list_actividades, list_usurarios;
     List<String> participantes = new ArrayList<>();
-    Map<String, String> usuarios = new HashMap<>();
 
     public ActivityViewFragment() {
         // Required empty public constructor
@@ -85,7 +81,6 @@ public class ActivityViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            Log.d(TAG, "Recibido id: " + mParam1);
         }
     }
 
@@ -103,8 +98,8 @@ public class ActivityViewFragment extends Fragment {
         list_actividades = root.findViewById(R.id.show_activity_pic);
         list_usurarios = root.findViewById(R.id.show_activity_name_users);
 
-        getParticipantes();
         getDatos();
+        getParticipantes();
 
         return root;
     }
@@ -122,46 +117,50 @@ public class ActivityViewFragment extends Fragment {
                                         document.getData().get("Apellidos") + " (" +
                                         document.getData().get("Apodo") + ")";
 
-                                Log.d(TAG,  "Veo: " + full_name + " y llevo " + usuarios);
-                                usuarios.put(document.getId(), full_name);
+                                FirebaseFirestore.getInstance().collection("users")
+                                        .document(document.getId())
+                                        .collection("activities")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> act) {
+                                                if (act.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot doc : act.getResult()) {
+                                                        if(mParam1.equals(doc.getId())) {
+                                                            /*Marca de firebase
+                                                            * url problema: https://stackoverflow.com/questions/47771044/firestore-timestamp-getting-null
+                                                            * */
+                                                            DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
+                                                            Date fecha_inicio = doc.getDate("Fecha Inicio", behavior) ;
+                                                            Date fecha_fin = doc.getDate("Fecha Fin", behavior) ;
+
+                                                            Log.d(TAG, "Fecha inicio: " + fecha_inicio + " ¿posterior? " + new Date().after(fecha_inicio));
+                                                            Log.d(TAG, "Fecha fin: " + fecha_fin + " ¿anterior? " + new Date().before(fecha_fin));
+
+                                                            if (new Date().after(fecha_inicio) && new Date().before(fecha_fin)) {
+                                                                participantes.add(full_name);
+                                                                Log.d(TAG, "Participante: " + full_name);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    ArrayAdapter<String> adapter = new ArrayAdapter(
+                                                            root.getContext(),
+                                                            android.R.layout.simple_list_item_1,
+                                                            participantes
+                                                    );
+                                                    list_usurarios.setAdapter(adapter);
+                                                } else {
+                                                    Log.d(TAG, "Error getting documents: ", act.getException());
+                                                }
+                                            }
+                                        });
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-
-
-        usuarios.forEach((k,v) -> {
-            System.out.println("Key: " + k + ": Value: " + v);
-            FirebaseFirestore.getInstance().collection("users")
-                    .document(k)
-                    .collection("activities")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> act) {
-                            if (act.isSuccessful()) {
-                                for (QueryDocumentSnapshot doc : act.getResult()) {
-                                    if(doc.getId() == mParam1) {
-                                        Log.d(TAG, doc.getId() + " == " + mParam1);
-                                        participantes.add(v);
-                                    }
-                                }
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", act.getException());
-                            }
-                        }
-                    });
-        });
-
-        Log.d(TAG, "Participantes " + participantes);
-        ArrayAdapter<String> adapter = new ArrayAdapter(
-                root.getContext(),
-                android.R.layout.simple_list_item_1,
-                participantes
-        );
-        list_usurarios.setAdapter(adapter);
     }
 
     private void getDatos(){
@@ -172,7 +171,6 @@ public class ActivityViewFragment extends Fragment {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         text_name.setText(document.getData().get("Nombre").toString());
 
                         // Create a reference to a file from a Google Cloud Storage URI
@@ -180,7 +178,6 @@ public class ActivityViewFragment extends Fragment {
                             storageRef.child((String) document.getData().get("Pictograma")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    Log.d(TAG, "Mostando: " + document.getData().get("Pictograma").toString());
                                     Glide.with(root)
                                             .load(uri)
                                             .into(img_picto);
@@ -192,7 +189,6 @@ public class ActivityViewFragment extends Fragment {
                             storageRef.child((String) document.getData().get("Categoria")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    Log.d(TAG, "Mostando: " + document.getData().get("Categoria").toString());
                                     Glide.with(root)
                                             .load(uri)
                                             .into(img_cat);
@@ -204,7 +200,6 @@ public class ActivityViewFragment extends Fragment {
                             storageRef.child((String) document.getData().get("Meta")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    Log.d(TAG, "Mostando: " + document.getData().get("Meta").toString());
                                     Glide.with(root)
                                             .load(uri)
                                             .into(img_meta);
@@ -245,5 +240,4 @@ public class ActivityViewFragment extends Fragment {
             }
         });
     }
-
 }
