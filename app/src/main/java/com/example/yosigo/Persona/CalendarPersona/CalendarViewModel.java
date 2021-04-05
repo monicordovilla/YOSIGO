@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.yosigo.Persona.itemGrid;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,8 +23,10 @@ import java.util.Map;
 
 public class CalendarViewModel extends ViewModel {
     // TODO: Llamar a las actividades de una persona
-    private MutableLiveData<Map<String, Integer>> activities;
-    private Map<String, Integer> id_activities = new HashMap<>();
+    private MutableLiveData<itemGrid> activities;
+    private MutableLiveData<HashMap<String, Integer>> activities_days;
+    private itemGrid item_grid;
+    private HashMap<String, Integer> id_days;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "ACTIVIDADES ";
     private String uuid;
@@ -36,8 +39,8 @@ public class CalendarViewModel extends ViewModel {
         getUserActivities();
     }
 
-    public LiveData<Map<String, Integer>> getActivities() { return activities; }
-
+    public LiveData<itemGrid> getActivities() { return activities; }
+    public LiveData<HashMap<String, Integer>> getDays() { return activities_days; }
 
     private  void getUserActivities(){
         db.collection("users").document("sesion").collection("activities")
@@ -50,13 +53,13 @@ public class CalendarViewModel extends ViewModel {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                id_activities.put(document.getId(), (Integer) document.getData().get("Dias Semana"));
+                                id_days.put(document.getId(), (Integer) document.getData().get("Dias Semana"));
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
-        activities.setValue(id_activities);
+        activities_days.setValue(id_days);
     }
 }

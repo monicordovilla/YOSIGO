@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NavigationDrawerActivity">
-        <activity android:name=".SaveEmail"></activity>
+        <activity android:name=".SaveEmail" />
         <activity android:name=".LoginActivity" />
         <activity
             android:name=".MainActivity"

@@ -26,8 +26,8 @@ public class HomePersonaFragment extends Fragment {
 
         btn_calendar = (Button) root.findViewById(R.id.button_persona_calendar);
         btn_forums = (Button) root.findViewById(R.id.button_persona_forum);
-        btn_calendar.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_calendar, null));
-        btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_forums, null));
+        btn_calendar.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_home_to_nav_calendar));
+        btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_home_to_nav_slideshow));
 
         return root;
     }

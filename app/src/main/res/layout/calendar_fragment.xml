@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:padding="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".Persona.CalendarPersona.CalendarFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,7 @@
 
         <Button
             android:id="@+id/button_lunes"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:background="#FFFFFF"
             android:color="@color/white"
@@ -25,7 +25,7 @@
 
         <Button
             android:id="@+id/button_martes"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:foreground="@drawable/martes"
             android:text="Martes"
@@ -35,7 +35,7 @@
 
         <Button
             android:id="@+id/button_miercoles"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:text="Miercoles"
             android:foreground="@drawable/miercoles"
@@ -44,7 +44,7 @@
 
         <Button
             android:id="@+id/button_jueves"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:foreground="@drawable/jueves"
@@ -55,7 +55,7 @@
 
         <Button
             android:id="@+id/button_viernes"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:foreground="@drawable/viernes"
@@ -66,7 +66,7 @@
 
         <Button
             android:id="@+id/button_sabado"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:foreground="@drawable/sabado"
@@ -77,7 +77,7 @@
 
         <Button
             android:id="@+id/button_domingo"
-            android:layout_width="130dp"
+            android:layout_width="120dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
             android:foreground="@drawable/domingo"
@@ -88,16 +88,20 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
+        android:paddingTop="10dp"
+        >
+        <GridView
+            android:id="@+id/grid_calendar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </androidx.core.widget.NestedScrollView>
+            android:layout_height="match_parent"
+            android:columnWidth="120dp"
+            android:horizontalSpacing="10dp"
+            android:numColumns="auto_fit"
+            android:verticalSpacing="10dp" />
+    </LinearLayout>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

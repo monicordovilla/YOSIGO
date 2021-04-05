@@ -1,5 +1,7 @@
 package com.example.yosigo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 
@@ -18,17 +20,19 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
+    boolean facilitador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boolean facilitador = true;
+        facilitador = false;
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         if(facilitador) {
             mAuth.signInWithEmailAndPassword("e.monicordovilla@go.ugr.es", "123456");
+            guardarSesion(mAuth.getCurrentUser().getUid());
             setContentView(R.layout.activity_main_facilitador);
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -47,12 +51,13 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupWithNavController(navigationView, navController);
         } else {
             mAuth.signInWithEmailAndPassword("monicordovilla@correo.ugr.es", "123456");
+            guardarSesion(mAuth.getCurrentUser().getUid());
             setContentView(R.layout.activity_main_persona);
-            Toolbar toolbar = findViewById(R.id.toolbar);
+            Toolbar toolbar = findViewById(R.id.toolbar_persona);
             setSupportActionBar(toolbar);
 
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            NavigationView navigationView = findViewById(R.id.nav_view);
+            DrawerLayout drawer = findViewById(R.id.drawer_layout_persona);
+            NavigationView navigationView = findViewById(R.id.nav_view_persona);
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
             mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -60,12 +65,23 @@ public class MainActivity extends AppCompatActivity {
                     .setDrawerLayout(drawer)
                     .build();
 
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_persona);
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
         }
 
 
+    }
+
+    public void guardarSesion(String uid) {
+        //Obtenemos referencia del archivo datos
+        SharedPreferences preferencias=getSharedPreferences("datos", Context.MODE_PRIVATE);
+        //Creamos un editor para editar el archivo
+        SharedPreferences.Editor editor=preferencias.edit();
+        //Almacenamos en el editor el valor de la sesion
+        editor.putString("sesion", uid);
+        //Grabamos en el archivo el contenido de la sesion
+        editor.commit();
     }
 
     @Override
@@ -77,8 +93,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+        if(facilitador) {
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+            return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                    || super.onSupportNavigateUp();
+        } else {
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_persona);
+            return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+                    || super.onSupportNavigateUp();
+        }
     }
 }
