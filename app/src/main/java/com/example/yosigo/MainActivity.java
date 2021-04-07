@@ -1,13 +1,19 @@
 package com.example.yosigo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
     boolean facilitador;
+    public ImageView toolbar_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +38,14 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         if(facilitador) {
-            mAuth.signInWithEmailAndPassword("e.monicordovilla@go.ugr.es", "123456");
-            guardarSesion(mAuth.getCurrentUser().getUid());
+            mAuth.signInWithEmailAndPassword("e.monicordovilla@go.ugr.es", "123456").addOnCompleteListener(
+                    this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            guardarSesion(mAuth.getCurrentUser().getUid());
+                        }
+                    }
+            );
             setContentView(R.layout.activity_main_facilitador);
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -50,10 +63,17 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
         } else {
-            mAuth.signInWithEmailAndPassword("monicordovilla@correo.ugr.es", "123456");
-            guardarSesion(mAuth.getCurrentUser().getUid());
+            mAuth.signInWithEmailAndPassword("monicordovilla@correo.ugr.es", "123456").addOnCompleteListener(
+                    this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            guardarSesion(mAuth.getCurrentUser().getUid());
+                        }
+                    }
+            );
             setContentView(R.layout.activity_main_persona);
             Toolbar toolbar = findViewById(R.id.toolbar_persona);
+            //toolbar_image = (ImageView) findViewById(R.id.image_toolbar_persona);
             setSupportActionBar(toolbar);
 
             DrawerLayout drawer = findViewById(R.id.drawer_layout_persona);
@@ -69,8 +89,10 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(navigationView, navController);
         }
+    }
 
-
+    public void setToolbar_image(int image){
+        toolbar_image.setImageResource(image);
     }
 
     public void guardarSesion(String uid) {
@@ -87,8 +109,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.main, menu);
+        //return true;
+        return false;
     }
 
     @Override

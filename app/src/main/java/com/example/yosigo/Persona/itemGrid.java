@@ -3,11 +3,11 @@ package com.example.yosigo.Persona;
 import android.net.Uri;
 
 public class itemGrid {
-    private Uri pictograma;
+    private String pictograma;
     private String titulo;
     private String id;
 
-    public itemGrid(String titulo, String id, Uri pictograma){
+    public itemGrid(String titulo, String id, String pictograma){
         this.pictograma = pictograma;
         this.titulo = titulo;
         this.id = id;
@@ -29,11 +29,11 @@ public class itemGrid {
         this.id = id;
     }
 
-    public Uri getPictograma() {
+    public String getPictograma() {
         return pictograma;
     }
 
-    public void setPictograma(Uri pictograma) {
+    public void setPictograma(String pictograma) {
         this.pictograma = pictograma;
     }
 }

@@ -39,7 +39,6 @@ public class ListActivitiesFragment extends Fragment {
             public void onChanged(Map<String, String> strings) {
                 nameList.clear();
                 for (String key : strings.keySet()) {
-                    System.out.println(key + " : " + strings.get(key).toString());
                     nameList.add( (String) key);
                 }
 

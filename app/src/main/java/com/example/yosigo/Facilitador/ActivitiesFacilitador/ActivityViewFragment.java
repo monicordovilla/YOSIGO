@@ -55,7 +55,7 @@ public class ActivityViewFragment extends Fragment {
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
     private ListView list_actividades, list_usurarios;
-    List<String> participantes = new ArrayList<>();
+    private List<String> participantes = new ArrayList<>();
 
     public ActivityViewFragment() {
         // Required empty public constructor

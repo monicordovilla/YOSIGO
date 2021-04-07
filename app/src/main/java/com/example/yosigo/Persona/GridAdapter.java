@@ -1,64 +1,68 @@
 package com.example.yosigo.Persona;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.BaseAdapter;
 
 import com.bumptech.glide.Glide;
 import com.example.yosigo.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-public class GridAdapter extends BaseAdapter {
+public class GridAdapter extends ArrayAdapter {
     private final Context context;
-    private List<itemGrid> item_grid;
+    private final List<String> id;
+    private final Map<String,String> item_name;
+    private final Map<String,String> item_picto;
 
+    private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
-    public GridAdapter(Context context, List<itemGrid> item_grid) {
+    public GridAdapter(Context context, List<String> id,
+                       Map<String,String> item_name, Map<String,String> item_picto) {
+        super(context, R.layout.grid_item, id);
         this.context = context;
-        this.item_grid = item_grid;
+        this.id = id;
+        this.item_name = item_name;
+        this.item_picto = item_picto;
     }
 
     @Override
-    public int getCount() {
-        return item_grid.size();
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    @Override
-    public Object getItem(int i) {
-        return item_grid.get(i);
-    }
+        View rowView = inflater.inflate(R.layout.grid_item, parent, false);
 
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
+        ImageView pictograma = (ImageView) rowView.findViewById(R.id.grid_picto_descriptivo);
+        TextView titulo = (TextView) rowView.findViewById(R.id.text_title_content);
 
-    @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
+        String id_item = id.get(position);
 
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflater.inflate(R.layout.grid_item, viewGroup, false);
-        }
+        storageRef.child(item_picto.get(id_item)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(context)
+                        .load(uri)
+                        .into(pictograma);
 
-        ImageView pictograma = (ImageView) view.findViewById(R.id.grid_picto_descriptivo);
-        TextView titulo = (TextView) view.findViewById(R.id.text_title_content);
+            }
+        });
+        titulo.setText(item_name.get(id_item));
+        Log.d("GRID ADAPTER", "Nombre: " + item_name.get(id_item));
 
-
-        titulo.setText(item_grid.get(position).getTitulo());
-        if(pictograma != null) {
-            Glide.with(context)
-                    .load(item_grid.get(position).getPictograma())
-                    .into(pictograma);
-        }
-
-        return view;
+        return rowView;
     }
 }

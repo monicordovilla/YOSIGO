@@ -1,10 +1,13 @@
 package com.example.yosigo.Persona.HomePersona;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.yosigo.MainActivity;
 import com.example.yosigo.R;
 
 public class HomePersonaFragment extends Fragment {
@@ -28,6 +32,9 @@ public class HomePersonaFragment extends Fragment {
         btn_forums = (Button) root.findViewById(R.id.button_persona_forum);
         btn_calendar.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_home_to_nav_calendar));
         btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_home_to_nav_slideshow));
+
+        /*MainActivity mainActivity = new MainActivity();
+        mainActivity.setToolbar_image(R.drawable.inicio);*/
 
         return root;
     }
