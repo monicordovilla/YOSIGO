@@ -61,7 +61,6 @@ public class GridAdapter extends ArrayAdapter {
             }
         });
         titulo.setText(item_name.get(id_item));
-        Log.d("GRID ADAPTER", "Nombre: " + item_name.get(id_item));
 
         return rowView;
     }

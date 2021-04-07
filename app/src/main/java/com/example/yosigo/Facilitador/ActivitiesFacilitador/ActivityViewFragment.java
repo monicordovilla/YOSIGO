@@ -134,9 +134,6 @@ public class ActivityViewFragment extends Fragment {
                                                             Date fecha_inicio = doc.getDate("Fecha Inicio", behavior) ;
                                                             Date fecha_fin = doc.getDate("Fecha Fin", behavior) ;
 
-                                                            Log.d(TAG, "Fecha inicio: " + fecha_inicio + " ¿posterior? " + new Date().after(fecha_inicio));
-                                                            Log.d(TAG, "Fecha fin: " + fecha_fin + " ¿anterior? " + new Date().before(fecha_fin));
-
                                                             if (new Date().after(fecha_inicio) && new Date().before(fecha_fin)) {
                                                                 participantes.add(full_name);
                                                                 Log.d(TAG, "Participante: " + full_name);
