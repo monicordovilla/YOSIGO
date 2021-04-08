@@ -23,11 +23,27 @@
         android:id="@+id/nav_calendar"
         android:name="com.example.yosigo.Persona.CalendarPersona.CalendarFragment"
         android:label="@string/menu_calendar"
-        tools:layout="@layout/list_activities_facilitador" />
+        tools:layout="@layout/list_activities_facilitador" >
+        <action
+            android:id="@+id/action_nav_calendar_to_activityViewFragment22"
+            app:destination="@id/activityViewFragment2" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_forums"
         android:name="com.example.yosigo.Persona.ForumsPersona.ListForumsPersona"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/activityViewFragment2"
+        android:name="com.example.yosigo.Persona.ActivitiesPersona.ActivityViewFragment"
+        android:label="@string/ver_actividad"
+        tools:layout="@layout/activity_view_fragment" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+    </fragment>
 </navigation>

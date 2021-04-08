@@ -1,11 +1,5 @@
 package com.example.yosigo.Persona.CalendarPersona;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,14 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 
-import com.bumptech.glide.Glide;
+import com.example.yosigo.MainActivity;
 import com.example.yosigo.Persona.GridAdapter;
-import com.example.yosigo.Persona.itemGrid;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -144,13 +135,8 @@ public class CalendarFragment extends Fragment {
     }
 
     private void getActivities(){
-        //Obtenemos la referencia al archvivo datos
-        SharedPreferences preferencias= getActivity().getSharedPreferences("datos", Context.MODE_PRIVATE);
-        //Extraemos del archivo datos el campo email, si este no existe se devuelve un campo vacío
-        String sesion = preferencias.getString("sesion","");
-
         //Comprobar las actividades que tiene asignadas
-        db.collection("users").document(sesion).collection("activities")
+        db.collection("users").document(MainActivity.sesion).collection("activities")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -189,7 +175,6 @@ public class CalendarFragment extends Fragment {
                                                     //Filtrar actividades para que aparezcan las que tocan hoy
                                                     Calendar cal = Calendar.getInstance();
                                                     int dia = cal.get(Calendar.DAY_OF_WEEK);
-                                                    Log.d(TAG, "Dia: " + cal.get(Calendar.DAY_OF_WEEK));
                                                     if (dia == 1) filtrarActividades(DOMINGO);
                                                     else if (dia == 2) filtrarActividades(LUNES);
                                                     else if (dia == 3) filtrarActividades(MARTES);

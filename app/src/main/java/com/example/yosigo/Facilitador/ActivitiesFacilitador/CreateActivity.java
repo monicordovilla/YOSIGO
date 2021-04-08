@@ -1,6 +1,8 @@
 package com.example.yosigo.Facilitador.ActivitiesFacilitador;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -118,6 +120,9 @@ public class CreateActivity extends Fragment {
         //Guardar nombre
         Map<String, Object> data = new HashMap<>();
         data.put("Nombre", nombre_actividad.getText().toString());
+
+        String sesion = MainActivity.sesion;
+        data.put("Facilitador", sesion);
 
         //Guardar fotos en firestore storage
         if (uri_picto == null) {

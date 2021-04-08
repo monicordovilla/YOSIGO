@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     boolean facilitador;
     public ImageView toolbar_image;
+    public static String sesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             guardarSesion(mAuth.getCurrentUser().getUid());
+                            sesion=mAuth.getCurrentUser().getUid();
                         }
                     }
             );
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             guardarSesion(mAuth.getCurrentUser().getUid());
+                            sesion=mAuth.getCurrentUser().getUid();
                         }
                     }
             );
