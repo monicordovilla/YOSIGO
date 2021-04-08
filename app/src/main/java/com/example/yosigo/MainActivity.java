@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             guardarSesion(mAuth.getCurrentUser().getUid());
-                            sesion=mAuth.getCurrentUser().getUid();
+                            sesion=mAuth.getCurrentUser().getUid().toString();
                         }
                     }
             );

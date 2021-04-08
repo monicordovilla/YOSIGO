@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.BaseAdapter;
 
+import androidx.navigation.Navigation;
+
 import com.bumptech.glide.Glide;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,6 +60,14 @@ public class GridAdapter extends ArrayAdapter {
                         .load(uri)
                         .into(pictograma);
 
+                pictograma.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("param1", id_item);
+                        Navigation.findNavController(view).navigate(R.id.action_nav_calendar_to_activityViewFragment22, bundle);
+                    }
+                });
             }
         });
         titulo.setText(item_name.get(id_item));

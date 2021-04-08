@@ -67,6 +67,15 @@ public class CalendarFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         root =  inflater.inflate(R.layout.calendar_fragment, container, false);
 
+        //Limpiar datos
+        actividades_id.clear();
+        actividades_nombre.clear();
+        actividades_pictos.clear();
+        dias_actividades.clear();
+        actividades_id_filtradas.clear();
+        actividades_nombre_filtradas.clear();
+        actividades_pictos_filtradas.clear();
+
         //Botones
         btn_l = (Button) root.findViewById(R.id.button_lunes);
         btn_m = (Button) root.findViewById(R.id.button_martes);
