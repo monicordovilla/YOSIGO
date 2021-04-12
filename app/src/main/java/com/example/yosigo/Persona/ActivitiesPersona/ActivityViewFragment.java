@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,6 +54,7 @@ public class ActivityViewFragment extends Fragment {
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
     private ListView list_actividades;
+    private ImageButton btn_feedback, btn_email;
 
     public ActivityViewFragment() {
         // Required empty public constructor
@@ -89,6 +92,16 @@ public class ActivityViewFragment extends Fragment {
         img_picto = (ImageView) root.findViewById(R.id.picto_activity_persona);
         img_meta = (ImageView) root.findViewById(R.id.show_picto_meta_persona);
         list_actividades = root.findViewById(R.id.list_array_activities_persona);
+        btn_feedback = root.findViewById(R.id.btn_feedback_persona);
+
+        btn_feedback.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_activityViewFragment2_to_createFeedbackFragment, bundle);
+            }
+        });
 
         getDatosTarea();
 

@@ -63,7 +63,7 @@
         android:layout_height="match_parent">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/btn_feedback_persona"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitCenter"
@@ -72,7 +72,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/btn_go_chat"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="fitCenter"

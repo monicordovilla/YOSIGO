@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             guardarSesion(mAuth.getCurrentUser().getUid());
                             sesion=mAuth.getCurrentUser().getUid().toString();
+
                         }
                     }
             );
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
             DrawerLayout drawer = findViewById(R.id.drawer_layout);
             NavigationView navigationView = findViewById(R.id.nav_view);
+
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
             mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
             DrawerLayout drawer = findViewById(R.id.drawer_layout_persona);
             NavigationView navigationView = findViewById(R.id.nav_view_persona);
+
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
             mAppBarConfiguration = new AppBarConfiguration.Builder(

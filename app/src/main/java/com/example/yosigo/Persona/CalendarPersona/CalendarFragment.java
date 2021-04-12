@@ -1,5 +1,7 @@
 package com.example.yosigo.Persona.CalendarPersona;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.example.yosigo.MainActivity;
 import com.example.yosigo.Persona.GridAdapter;
@@ -144,8 +148,15 @@ public class CalendarFragment extends Fragment {
     }
 
     private void getActivities(){
+        String sesion = MainActivity.sesion;
+        if(MainActivity.sesion == null){
+            //Obtenemos la referencia al archvivo datos
+            SharedPreferences preferencias= getActivity().getSharedPreferences("datos", Context.MODE_PRIVATE);
+            //Extraemos del archivo datos el campo email, si este no existe se devuelve un campo vacío
+            sesion = preferencias.getString("sesion","");
+        }
         //Comprobar las actividades que tiene asignadas
-        db.collection("users").document(MainActivity.sesion).collection("activities")
+        db.collection("users").document(sesion).collection("activities")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -194,6 +205,9 @@ public class CalendarFragment extends Fragment {
                                                 }
                                             });
                                 }
+                            }
+                            if(task.getResult().isEmpty()){
+                                Toast.makeText(getContext(), "No tiene actividades asociadas", Toast.LENGTH_LONG).show();
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
