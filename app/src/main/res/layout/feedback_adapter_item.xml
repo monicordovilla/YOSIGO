@@ -15,6 +15,7 @@
         android:id="@+id/show_date_persona_feedback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:layout_gravity="center"
         android:typeface="monospace" />
 
@@ -22,6 +23,16 @@
         android:id="@+id/show_persona_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="30dp"
         android:text="TextView" />
+
+    <ImageButton
+        android:id="@+id/button_watch_feedback_persona"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimary"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_watch" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

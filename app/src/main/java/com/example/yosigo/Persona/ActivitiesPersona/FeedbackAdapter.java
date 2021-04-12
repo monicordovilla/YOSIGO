@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,19 +54,22 @@ public class FeedbackAdapter extends ArrayAdapter {
 
         TextView fecha = rowView.findViewById(R.id.show_date_persona_feedback);;
         TextView texto = (TextView) rowView.findViewById(R.id.show_persona_feedback);
+        ImageButton btn = rowView.findViewById(R.id.button_watch_feedback_persona);
 
         String id_item = id.get(position);
 
         //Convertir fecha a String
-        DateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = dateFormat.format(item_date.get(id_item));
         fecha.setText(strDate);
 
 
         texto.setText(item_file.get(id_item));
 
-        if(item_type.get(id_item) == "Archivo"){
-            texto.setOnClickListener( new View.OnClickListener(){
+        if(item_type.get(id_item).equals("Texto")){
+            btn.setVisibility(View.GONE);
+        } else if(item_type.get(id_item).equals("Archivo")){
+            btn.setOnClickListener( new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
                     FirebaseStorage.getInstance().getReference().

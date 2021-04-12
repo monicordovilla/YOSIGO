@@ -212,6 +212,13 @@ public class CreateFeedbackFragment extends Fragment {
     }
 
     private void getAnteriores(){
+        //Limpiamos datos
+        id.clear();
+        map_date.clear();
+        map_type.clear();
+        map_file.clear();
+
+        //Obtenemos datos de base de datos
         fb.collection("activities")
                 .document(mParam1)
                 .collection("Feedback")
