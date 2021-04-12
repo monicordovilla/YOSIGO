@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -54,6 +56,7 @@ public class ActivityViewFragment extends Fragment {
 
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
+    private Button btn_go_feedback;
     private ListView list_actividades, list_usurarios;
     private List<String> participantes = new ArrayList<>();
 
@@ -97,6 +100,16 @@ public class ActivityViewFragment extends Fragment {
         img_cat = (ImageView) root.findViewById(R.id.show_cat_pic);
         list_actividades = root.findViewById(R.id.show_activity_pic);
         list_usurarios = root.findViewById(R.id.show_activity_name_users);
+        btn_go_feedback = root.findViewById(R.id.button_go_retroalimentacion);
+
+        btn_go_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_activityViewFragment_to_feedbackFacilitadorFragment, bundle);
+            }
+        });
 
         getDatos();
         getParticipantes();
@@ -105,6 +118,7 @@ public class ActivityViewFragment extends Fragment {
     }
 
     private void getParticipantes(){
+        participantes.clear();
         FirebaseFirestore.getInstance().collection("users")
                 .whereEqualTo("Rol", "Persona")
                 .get()

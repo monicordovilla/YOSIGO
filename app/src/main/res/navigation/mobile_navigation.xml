@@ -54,12 +54,26 @@
             app:argType="string"
             android:defaultValue="0"
             />
+        <action
+            android:id="@+id/action_activityViewFragment_to_feedbackFacilitadorFragment"
+            app:destination="@id/feedbackFacilitadorFragment" />
     </fragment>
     <fragment
         android:id="@+id/asociateFragment"
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.AsociateFragment"
         android:label="Asociar personas"
         tools:layout="@layout/asociate_fragment" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/feedbackFacilitadorFragment"
+        android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.FeedbackFacilitadorFragment"
+        android:label="Retroalimentación"
+        tools:layout="@layout/fragment_feedback_facilitador">
         <argument
             android:name="param1"
             app:argType="string"

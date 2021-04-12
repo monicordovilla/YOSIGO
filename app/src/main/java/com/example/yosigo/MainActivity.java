@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        facilitador = false;
+        facilitador = true;
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             guardarSesion(mAuth.getCurrentUser().getUid());
                             sesion=mAuth.getCurrentUser().getUid().toString();
-
                         }
                     }
             );

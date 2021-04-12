@@ -40,7 +40,7 @@ public class ListActivitiesViewModel extends ViewModel {
         Map<String, String> activitiesList = new HashMap<>();
 
         FirebaseFirestore.getInstance().collection("activities")
-                .whereEqualTo("Facilitador" , sesion)
+                .whereEqualTo("Facilitador" , MainActivity.sesion)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
