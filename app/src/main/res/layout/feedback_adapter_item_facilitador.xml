@@ -12,7 +12,7 @@
 
 
     <TextView
-        android:id="@+id/show_date_persona_feedback"
+        android:id="@+id/show_date_facilitador_feedback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15dp"
@@ -20,10 +20,26 @@
         android:typeface="monospace" />
 
     <TextView
-        android:id="@+id/show_persona_feedback"
+        android:id="@+id/show_facilitador_nombre_persona"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:text="Nombre" />
+
+    <TextView
+        android:id="@+id/show_facilitador_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:text="TextView" />
+    
+    <ImageButton
+        android:id="@+id/button_watch_feedback_facilitador"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimary"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_watch" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -26,15 +26,18 @@ public class FeedbackFacilitadorAdapter extends ArrayAdapter {
     private final Map<String,Date> item_date;
     private final Map<String,String> item_file;
     private final Map<String,String> item_type;
+    private final Map<String,String> item_user;
 
     public FeedbackFacilitadorAdapter(Context context, List<String> objects, Map<String, Date> item_date,
-                                      Map<String,String> item_file, Map<String,String> item_type) {
-        super(context, R.layout.feedback_adapter_item, objects);
+                                      Map<String,String> item_file, Map<String,String> item_type,
+                                      Map<String,String> item_user) {
+        super(context, R.layout.feedback_adapter_item_facilitador, objects);
         this.context = context;
         this.id = objects;
         this.item_date = item_date;
         this.item_file = item_file;
         this.item_type = item_type;
+        this.item_user = item_user;
     }
 
     @Override
@@ -42,11 +45,12 @@ public class FeedbackFacilitadorAdapter extends ArrayAdapter {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = inflater.inflate(R.layout.feedback_adapter_item, parent, false);
+        View rowView = inflater.inflate(R.layout.feedback_adapter_item_facilitador, parent, false);
 
-        TextView fecha = rowView.findViewById(R.id.show_date_persona_feedback);;
-        TextView texto = (TextView) rowView.findViewById(R.id.show_persona_feedback);
-        ImageButton btn = rowView.findViewById(R.id.button_watch_feedback_persona);
+        TextView fecha = rowView.findViewById(R.id.show_date_facilitador_feedback);
+        TextView nombre = (TextView) rowView.findViewById(R.id.show_facilitador_nombre_persona);
+        TextView texto = (TextView) rowView.findViewById(R.id.show_facilitador_feedback);
+        ImageButton btn = rowView.findViewById(R.id.button_watch_feedback_facilitador);
 
         String id_item = id.get(position);
 
@@ -55,7 +59,7 @@ public class FeedbackFacilitadorAdapter extends ArrayAdapter {
         String strDate = dateFormat.format(item_date.get(id_item));
         fecha.setText(strDate);
 
-
+        nombre.setText(item_user.get(id_item));
         texto.setText(item_file.get(id_item));
 
         if(item_type.get(id_item).equals("Texto")){

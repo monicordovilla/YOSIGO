@@ -147,7 +147,7 @@ public class CreateFeedbackFragment extends Fragment {
         if(uri_feedback != null) {
             data.put("Tipo", "Archivo");
             Log.d(TAG, "Archivo: " + uri_feedback.getLastPathSegment());
-            StorageReference filePath_picto = storageRef.child("pictogramas").child(uri_feedback.getLastPathSegment());
+            StorageReference filePath_picto = storageRef.child("feedback").child(uri_feedback.getLastPathSegment());
 
             filePath_picto.putFile(uri_feedback).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
