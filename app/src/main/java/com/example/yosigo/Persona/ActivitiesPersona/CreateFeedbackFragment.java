@@ -155,7 +155,7 @@ public class CreateFeedbackFragment extends Fragment {
                     data.put("Archivo", filePath_picto.getPath());
                     Log.d(TAG, "Agregado: " + filePath_picto.getPath());
 
-                    //Agregar tarea
+                    //Agregar feedback
                     fb.collection("activities")
                             .document(mParam1)
                             .collection("Feedback")
@@ -184,7 +184,7 @@ public class CreateFeedbackFragment extends Fragment {
             data.put("Archivo", text_input.getText().toString());
             Log.d(TAG, "Agregado: " + text_input.getText().toString());
 
-            //Agregar tarea
+            //Agregar feedback
             FirebaseFirestore.getInstance().collection("activities")
                     .document(mParam1)
                     .collection("Feedback")

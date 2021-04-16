@@ -3,6 +3,7 @@ package com.example.yosigo.Persona.ActivitiesPersona;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -94,12 +95,24 @@ public class ActivityViewFragment extends Fragment {
         list_actividades = root.findViewById(R.id.list_array_activities_persona);
         btn_feedback = root.findViewById(R.id.btn_feedback_persona);
 
-        btn_feedback.setOnClickListener(new View.OnClickListener(){
+        /*btn_feedback.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("param1", mParam1);
                 Navigation.findNavController(view).navigate(R.id.action_activityViewFragment2_to_createFeedbackFragment, bundle);
+            }
+        });*/
+
+        Drawable drawableAssessment = getResources().getDrawable(R.drawable.como_estas);
+        btn_feedback.setImageDrawable(drawableAssessment);
+
+        btn_feedback.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_activityViewFragment2_to_createAssessmentFragment, bundle);
             }
         });
 
