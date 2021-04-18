@@ -1,29 +1,24 @@
 package com.example.yosigo.Facilitador.ActivitiesFacilitador;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.bumptech.glide.Glide;
-import com.example.yosigo.MainActivity;
-import com.example.yosigo.Persona.ActivitiesPersona.FeedbackAdapter;
 import com.example.yosigo.R;
+import com.example.yosigo.Facilitador.ActivitiesFacilitador.dummy.DummyContent;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,13 +31,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FeedbackFacilitadorFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment representing a list of Items.
  */
-public class FeedbackFacilitadorFragment extends Fragment {
+public class ViewAssessmentFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private final String TAG = "FEEDBACK";
     private final FirebaseFirestore FB = FirebaseFirestore.getInstance();
@@ -55,20 +47,18 @@ public class FeedbackFacilitadorFragment extends Fragment {
     private Map<String, String> map_type = new HashMap<>();
     private Map<String, Date> map_date = new HashMap<>();
     private Map<String, String> map_user = new HashMap<>();
-
-    public FeedbackFacilitadorFragment() {
-        // Required empty public constructor
-    }
+    private Map<String, Integer> map_difficult = new HashMap<>();
+    private Map<String, Integer> map_utility = new HashMap<>();
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @return A new instance of fragment FeedbackFacilitadorFragment.
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
      */
-    public static FeedbackFacilitadorFragment newInstance(String param1, String param2) {
-        FeedbackFacilitadorFragment fragment = new FeedbackFacilitadorFragment();
+    public ViewAssessmentFragment() {
+    }
+
+    public static ViewAssessmentFragment newInstance(String param1, String param2) {
+        ViewAssessmentFragment fragment = new ViewAssessmentFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -86,14 +76,13 @@ public class FeedbackFacilitadorFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        root = inflater.inflate(R.layout.fragment_feedback_facilitador, container, false);
-        list = root.findViewById(R.id.list_feedback_facilitador);
-        getFeedbacks();
+        root = inflater.inflate(R.layout.fragment_view_assessment_list, container, false);
+        list = root.findViewById(R.id.list_assessment_facilitador);
+        getAssessments();
         return root;
     }
 
-    private void getFeedbacks(){
+    private void getAssessments(){
         id = new ArrayList<>();
         map_file.clear();
         map_type.clear();
@@ -101,13 +90,14 @@ public class FeedbackFacilitadorFragment extends Fragment {
         map_user.clear();
 
         FB.collection("activities")
-                .document(mParam1).collection("Feedback")
+                .document(mParam1).collection("Assessment")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getData().toString());
                                 //Obtener id
                                 String doc_id = document.getId();
                                 id.add(doc_id);
@@ -130,13 +120,22 @@ public class FeedbackFacilitadorFragment extends Fragment {
                                                 Log.d(TAG, doc_id);
                                                 DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
                                                 map_date.put(doc_id , document.getDate("Fecha", behavior));
-                                                map_type.put(doc_id , document.getData().get("Tipo").toString());
-                                                map_file.put(doc_id , document.getData().get("Archivo").toString());
+                                                map_difficult.put(doc_id, Integer.parseInt(document.getData().get("Dificultad").toString()));
+                                                map_utility.put(doc_id, Integer.parseInt(document.getData().get("Utilidad").toString()));
+                                                if (document.getData().get("Tipo") == null){
+                                                    map_type.put(doc_id, "");
+                                                    map_file.put(doc_id, "");
+                                                } else {
+                                                    map_type.put(doc_id, document.getData().get("Tipo").toString());
+                                                    map_file.put(doc_id, document.getData().get("Sugerencia").toString());
+                                                }
 
-                                                FeedbackFacilitadorAdapter adapter = new FeedbackFacilitadorAdapter(
+                                                AssessmentViewItemAdapter adapter = new AssessmentViewItemAdapter(
                                                         root.getContext(),
                                                         id,
                                                         map_date,
+                                                        map_difficult,
+                                                        map_utility,
                                                         map_file,
                                                         map_type,
                                                         map_user

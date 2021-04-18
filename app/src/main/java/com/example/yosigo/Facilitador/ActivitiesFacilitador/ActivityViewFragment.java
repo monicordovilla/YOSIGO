@@ -56,7 +56,7 @@ public class ActivityViewFragment extends Fragment {
 
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
-    private Button btn_go_feedback;
+    private Button btn_go_feedback, btn_go_valoracion;
     private ListView list_actividades, list_usurarios;
     private List<String> participantes = new ArrayList<>();
 
@@ -101,6 +101,7 @@ public class ActivityViewFragment extends Fragment {
         list_actividades = root.findViewById(R.id.show_activity_pic);
         list_usurarios = root.findViewById(R.id.show_activity_name_users);
         btn_go_feedback = root.findViewById(R.id.button_go_retroalimentacion);
+        btn_go_valoracion = root.findViewById(R.id.button_go_valoracion);
 
         btn_go_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +109,15 @@ public class ActivityViewFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("param1", mParam1);
                 Navigation.findNavController(view).navigate(R.id.action_activityViewFragment_to_feedbackFacilitadorFragment, bundle);
+            }
+        });
+
+        btn_go_valoracion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_activityViewFragment_to_viewAssessmentFragment, bundle);
             }
         });
 

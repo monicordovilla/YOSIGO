@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="10dp"
-    tools:context=".Facilitador.ActivitiesFacilitador.FeedbackFacilitadorFragment">
+    android:padding="10dp"
+    tools:context=".Facilitador.ActivitiesFacilitador.ViewAssessmentFragment">
 
     <ListView
-        android:id="@+id/list_feedback_facilitador"
+        android:id="@+id/list_assessment_facilitador"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

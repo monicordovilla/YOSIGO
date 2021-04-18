@@ -160,7 +160,7 @@ public class CreateAssessmentFragment extends Fragment {
         btn_difficult_low.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                difficult = 2;
+                difficult = 1;
                 btn_difficult_high.setBackgroundColor(getResources().getColor(R.color.white));
                 btn_difficult_medium.setBackgroundColor(getResources().getColor(R.color.white));
                 btn_difficult_low.setBackgroundColor(getResources().getColor(R.color.black));
@@ -190,7 +190,7 @@ public class CreateAssessmentFragment extends Fragment {
         btn_utility_low.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                utility = 2;
+                utility = 1;
                 btn_utility_high.setBackgroundColor(getResources().getColor(R.color.white));
                 btn_utility_medium.setBackgroundColor(getResources().getColor(R.color.white));
                 btn_utility_low.setBackgroundColor(getResources().getColor(R.color.black));

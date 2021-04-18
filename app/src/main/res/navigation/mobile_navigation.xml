@@ -57,6 +57,9 @@
         <action
             android:id="@+id/action_activityViewFragment_to_feedbackFacilitadorFragment"
             app:destination="@id/feedbackFacilitadorFragment" />
+        <action
+            android:id="@+id/action_activityViewFragment_to_viewAssessmentFragment"
+            app:destination="@id/viewAssessmentFragment" />
     </fragment>
     <fragment
         android:id="@+id/asociateFragment"
@@ -72,8 +75,19 @@
     <fragment
         android:id="@+id/feedbackFacilitadorFragment"
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.FeedbackFacilitadorFragment"
-        android:label="Retroalimentación"
+        android:label="Retroalimentaciones"
         tools:layout="@layout/fragment_feedback_facilitador">
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/viewAssessmentFragment"
+        android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.ViewAssessmentFragment"
+        android:label="Valoraciones"
+        tools:layout="@layout/fragment_view_assessment_list" >
         <argument
             android:name="param1"
             app:argType="string"
