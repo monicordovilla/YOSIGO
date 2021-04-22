@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.yosigo.Facilitador.ActivitiesFacilitador.dummy.DummyContent.DummyItem;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;

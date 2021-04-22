@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.yosigo.R;
-import com.example.yosigo.Facilitador.ActivitiesFacilitador.dummy.DummyContent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;

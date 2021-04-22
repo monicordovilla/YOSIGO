@@ -62,6 +62,9 @@
             app:argType="string"
             android:defaultValue="0"
             />
+        <action
+            android:id="@+id/action_createFeedbackFragment_to_activityViewFragment2"
+            app:destination="@id/activityViewFragment2" />
     </fragment>
     <fragment
         android:id="@+id/createAssessmentFragment"
@@ -73,5 +76,8 @@
             app:argType="string"
             android:defaultValue="0"
             />
+        <action
+            android:id="@+id/action_createAssessmentFragment_to_activityViewFragment2"
+            app:destination="@id/activityViewFragment2" />
     </fragment>
 </navigation>
