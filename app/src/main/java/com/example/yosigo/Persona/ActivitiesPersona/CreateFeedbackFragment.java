@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -164,6 +165,9 @@ public class CreateFeedbackFragment extends Fragment {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
                                     Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("param1", mParam1);
+                                    Navigation.findNavController(root).navigate(R.id.action_createFeedbackFragment_to_activityViewFragment2, bundle);
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -193,6 +197,9 @@ public class CreateFeedbackFragment extends Fragment {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                            Bundle bundle = new Bundle();
+                            bundle.putString("param1", mParam1);
+                            Navigation.findNavController(root).navigate(R.id.action_createFeedbackFragment_to_activityViewFragment2, bundle);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

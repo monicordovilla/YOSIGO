@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.yosigo.Facilitador.ActivitiesFacilitador.PersonasViewModel;
+import com.example.yosigo.MainActivity;
+import com.example.yosigo.Persona.CalendarPersona.CalendarFragment;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,10 +34,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,7 +57,12 @@ public class ActivityViewFragment extends Fragment {
     private String mParam1;
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
     private View root;
+    private FirebaseFirestore fb = FirebaseFirestore.getInstance();
 
+    //Dias semana
+    private int flag;
+
+    //Elementos de la vista
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
     private ListView list_actividades;
@@ -95,18 +106,27 @@ public class ActivityViewFragment extends Fragment {
         list_actividades = root.findViewById(R.id.list_array_activities_persona);
         btn_feedback = root.findViewById(R.id.btn_feedback_persona);
 
-        /*btn_feedback.setOnClickListener(new View.OnClickListener(){
+        Drawable drawableAssessment = getResources().getDrawable(R.drawable.como_estas);
+        btn_feedback.setImageDrawable(drawableAssessment);
+
+        //setButton();
+        getDatosTarea();
+
+        return root;
+    }
+
+    private void buttonFeedback(){
+        btn_feedback.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("param1", mParam1);
                 Navigation.findNavController(view).navigate(R.id.action_activityViewFragment2_to_createFeedbackFragment, bundle);
             }
-        });*/
+        });
+    }
 
-        Drawable drawableAssessment = getResources().getDrawable(R.drawable.como_estas);
-        btn_feedback.setImageDrawable(drawableAssessment);
-
+    private void buttonAssessment(){
         btn_feedback.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -115,21 +135,101 @@ public class ActivityViewFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_activityViewFragment2_to_createAssessmentFragment, bundle);
             }
         });
-
-        getDatosTarea();
-
-        return root;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // TODO: Use the ViewModel
+    private void setButton(){
+        fb.collection("users")
+                .document(MainActivity.sesion)
+                .collection("activities")
+                .document(mParam1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                //Obtenermos el último día
+                                DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
+                                Date fecha_fin = document.getDate("Fecha Fin", behavior);
+
+                                //Si ha pasado la fecha actual final
+                                Date actualDate = new Date();
+                                if ( actualDate.after(fecha_fin)){
+                                    fb.collection("activities")
+                                            .document(mParam1).collection("Feedback")
+                                            .whereEqualTo("Persona", MainActivity.sesion)
+                                            .get()
+                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task_feedback) {
+                                                    if (task_feedback.getResult().isEmpty()){
+                                                        buttonFeedback();
+                                                    } else {
+                                                        buttonAssessment();
+                                                    }
+                                                }
+                                            });
+                                } else {
+                                    //Dias de la semana de la actividad
+                                    flag = Integer.parseInt(document.getData().get("Dias semana").toString());
+
+                                    //Filtrar actividades para que aparezcan las que tocan hoy
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.setTime(fecha_fin);
+                                    int dia = cal.get(Calendar.DAY_OF_WEEK);
+                                    boolean esÚltimo = false;
+
+                                    //Ver el último día de la semana de la actividad
+                                    while (!esÚltimo) {
+                                        if (dia == 1)
+                                            esÚltimo = ((CalendarFragment.DOMINGO & flag) == CalendarFragment.DOMINGO);
+                                        else if (dia == 2)
+                                            esÚltimo = ((CalendarFragment.LUNES & flag) == CalendarFragment.LUNES);
+                                        else if (dia == 3)
+                                            esÚltimo = ((CalendarFragment.MARTES & flag) == CalendarFragment.MARTES);
+                                        else if (dia == 4)
+                                            esÚltimo = ((CalendarFragment.MIERCOLES & flag) == CalendarFragment.MIERCOLES);
+                                        else if (dia == 5)
+                                            esÚltimo = ((CalendarFragment.JUEVES & flag) == CalendarFragment.JUEVES);
+                                        else if (dia == 6)
+                                            esÚltimo = ((CalendarFragment.VIERNES & flag) == CalendarFragment.VIERNES);
+                                        else if (dia == 7)
+                                            esÚltimo = ((CalendarFragment.SABADO & flag) == CalendarFragment.SABADO);
+                                        if (!esÚltimo) dia = (dia - 1) % 8;
+                                    }
+
+                                    //Ver día de la semana actual
+                                    Calendar actualCal = Calendar.getInstance();
+                                    int actualDay = cal.get(Calendar.DAY_OF_WEEK);
+                                    if (actualDay == dia){
+                                        fb.collection("activities")
+                                                .document(mParam1).collection("Feedback")
+                                                .whereEqualTo("Persona", MainActivity.sesion)
+                                                .get()
+                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if (task.getResult().isEmpty()){
+                                                            buttonFeedback();
+                                                        } else {
+                                                            buttonAssessment();
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        buttonFeedback();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
     }
 
     private void getDatosTarea(){
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("activities").document(mParam1);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        fb.collection("activities").document(mParam1).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {

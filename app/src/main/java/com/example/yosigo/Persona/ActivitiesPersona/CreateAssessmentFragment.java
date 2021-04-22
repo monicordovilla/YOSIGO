@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.os.Environment;
 import android.util.Log;
@@ -56,9 +57,8 @@ public class CreateAssessmentFragment extends Fragment {
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
 
-    private static final int AUDIO_INTENT = 2;
-    private static final int PHOTO_INTENT = 3;
-    private static final int FILE_INTENT = 4;
+    private static final int PHOTO_INTENT = 6;
+    private static final int FILE_INTENT = 7;
 
     private final String TAG = "CREATE ASSESSMENT";
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
@@ -215,20 +215,6 @@ public class CreateAssessmentFragment extends Fragment {
             }
         });
 
-        //El usuario debe dar permiso expreso de que quiere que se guarde el audio
-        /*if (ContextCompat.checkSelfPermission(root.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(root.getContext(), Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    getActivity(),
-                    new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.RECORD_AUDIO},
-                    1000);
-
-        }*/
-
         btn_audio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -306,6 +292,9 @@ public class CreateAssessmentFragment extends Fragment {
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
                                         Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("param1", mParam1);
+                                        Navigation.findNavController(root).navigate(R.id.action_createAssessmentFragment_to_activityViewFragment2, bundle);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -330,6 +319,9 @@ public class CreateAssessmentFragment extends Fragment {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                Bundle bundle = new Bundle();
+                                bundle.putString("param1", mParam1);
+                                Navigation.findNavController(root).navigate(R.id.action_createAssessmentFragment_to_activityViewFragment2, bundle);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

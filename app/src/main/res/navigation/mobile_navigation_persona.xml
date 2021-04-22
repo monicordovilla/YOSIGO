@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_activityViewFragment2_to_createAssessmentFragment"
             app:destination="@id/createAssessmentFragment" />
+        <action
+            android:id="@+id/action_activityViewFragment2_to_chatPersonaFragment"
+            app:destination="@id/chatPersonaFragment" />
     </fragment>
     <fragment
         android:id="@+id/createFeedbackFragment"
@@ -79,5 +82,16 @@
         <action
             android:id="@+id/action_createAssessmentFragment_to_activityViewFragment2"
             app:destination="@id/activityViewFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatPersonaFragment"
+        android:name="com.example.yosigo.Persona.ForumsPersona.ChatPersonaFragment"
+        android:label="fragment_chat_persona"
+        tools:layout="@layout/fragment_chat_persona" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
     </fragment>
 </navigation>
