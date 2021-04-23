@@ -86,7 +86,7 @@
     <fragment
         android:id="@+id/chatPersonaFragment"
         android:name="com.example.yosigo.Persona.ForumsPersona.ChatPersonaFragment"
-        android:label="fragment_chat_persona"
+        android:label="Chat"
         tools:layout="@layout/fragment_chat_persona" >
         <argument
             android:name="param1"

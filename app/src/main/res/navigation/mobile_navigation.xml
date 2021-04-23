@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_activityViewFragment_to_viewAssessmentFragment"
             app:destination="@id/viewAssessmentFragment" />
+        <action
+            android:id="@+id/action_activityViewFragment_to_chatFacilitadorFragment"
+            app:destination="@id/chatFacilitadorFragment" />
     </fragment>
     <fragment
         android:id="@+id/asociateFragment"
@@ -88,6 +91,17 @@
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.ViewAssessmentFragment"
         android:label="Valoraciones"
         tools:layout="@layout/fragment_view_assessment_list" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFacilitadorFragment"
+        android:name="com.example.yosigo.Facilitador.ForumsFacilitador.ChatFacilitadorFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat_facilitador" >
         <argument
             android:name="param1"
             app:argType="string"

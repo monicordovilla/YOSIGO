@@ -105,9 +105,16 @@ public class ActivityViewFragment extends Fragment {
         img_meta = (ImageView) root.findViewById(R.id.show_picto_meta_persona);
         list_actividades = root.findViewById(R.id.list_array_activities_persona);
         btn_feedback = root.findViewById(R.id.btn_feedback_persona);
+        btn_email = root.findViewById(R.id.btn_go_chat);
 
-        Drawable drawableAssessment = getResources().getDrawable(R.drawable.como_estas);
-        btn_feedback.setImageDrawable(drawableAssessment);
+        btn_email.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_activityViewFragment2_to_chatPersonaFragment, bundle);
+            }
+        });
 
         //setButton();
         getDatosTarea();
@@ -127,6 +134,8 @@ public class ActivityViewFragment extends Fragment {
     }
 
     private void buttonAssessment(){
+        Drawable drawableAssessment = getResources().getDrawable(R.drawable.como_estas);
+        btn_feedback.setImageDrawable(drawableAssessment);
         btn_feedback.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

@@ -3,31 +3,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    tools:context=".Persona.ForumsPersona.ChatPersonaFragment">
-
+    android:orientation="vertical"
+    tools:context=".Facilitador.ForumsFacilitador.ChatFacilitadorFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp">
 
-        <ImageView
-            android:id="@+id/imageView_chat_picto"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/actividades"
+        <TextView
+            android:id="@+id/textView_chat_facilitador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:hint="Nombre actividad"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
-        android:id="@+id/list_chat_persona"
+        android:id="@+id/list_chat_facilitador"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
@@ -38,7 +36,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/EditText_chat_persona"
+            android:id="@+id/EditText_chat_facilitador"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -48,17 +46,21 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/enviar"/>
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_send"/>
         <ImageButton
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/foto"/>
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_add_photo"/>
         <ImageButton
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/microfono"/>
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_audio"/>
 
     </LinearLayout>
+
 </LinearLayout>
