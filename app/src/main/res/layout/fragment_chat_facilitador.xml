@@ -43,18 +43,21 @@
             android:hint="@string/escribir_mensaje"/>
 
         <ImageButton
+            android:id="@+id/btn_enviar_mensaje_facilitador"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
             android:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_send"/>
         <ImageButton
+            android:id="@+id/btn_enviar_foto_facilitador"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
             android:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_add_photo"/>
         <ImageButton
+            android:id="@+id/btn_enviar_audio_facilitador"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
