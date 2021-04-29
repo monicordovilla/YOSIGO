@@ -4,6 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="8dp"
+    android:layout_marginBottom="8dp"
     android:orientation="vertical"
     android:background="@drawable/background_left">
 
@@ -40,8 +41,8 @@
         android:id="@+id/show_image_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxHeight="300dp"
-        android:maxWidth="300dp"/>
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
 
     <ImageButton
         android:id="@+id/show_btn_hear_message"

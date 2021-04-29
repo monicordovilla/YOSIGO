@@ -31,14 +31,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.firestore.v1.Document;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +75,8 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     private String mParam1, mParam2;
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+    //View items
     private View root;
     private TextView text_name;
     private EditText mensaje;
@@ -78,6 +85,14 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     private String tipo, ruta;
     private Uri uri_audio, uri_photo;
     private RecyclerView list;
+
+    //Save data
+    List<String> idList = new ArrayList<>();
+    Map<String, Date> dateMap = new HashMap<>();
+    Map<String, String> emisorMap = new HashMap<>();
+    Map<String, String> emisorId = new HashMap<>();
+    Map<String, String> tipoMap = new HashMap<>();
+    Map<String, String> contenidoMap = new HashMap<>();
 
     public ChatFacilitadorFragment() {
         // Required empty public constructor
@@ -124,6 +139,10 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
         btn_foto = root.findViewById(R.id.btn_enviar_foto_facilitador);
         btn_send = root.findViewById(R.id.btn_enviar_mensaje_facilitador);
 
+        btn_audio.setOnClickListener(this);
+        btn_foto.setOnClickListener(this);
+        btn_send.setOnClickListener(this);
+
         getNombre();
         getMensajes();
 
@@ -131,28 +150,19 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     }
 
     private void getMensajes(){
-        Log.d(TAG, "Actividad: " + mParam1);
-        Log.d(TAG, "Persona: " + mParam2);
         fb.collection("activities")
                 .document(mParam1)
                 .collection("Chat")
                 .document(mParam2)
                 .collection("Messages")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .orderBy("Fecha", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d(TAG, "A mostrar: " + task.getResult().getDocuments());
-                        if (task.isSuccessful()) {
-                            List<String> idList = new ArrayList<>();
-                            Map<String, Date> dateMap = new HashMap<>();
-                            Map<String, String> emisorMap = new HashMap<>();
-                            Map<String, String> emisorId = new HashMap<>();
-                            Map<String, String> tipoMap = new HashMap<>();
-                            Map<String, String> contenidoMap = new HashMap<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        for (DocumentChange mDocumentChange : queryDocumentSnapshots.getDocumentChanges()){
+                            if(mDocumentChange.getType() == DocumentChange.Type.ADDED){
+                                QueryDocumentSnapshot document = mDocumentChange.getDocument();
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-
                                 //Obtener usuario
                                 fb.collection("users")
                                         .document(document.getData().get("Emisor").toString())
@@ -192,8 +202,6 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                                             }
                                         });
                             }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
                         }
                     }
                 });
@@ -224,14 +232,16 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_enviar_mensaje_facilitador:
-                tipo = "Texto";
-                Map<String, Object> data = new HashMap<>();
-                data.put("Fecha", Timestamp.now());
-                data.put("Emisor", MainActivity.sesion);
-                data.put("Tipo", tipo);
-                data.put("Contenido", mensaje.getText().toString());
-                sendData(data);
-                mensaje.setText("");
+                if(!mensaje.getText().toString().isEmpty()) {
+                    tipo = "Texto";
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("Fecha", Timestamp.now());
+                    data.put("Emisor", MainActivity.sesion);
+                    data.put("Tipo", tipo);
+                    data.put("Contenido", mensaje.getText().toString());
+                    sendData(data);
+                    mensaje.setText("");
+                }
                 break;
 
             case R.id.btn_enviar_foto_facilitador:
@@ -334,7 +344,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
         fb.collection("activities")
                 .document(mParam1)
                 .collection("Chat")
-                .document(MainActivity.sesion)
+                .document(mParam2)
                 .collection("Messages")
                 .add(data)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

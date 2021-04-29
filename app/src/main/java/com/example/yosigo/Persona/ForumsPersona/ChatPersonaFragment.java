@@ -38,6 +38,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -140,6 +141,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                 .collection("Chat")
                 .document(MainActivity.sesion)
                 .collection("Messages")
+                .orderBy("Fecha", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -236,14 +238,16 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_enviar_mensaje_persona:
-                tipo = "Texto";
-                Map<String, Object> data = new HashMap<>();
-                data.put("Fecha", Timestamp.now());
-                data.put("Emisor", MainActivity.sesion);
-                data.put("Tipo", tipo);
-                data.put("Contenido", mensaje.getText().toString());
-                sendData(data);
-                mensaje.setText("");
+                if(!mensaje.getText().toString().isEmpty()) {
+                    tipo = "Texto";
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("Fecha", Timestamp.now());
+                    data.put("Emisor", MainActivity.sesion);
+                    data.put("Tipo", tipo);
+                    data.put("Contenido", mensaje.getText().toString());
+                    sendData(data);
+                    mensaje.setText("");
+                }
                 break;
 
             case R.id.btn_enviar_foto_persona:
