@@ -35,9 +35,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -72,9 +75,11 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
 
     private String mParam1;
-    private View root;
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+    //View items
+    private View root;
     private ImageView picto;
     private EditText mensaje;
     private ImageButton btn_audio, btn_foto, btn_send;
@@ -82,6 +87,14 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     private String tipo, ruta;
     private Uri uri_audio, uri_photo;
     private RecyclerView list;
+
+    //Save data
+    List<String> idList = new ArrayList<>();
+    Map<String, Date> dateMap = new HashMap<>();
+    Map<String, String> emisorMap = new HashMap<>();
+    Map<String, String> emisorId = new HashMap<>();
+    Map<String, String> tipoMap = new HashMap<>();
+    Map<String, String> contenidoMap = new HashMap<>();
 
     public ChatPersonaFragment() {
         // Required empty public constructor
@@ -142,18 +155,12 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                 .document(MainActivity.sesion)
                 .collection("Messages")
                 .orderBy("Fecha", Query.Direction.ASCENDING)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            List<String> idList = new ArrayList<>();
-                            Map<String, Date> dateMap = new HashMap<>();
-                            Map<String, String> emisorMap = new HashMap<>();
-                            Map<String, String> emisorId = new HashMap<>();
-                            Map<String, String> tipoMap = new HashMap<>();
-                            Map<String, String> contenidoMap = new HashMap<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        for (DocumentChange mDocumentChange : queryDocumentSnapshots.getDocumentChanges()){
+                            if(mDocumentChange.getType() == DocumentChange.Type.ADDED){
+                                QueryDocumentSnapshot document = mDocumentChange.getDocument();
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
                                 //Obtener usuario
@@ -195,8 +202,6 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                             llm.setOrientation(LinearLayoutManager.VERTICAL);
                             list.setLayoutManager(llm);
                             list.setAdapter(adapter);
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
                         }
                     }
                 });
