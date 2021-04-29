@@ -127,7 +127,7 @@ public class ActivityViewFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("param1", mParam1);
-                Navigation.findNavController(view).navigate(R.id.action_activityViewFragment_to_chatFacilitadorFragment, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_activityViewFragment_to_chatUsersListFragment, bundle);
             }
         });
 

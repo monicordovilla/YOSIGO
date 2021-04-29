@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:orientation="vertical"
+    android:background="@drawable/background_left">
+
+    <TextView
+        android:id="@+id/show_date_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:typeface="monospace"
+        android:text="Nombre"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/show_name_sender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:typeface="monospace"
+        android:text="Nombre"
+        android:padding="8dp"/>
+
+    <TextView
+        android:id="@+id/show_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        android:text="Nombre"
+        android:padding="8dp"/>
+
+    <ImageView
+        android:id="@+id/show_image_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="300dp"
+        android:maxWidth="300dp"/>
+
+    <ImageButton
+        android:id="@+id/show_btn_hear_message"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/oir"
+        android:scaleType="fitCenter"
+        android:layout_gravity="center"
+        />
+</LinearLayout>

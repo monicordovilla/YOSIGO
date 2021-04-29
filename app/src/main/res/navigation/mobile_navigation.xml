@@ -61,8 +61,8 @@
             android:id="@+id/action_activityViewFragment_to_viewAssessmentFragment"
             app:destination="@id/viewAssessmentFragment" />
         <action
-            android:id="@+id/action_activityViewFragment_to_chatFacilitadorFragment"
-            app:destination="@id/chatFacilitadorFragment" />
+            android:id="@+id/action_activityViewFragment_to_chatUsersListFragment"
+            app:destination="@id/chatUsersListFragment" />
     </fragment>
     <fragment
         android:id="@+id/asociateFragment"
@@ -102,6 +102,25 @@
         android:name="com.example.yosigo.Facilitador.ForumsFacilitador.ChatFacilitadorFragment"
         android:label="Chat"
         tools:layout="@layout/fragment_chat_facilitador" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+        <argument
+            android:name="param2"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/chatUsersListFragment"
+        android:name="com.example.yosigo.Facilitador.ForumsFacilitador.ChatUsersListFragment"
+        android:label="Chats con usuarios"
+        tools:layout="@layout/fragment_chat_users_list" >
+        <action
+            android:id="@+id/action_chatUsersListFragment_to_chatFacilitadorFragment"
+            app:destination="@id/chatFacilitadorFragment" />
         <argument
             android:name="param1"
             app:argType="string"

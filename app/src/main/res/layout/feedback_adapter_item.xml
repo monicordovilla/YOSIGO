@@ -33,6 +33,6 @@
         android:background="@color/colorPrimary"
         android:scaleType="fitCenter"
         android:layout_gravity="center"
-        android:src="@drawable/ic_watch" />
+        android:src="@drawable/ver" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

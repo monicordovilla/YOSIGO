@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +25,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.yosigo.Facilitador.ActivitiesFacilitador.AssessmentViewItemAdapter;
 import com.example.yosigo.MainActivity;
+import com.example.yosigo.MessageAdapter;
+import com.example.yosigo.Persona.GridAdapter;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,8 +46,10 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
@@ -73,6 +80,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     private MediaRecorder mRecorder;
     private String tipo, ruta;
     private Uri uri_audio, uri_photo;
+    private RecyclerView list;
 
     public ChatPersonaFragment() {
         // Required empty public constructor
@@ -109,6 +117,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
         root = inflater.inflate(R.layout.fragment_chat_persona, container, false);
         picto = root.findViewById(R.id.imageView_chat_picto);
         mensaje = root.findViewById(R.id.EditText_chat_persona);
+        list = root.findViewById(R.id.list_chat_persona);
 
         //Buttons
         btn_audio = root.findViewById(R.id.btn_enviar_audio_persona);
@@ -120,8 +129,75 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
         btn_send.setOnClickListener(this);
 
         getPicto();
+        getMensajes();
 
         return root;
+    }
+
+    private void getMensajes(){
+        fb.collection("activities")
+                .document(mParam1)
+                .collection("Chat")
+                .document(MainActivity.sesion)
+                .collection("Messages")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<String> idList = new ArrayList<>();
+                            Map<String, Date> dateMap = new HashMap<>();
+                            Map<String, String> emisorMap = new HashMap<>();
+                            Map<String, String> emisorId = new HashMap<>();
+                            Map<String, String> tipoMap = new HashMap<>();
+                            Map<String, String> contenidoMap = new HashMap<>();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+
+                                //Obtener usuario
+                                fb.collection("users")
+                                        .document(document.getData().get("Emisor").toString())
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task_user) {
+                                                if (task_user.isSuccessful()){
+                                                    DocumentSnapshot doc_user = task_user.getResult();
+                                                    String full_name = doc_user.getData().get("Nombre") + " " +
+                                                            doc_user.getData().get("Apellidos") + " (" +
+                                                            doc_user.getData().get("Apodo") + ")";
+
+                                                    //Guardar datos
+                                                    idList.add(document.getId());
+                                                    DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
+                                                    dateMap.put(document.getId(), document.getDate("Fecha", behavior));
+                                                    emisorMap.put(document.getId(), full_name);
+                                                    emisorId.put(document.getId(), document.getData().get("Emisor").toString());
+                                                    tipoMap.put(document.getId(), document.getData().get("Tipo").toString());
+                                                    contenidoMap.put(document.getId(), document.getData().get("Contenido").toString());
+                                                }
+                                            }
+                                        });
+                            }
+
+                            MessageAdapter adapter = new MessageAdapter(
+                                    root.getContext(),
+                                    idList,
+                                    dateMap,
+                                    emisorId,
+                                    emisorMap,
+                                    tipoMap,
+                                    contenidoMap
+                            );
+                            LinearLayoutManager llm = new LinearLayoutManager(root.getContext());
+                            llm.setOrientation(LinearLayoutManager.VERTICAL);
+                            list.setLayoutManager(llm);
+                            list.setAdapter(adapter);
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
     }
 
     private void getPicto(){
@@ -134,7 +210,6 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                 if(document.getData().get("Pictograma") != null) {
                                     storageRef.child((String) document.getData().get("Pictograma"))
                                             .getDownloadUrl()
@@ -168,6 +243,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                 data.put("Tipo", tipo);
                 data.put("Contenido", mensaje.getText().toString());
                 sendData(data);
+                mensaje.setText("");
                 break;
 
             case R.id.btn_enviar_foto_persona:
@@ -245,6 +321,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                 data.put("Tipo", tipo);
                 data.put("Contenido", filePath.getPath());
                 sendData(data);
+                uri_audio=null;
             }
         });
     }
@@ -260,6 +337,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                 data.put("Tipo", tipo);
                 data.put("Contenido", filePath.getPath());
                 sendData(data);
+                uri_photo=null;
             }
         });
     }

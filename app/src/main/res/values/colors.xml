@@ -14,6 +14,8 @@
     <color name="colorPrimary">#359B8A</color>
     <color name="colorPrimaryDark">#336159</color> <!-- The colors compared pass at level AAA -->
     <color name="colorAccent">#6AF5DD</color>
+    <color name="messagesL">#93E6D8</color>
+    <color name="messagesR">#4CE0C8</color>
 
     <!-- Colores identificativos secciones -->
     <color name="colorActivities">#8A4DCF</color> <!-- The colors compared pass at level AA -->
