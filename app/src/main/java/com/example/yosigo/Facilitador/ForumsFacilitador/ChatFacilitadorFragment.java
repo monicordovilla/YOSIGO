@@ -117,7 +117,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
         root = inflater.inflate(R.layout.fragment_chat_facilitador, container, false);
         text_name = (TextView) root.findViewById(R.id.textView_chat_facilitador);
         mensaje = root.findViewById(R.id.EditText_chat_facilitador);
-        list = root.findViewById(R.id.list_chat_persona);
+        list = root.findViewById(R.id.list_chat_facilitador);
 
         //Buttons
         btn_audio = root.findViewById(R.id.btn_enviar_audio_facilitador);
@@ -131,15 +131,18 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     }
 
     private void getMensajes(){
+        Log.d(TAG, "Actividad: " + mParam1);
+        Log.d(TAG, "Persona: " + mParam2);
         fb.collection("activities")
                 .document(mParam1)
                 .collection("Chat")
-                .document(MainActivity.sesion)
+                .document(mParam2)
                 .collection("Messages")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d(TAG, "A mostrar: " + task.getResult().getDocuments());
                         if (task.isSuccessful()) {
                             List<String> idList = new ArrayList<>();
                             Map<String, Date> dateMap = new HashMap<>();
@@ -171,24 +174,24 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                                                     emisorId.put(document.getId(), document.getData().get("Emisor").toString());
                                                     tipoMap.put(document.getId(), document.getData().get("Tipo").toString());
                                                     contenidoMap.put(document.getId(), document.getData().get("Contenido").toString());
+
+                                                    MessageAdapter adapter = new MessageAdapter(
+                                                            root.getContext(),
+                                                            idList,
+                                                            dateMap,
+                                                            emisorId,
+                                                            emisorMap,
+                                                            tipoMap,
+                                                            contenidoMap
+                                                    );
+                                                    LinearLayoutManager llm = new LinearLayoutManager(root.getContext());
+                                                    llm.setOrientation(LinearLayoutManager.VERTICAL);
+                                                    list.setLayoutManager(llm);
+                                                    list.setAdapter(adapter);
                                                 }
                                             }
                                         });
                             }
-
-                            MessageAdapter adapter = new MessageAdapter(
-                                    root.getContext(),
-                                    idList,
-                                    dateMap,
-                                    emisorId,
-                                    emisorMap,
-                                    tipoMap,
-                                    contenidoMap
-                            );
-                            LinearLayoutManager llm = new LinearLayoutManager(root.getContext());
-                            llm.setOrientation(LinearLayoutManager.VERTICAL);
-                            list.setLayoutManager(llm);
-                            list.setAdapter(adapter);
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
                         }

@@ -24,7 +24,7 @@
             android:hint="Nombre actividad"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_chat_facilitador"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

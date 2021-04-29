@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,6 +35,7 @@ import java.util.List;
 public class ChatUsersListFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
+    private static final String TAG = "USER LIST";
 
     private String mParam1;
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
@@ -74,8 +76,77 @@ public class ChatUsersListFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_chat_users_list, container, false);
         list = root.findViewById(R.id.list_chat_users);
 
-        getUsers();
+        getParticipantes();
         return root;
+    }
+
+    private void getParticipantes(){
+        List<String> participantes = new ArrayList<>();
+        List<String> user_id = new ArrayList<>();
+        FirebaseFirestore.getInstance().collection("users")
+                .whereEqualTo("Rol", "Persona")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String full_name = document.getData().get("Nombre") + " " +
+                                        document.getData().get("Apellidos") + " (" +
+                                        document.getData().get("Apodo") + ")";
+
+                                FirebaseFirestore.getInstance().collection("users")
+                                        .document(document.getId())
+                                        .collection("activities")
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> act) {
+                                                if (act.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot doc : act.getResult()) {
+                                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                                        if(mParam1.equals(doc.getId())) {
+                                                            /*Marca de firebase
+                                                             * url problema: https://stackoverflow.com/questions/47771044/firestore-timestamp-getting-null
+                                                             * */
+                                                            DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
+                                                            Date fecha_inicio = doc.getDate("Fecha Inicio", behavior) ;
+                                                            Date fecha_fin = doc.getDate("Fecha Fin", behavior) ;
+
+                                                            if (new Date().after(fecha_inicio) && new Date().before(fecha_fin)) {
+                                                                participantes.add(full_name);
+                                                                user_id.add(document.getId());
+                                                                Log.d(TAG, "Participante: " + full_name);
+                                                            }
+                                                        }
+                                                    }
+
+                                                    ArrayAdapter<String> adapter = new ArrayAdapter(
+                                                            root.getContext(),
+                                                            android.R.layout.simple_list_item_1,
+                                                            participantes
+                                                    );
+                                                    list.setAdapter(adapter);
+                                                    list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                        @Override//
+                                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                            Bundle bundle = new Bundle();
+                                                            bundle.putString("param1", mParam1);
+                                                            bundle.putString("param2", user_id.get(position));
+                                                            Navigation.findNavController(view).navigate(R.id.action_chatUsersListFragment_to_chatFacilitadorFragment, bundle);
+                                                        }
+                                                    });
+                                                } else {
+                                                    Log.d(TAG, "Error getting documents: ", act.getException());
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     private void getUsers(){
@@ -88,10 +159,11 @@ public class ChatUsersListFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d(TAG, "Documents: " + task.getResult().getDocuments());
                         if (task.isSuccessful()) {
                             //Obtener usuario
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("CHAT LIST", "DocumentSnapshot data: " + document.getData());
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                 fb.collection("users")
                                         .document(document.getData().get("Emisor").toString())
                                         .get()
