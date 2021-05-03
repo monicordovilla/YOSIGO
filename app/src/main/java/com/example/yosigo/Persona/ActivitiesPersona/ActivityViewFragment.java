@@ -1,10 +1,12 @@
 package com.example.yosigo.Persona.ActivitiesPersona;
 
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,8 +31,10 @@ import com.example.yosigo.MainActivity;
 import com.example.yosigo.Persona.CalendarPersona.CalendarFragment;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,10 +43,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -116,7 +124,7 @@ public class ActivityViewFragment extends Fragment {
             }
         });
 
-        //setButton();
+        setButton();
         getDatosTarea();
 
         return root;
@@ -153,6 +161,7 @@ public class ActivityViewFragment extends Fragment {
                 .document(mParam1)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
@@ -161,80 +170,131 @@ public class ActivityViewFragment extends Fragment {
                                 //Obtenermos el último día
                                 DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
                                 Date fecha_fin = document.getDate("Fecha Fin", behavior);
+                                //Dias de la semana de la actividad
+                                flag = Integer.parseInt(document.getData().get("Dias semana").toString());
 
-                                //Si ha pasado la fecha actual final
-                                Date actualDate = new Date();
-                                if ( actualDate.after(fecha_fin)){
+                                /*
+                                * Fecha final
+                                * */
+                                Calendar cal = Calendar.getInstance();
+                                cal.setTime(fecha_fin);
+                                //Dia de la semana
+                                int dia = cal.get(Calendar.DAY_OF_WEEK);
+
+                                /*
+                                * Vemos el último día real que se realiza la actividad
+                                *
+                                * Hay comprobamos el último día de la semana que se realiza y obtenemos
+                                * su día respecto a la fecha final seleccionada
+                                * */
+                                int diafin = getDia(dia);
+                                int diferencia = (Math.floorMod((diafin-2), 7) + 1);
+                                LocalDate realDate = fecha_fin.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                realDate = realDate.minusDays(diferencia);
+
+                                /*
+                                * Fecha actual
+                                * */
+                                LocalDate today = LocalDate.now();
+
+                                /*
+                                * Si estamos en el último día real o posterior
+                                * */
+                                if ( today.compareTo(realDate) >= 0 ){
+                                    LocalDate finalRealDate = realDate;
                                     fb.collection("activities")
                                             .document(mParam1).collection("Feedback")
                                             .whereEqualTo("Persona", MainActivity.sesion)
                                             .get()
                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                 @Override
-                                                public void onComplete(@NonNull Task<QuerySnapshot> task_feedback) {
-                                                    if (task_feedback.getResult().isEmpty()){
-                                                        buttonFeedback();
+                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        //Si no hay retroalimentacion
+                                                        if(task.getResult().isEmpty()){
+                                                            buttonFeedback();
+                                                            return;
+                                                        }
+                                                        boolean haveFeeback = false;
+                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                            Log.d(TAG, document.getId() + " => " + document.getData());
+                                                            DocumentSnapshot.ServerTimestampBehavior b = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
+                                                            Date date = document.getDate("Fecha", b);
+                                                            LocalDate tempDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                                                            if (tempDate.compareTo(finalRealDate) >= 0){
+                                                                haveFeeback = true;
+                                                            }
+                                                            int wait=0;
+                                                        }
+
+                                                        if(haveFeeback) buttonAssessment();
+                                                        else buttonFeedback();
                                                     } else {
-                                                        buttonAssessment();
+                                                        Log.d(TAG, "get failed with ", task.getException());
                                                     }
                                                 }
+                                            }).addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Error getting documents: ", e);
+                                                    buttonFeedback();
+                                                }
                                             });
+                                /*
+                                * Si aun no estamos en el ultimo dia
+                                * */
                                 } else {
-                                    //Dias de la semana de la actividad
-                                    flag = Integer.parseInt(document.getData().get("Dias semana").toString());
-
-                                    //Filtrar actividades para que aparezcan las que tocan hoy
-                                    Calendar cal = Calendar.getInstance();
-                                    cal.setTime(fecha_fin);
-                                    int dia = cal.get(Calendar.DAY_OF_WEEK);
-                                    boolean esÚltimo = false;
-
-                                    //Ver el último día de la semana de la actividad
-                                    while (!esÚltimo) {
-                                        if (dia == 1)
-                                            esÚltimo = ((CalendarFragment.DOMINGO & flag) == CalendarFragment.DOMINGO);
-                                        else if (dia == 2)
-                                            esÚltimo = ((CalendarFragment.LUNES & flag) == CalendarFragment.LUNES);
-                                        else if (dia == 3)
-                                            esÚltimo = ((CalendarFragment.MARTES & flag) == CalendarFragment.MARTES);
-                                        else if (dia == 4)
-                                            esÚltimo = ((CalendarFragment.MIERCOLES & flag) == CalendarFragment.MIERCOLES);
-                                        else if (dia == 5)
-                                            esÚltimo = ((CalendarFragment.JUEVES & flag) == CalendarFragment.JUEVES);
-                                        else if (dia == 6)
-                                            esÚltimo = ((CalendarFragment.VIERNES & flag) == CalendarFragment.VIERNES);
-                                        else if (dia == 7)
-                                            esÚltimo = ((CalendarFragment.SABADO & flag) == CalendarFragment.SABADO);
-                                        if (!esÚltimo) dia = (dia - 1) % 8;
-                                    }
-
-                                    //Ver día de la semana actual
-                                    Calendar actualCal = Calendar.getInstance();
-                                    int actualDay = cal.get(Calendar.DAY_OF_WEEK);
-                                    if (actualDay == dia){
-                                        fb.collection("activities")
-                                                .document(mParam1).collection("Feedback")
-                                                .whereEqualTo("Persona", MainActivity.sesion)
-                                                .get()
-                                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                        if (task.getResult().isEmpty()){
-                                                            buttonFeedback();
-                                                        } else {
-                                                            buttonAssessment();
-                                                        }
-                                                    }
-                                                });
-                                    } else {
-                                        buttonFeedback();
-                                    }
+                                    buttonFeedback();
                                 }
                             }
+                        } else {
+                            buttonFeedback();
                         }
                     }
                 });
 
+    }
+
+    private int getDia(int dia){
+        boolean esÚltimo = false;
+        //Ver el último día de la semana de la actividad
+        while (!esÚltimo) {
+            switch (dia) {
+                case Calendar.SUNDAY:
+                    esÚltimo = ((CalendarFragment.DOMINGO & flag) == CalendarFragment.DOMINGO);
+                    break;
+
+                case Calendar.MONDAY:
+                    esÚltimo = ((CalendarFragment.LUNES & flag) == CalendarFragment.LUNES);
+                    break;
+
+                case Calendar.TUESDAY:
+                    esÚltimo = ((CalendarFragment.MARTES & flag) == CalendarFragment.MARTES);
+                    break;
+
+                case Calendar.WEDNESDAY:
+                    esÚltimo = ((CalendarFragment.MIERCOLES & flag) == CalendarFragment.MIERCOLES);
+                    break;
+
+                case Calendar.THURSDAY:
+                    esÚltimo = ((CalendarFragment.JUEVES & flag) == CalendarFragment.JUEVES);
+                    break;
+
+                case Calendar.FRIDAY:
+                    esÚltimo = ((CalendarFragment.VIERNES & flag) == CalendarFragment.VIERNES);
+                    break;
+
+                case Calendar.SATURDAY:
+                    esÚltimo = ((CalendarFragment.SABADO & flag) == CalendarFragment.SABADO);
+                    break;
+            }
+
+            if (!esÚltimo) {
+                dia =Math.floorMod((dia-2), 7) + 1; // Decrementa de 7 a 1, volviendo al 7 al terminar
+            }
+        }
+
+        return dia;
     }
 
     private void getDatosTarea(){
