@@ -38,7 +38,11 @@
         android:id="@+id/nav_forums"
         android:name="com.example.yosigo.Facilitador.ForumsFacilitador.ForumsListFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/list_forum_facilitador" >
+        <action
+            android:id="@+id/action_nav_forums_to_chatFacilitadorFragment"
+            app:destination="@id/chatFacilitadorFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createActivity"
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.CreateActivity"

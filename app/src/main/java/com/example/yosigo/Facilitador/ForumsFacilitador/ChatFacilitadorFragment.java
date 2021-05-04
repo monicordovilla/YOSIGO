@@ -144,12 +144,76 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
         btn_send.setOnClickListener(this);
 
         getNombre();
-        getMensajes();
+        if (mParam1 == "Forum") {
+            getMensajesForums();
+        } else {
+            getMensajesChatActivities();
+        }
 
         return root;
     }
 
-    private void getMensajes(){
+    private void getMensajes(QueryDocumentSnapshot document){
+        //Obtener usuario
+        fb.collection("users")
+                .document(document.getData().get("Emisor").toString())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task_user) {
+                        if (task_user.isSuccessful()){
+                            DocumentSnapshot doc_user = task_user.getResult();
+                            String full_name = doc_user.getData().get("Nombre") + " " +
+                                    doc_user.getData().get("Apellidos") + " (" +
+                                    doc_user.getData().get("Apodo") + ")";
+
+                            //Guardar datos
+                            idList.add(document.getId());
+                            DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
+                            dateMap.put(document.getId(), document.getDate("Fecha", behavior));
+                            emisorMap.put(document.getId(), full_name);
+                            emisorId.put(document.getId(), document.getData().get("Emisor").toString());
+                            tipoMap.put(document.getId(), document.getData().get("Tipo").toString());
+                            contenidoMap.put(document.getId(), document.getData().get("Contenido").toString());
+
+                            MessageAdapter adapter = new MessageAdapter(
+                                    root.getContext(),
+                                    idList,
+                                    dateMap,
+                                    emisorId,
+                                    emisorMap,
+                                    tipoMap,
+                                    contenidoMap
+                            );
+                            LinearLayoutManager llm = new LinearLayoutManager(root.getContext());
+                            llm.setOrientation(LinearLayoutManager.VERTICAL);
+                            list.setLayoutManager(llm);
+                            list.setAdapter(adapter);
+                        }
+                    }
+                });
+    }
+
+    private void getMensajesForums(){
+        fb.collection("forums")
+                .document(mParam2)
+                .collection("Messages")
+                .orderBy("Fecha", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        for (DocumentChange mDocumentChange : queryDocumentSnapshots.getDocumentChanges()){
+                            if(mDocumentChange.getType() == DocumentChange.Type.ADDED){
+                                QueryDocumentSnapshot document = mDocumentChange.getDocument();
+                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                getMensajes(document);
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void getMensajesChatActivities(){
         fb.collection("activities")
                 .document(mParam1)
                 .collection("Chat")
@@ -163,44 +227,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                             if(mDocumentChange.getType() == DocumentChange.Type.ADDED){
                                 QueryDocumentSnapshot document = mDocumentChange.getDocument();
                                 Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                //Obtener usuario
-                                fb.collection("users")
-                                        .document(document.getData().get("Emisor").toString())
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task_user) {
-                                                if (task_user.isSuccessful()){
-                                                    DocumentSnapshot doc_user = task_user.getResult();
-                                                    String full_name = doc_user.getData().get("Nombre") + " " +
-                                                            doc_user.getData().get("Apellidos") + " (" +
-                                                            doc_user.getData().get("Apodo") + ")";
-
-                                                    //Guardar datos
-                                                    idList.add(document.getId());
-                                                    DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
-                                                    dateMap.put(document.getId(), document.getDate("Fecha", behavior));
-                                                    emisorMap.put(document.getId(), full_name);
-                                                    emisorId.put(document.getId(), document.getData().get("Emisor").toString());
-                                                    tipoMap.put(document.getId(), document.getData().get("Tipo").toString());
-                                                    contenidoMap.put(document.getId(), document.getData().get("Contenido").toString());
-
-                                                    MessageAdapter adapter = new MessageAdapter(
-                                                            root.getContext(),
-                                                            idList,
-                                                            dateMap,
-                                                            emisorId,
-                                                            emisorMap,
-                                                            tipoMap,
-                                                            contenidoMap
-                                                    );
-                                                    LinearLayoutManager llm = new LinearLayoutManager(root.getContext());
-                                                    llm.setOrientation(LinearLayoutManager.VERTICAL);
-                                                    list.setLayoutManager(llm);
-                                                    list.setAdapter(adapter);
-                                                }
-                                            }
-                                        });
+                                getMensajes(document);
                             }
                         }
                     }
@@ -208,24 +235,46 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     }
 
     private void getNombre(){
-        fb.collection("activities")
-                .document(mParam1)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                text_name.setText(document.getData().get("Nombre").toString());
+        if (mParam1 == "Forum"){
+            fb.collection("forums")
+                    .document(mParam2)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    text_name.setText(document.getData().get("Nombre").toString());
+                                } else {
+                                    Log.d(TAG, "No such document");
+                                }
                             } else {
-                                Log.d(TAG, "No such document");
+                                Log.d(TAG, "get failed with ", task.getException());
                             }
-                        } else {
-                            Log.d(TAG, "get failed with ", task.getException());
                         }
-                    }
-                });
+                    });
+        }
+        else {
+            fb.collection("activities")
+                    .document(mParam1)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    text_name.setText(document.getData().get("Nombre").toString());
+                                } else {
+                                    Log.d(TAG, "No such document");
+                                }
+                            } else {
+                                Log.d(TAG, "get failed with ", task.getException());
+                            }
+                        }
+                    });
+        }
     }
 
     @Override
@@ -341,22 +390,42 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     }
 
     private void sendData(Map<String, Object> data){
-        fb.collection("activities")
-                .document(mParam1)
-                .collection("Chat")
-                .document(mParam2)
-                .collection("Messages")
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()); }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+        if (mParam1 == "Forum") {
+            fb.collection("activities")
+                    .document(mParam1)
+                    .collection("Chat")
+                    .document(mParam2)
+                    .collection("Messages")
+                    .add(data)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+        } else {
+            fb.collection("forums")
+                    .document(mParam2)
+                    .collection("Messages")
+                    .add(data)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+        }
     }
 }

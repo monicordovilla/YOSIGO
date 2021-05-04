@@ -33,7 +33,7 @@
         android:id="@+id/nav_forums"
         android:name="com.example.yosigo.Persona.ForumsPersona.ListForumsPersona"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/list_forum_facilitador" />
 
     <fragment
         android:id="@+id/activityViewFragment2"

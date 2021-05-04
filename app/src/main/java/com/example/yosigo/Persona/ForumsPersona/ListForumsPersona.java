@@ -22,7 +22,7 @@ public class ListForumsPersona extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         listForumsViewModel =
                 new ViewModelProvider(this).get(ListForumsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
+        View root = inflater.inflate(R.layout.list_forum_facilitador, container, false);
         final TextView textView = root.findViewById(R.id.text_slideshow);
         listForumsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
