@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_nav_forums_to_chatFacilitadorFragment"
             app:destination="@id/chatFacilitadorFragment" />
+        <action
+            android:id="@+id/action_nav_forums_to_createForumFragment"
+            app:destination="@id/createForumFragment" />
     </fragment>
     <fragment
         android:id="@+id/createActivity"
@@ -130,5 +133,14 @@
             app:argType="string"
             android:defaultValue="0"
             />
+    </fragment>
+    <fragment
+        android:id="@+id/createForumFragment"
+        android:name="com.example.yosigo.Facilitador.ForumsFacilitador.CreateForumFragment"
+        android:label="Crear foro"
+        tools:layout="@layout/fragment_create_forum" >
+        <action
+            android:id="@+id/action_createForumFragment_to_nav_forums"
+            app:destination="@id/nav_forums" />
     </fragment>
 </navigation>

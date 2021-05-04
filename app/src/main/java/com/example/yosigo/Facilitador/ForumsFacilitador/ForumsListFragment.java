@@ -69,7 +69,7 @@ public class ForumsListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_nav_gallery_to_createActivity);
+                Navigation.findNavController(view).navigate(R.id.action_nav_forums_to_createForumFragment);
             }
         });
 
