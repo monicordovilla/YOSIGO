@@ -25,20 +25,20 @@ import java.util.Map;
 
 public class ForumsListFragment extends Fragment {
 
-    private ForumsListViewModel slideshowForums;
+    private ForumsListViewModel ViewModelForums;
     private ListView list;
     private List<String> nameList = new ArrayList<>();
     Map<String, String> forumsMap = new HashMap<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowForums =
+        ViewModelForums =
                 new ViewModelProvider(this).get(ForumsListViewModel.class);
         View root = inflater.inflate(R.layout.list_forum_facilitador, container, false);
 
         list = root.findViewById(R.id.list_forums);
 
-        slideshowForums.getText().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
+        ViewModelForums.getText().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
             @Override
             public void onChanged(Map<String, String> strings) {
                 forumsMap = strings;
@@ -47,11 +47,7 @@ public class ForumsListFragment extends Fragment {
                     nameList.add( (String) key);
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter(
-                        root.getContext(),
-                        android.R.layout.simple_list_item_1,
-                        nameList
-                );
+                ArrayAdapter<String> adapter = new ForumListAdapter(root.getContext(), strings, nameList);
                 list.setAdapter(adapter);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override//

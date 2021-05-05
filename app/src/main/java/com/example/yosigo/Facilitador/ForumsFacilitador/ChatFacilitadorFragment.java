@@ -390,7 +390,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     }
 
     private void sendData(Map<String, Object> data){
-        if (mParam1 == "Forum") {
+        if (mParam1 != "Forum") {
             fb.collection("activities")
                     .document(mParam1)
                     .collection("Chat")
