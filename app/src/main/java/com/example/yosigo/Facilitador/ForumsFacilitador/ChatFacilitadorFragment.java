@@ -205,7 +205,6 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                         for (DocumentChange mDocumentChange : queryDocumentSnapshots.getDocumentChanges()){
                             if(mDocumentChange.getType() == DocumentChange.Type.ADDED){
                                 QueryDocumentSnapshot document = mDocumentChange.getDocument();
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                 getMensajes(document);
                             }
                         }
@@ -226,7 +225,6 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                         for (DocumentChange mDocumentChange : queryDocumentSnapshots.getDocumentChanges()){
                             if(mDocumentChange.getType() == DocumentChange.Type.ADDED){
                                 QueryDocumentSnapshot document = mDocumentChange.getDocument();
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                 getMensajes(document);
                             }
                         }

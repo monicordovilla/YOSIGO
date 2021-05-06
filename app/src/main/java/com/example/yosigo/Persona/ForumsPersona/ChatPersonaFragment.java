@@ -67,6 +67,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "CHAT";
     private static final int FOTO_INTENT = 1;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
@@ -74,7 +75,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
 
-    private String mParam1;
+    private String mParam1, mParam2;
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -105,13 +106,15 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
      * @return A new instance of fragment ChatPersonaFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ChatPersonaFragment newInstance(String param1) {
+    public static ChatPersonaFragment newInstance(String param1, String param2) {
         ChatPersonaFragment fragment = new ChatPersonaFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -121,6 +124,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -142,15 +146,79 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
         btn_foto.setOnClickListener(this);
         btn_send.setOnClickListener(this);
 
-        getPicto();
-        getMensajes();
+        if (mParam1 == "Forum") {
+            getPictoForo();
+            getMensajesForums();
+        } else {
+            getPictoActivity();
+            getMensajesChatActivities();
+        }
 
         return root;
     }
 
-    private void getMensajes(){
+    private void getMensajes(QueryDocumentSnapshot document){
+        //Obtener usuario
+        fb.collection("users")
+                .document(document.getData().get("Emisor").toString())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task_user) {
+                        if (task_user.isSuccessful()){
+                            DocumentSnapshot doc_user = task_user.getResult();
+                            String full_name = doc_user.getData().get("Nombre") + " " +
+                                    doc_user.getData().get("Apellidos") + " (" +
+                                    doc_user.getData().get("Apodo") + ")";
+
+                            //Guardar datos
+                            idList.add(document.getId());
+                            DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
+                            dateMap.put(document.getId(), document.getDate("Fecha", behavior));
+                            emisorMap.put(document.getId(), full_name);
+                            emisorId.put(document.getId(), document.getData().get("Emisor").toString());
+                            tipoMap.put(document.getId(), document.getData().get("Tipo").toString());
+                            contenidoMap.put(document.getId(), document.getData().get("Contenido").toString());
+                        }
+
+                        MessageAdapter adapter = new MessageAdapter(
+                                root.getContext(),
+                                idList,
+                                dateMap,
+                                emisorId,
+                                emisorMap,
+                                tipoMap,
+                                contenidoMap
+                        );
+                        LinearLayoutManager llm = new LinearLayoutManager(root.getContext());
+                        llm.setOrientation(LinearLayoutManager.VERTICAL);
+                        list.setLayoutManager(llm);
+                        list.setAdapter(adapter);
+                    }
+                });
+    }
+
+    private void getMensajesForums(){
+        fb.collection("forums")
+                .document(mParam2)
+                .collection("Messages")
+                .orderBy("Fecha", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        for (DocumentChange mDocumentChange : queryDocumentSnapshots.getDocumentChanges()){
+                            if(mDocumentChange.getType() == DocumentChange.Type.ADDED){
+                                QueryDocumentSnapshot document = mDocumentChange.getDocument();
+                                getMensajes(document);
+                            }
+                        }
+                    }
+                });
+    }
+
+    private void getMensajesChatActivities(){
         fb.collection("activities")
-                .document(mParam1)
+                .document(mParam2)
                 .collection("Chat")
                 .document(MainActivity.sesion)
                 .collection("Messages")
@@ -161,55 +229,16 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                         for (DocumentChange mDocumentChange : queryDocumentSnapshots.getDocumentChanges()){
                             if(mDocumentChange.getType() == DocumentChange.Type.ADDED){
                                 QueryDocumentSnapshot document = mDocumentChange.getDocument();
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-
-                                //Obtener usuario
-                                fb.collection("users")
-                                        .document(document.getData().get("Emisor").toString())
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task_user) {
-                                                if (task_user.isSuccessful()){
-                                                    DocumentSnapshot doc_user = task_user.getResult();
-                                                    String full_name = doc_user.getData().get("Nombre") + " " +
-                                                            doc_user.getData().get("Apellidos") + " (" +
-                                                            doc_user.getData().get("Apodo") + ")";
-
-                                                    //Guardar datos
-                                                    idList.add(document.getId());
-                                                    DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
-                                                    dateMap.put(document.getId(), document.getDate("Fecha", behavior));
-                                                    emisorMap.put(document.getId(), full_name);
-                                                    emisorId.put(document.getId(), document.getData().get("Emisor").toString());
-                                                    tipoMap.put(document.getId(), document.getData().get("Tipo").toString());
-                                                    contenidoMap.put(document.getId(), document.getData().get("Contenido").toString());
-                                                }
-                                            }
-                                        });
+                                getMensajes(document);
                             }
-
-                            MessageAdapter adapter = new MessageAdapter(
-                                    root.getContext(),
-                                    idList,
-                                    dateMap,
-                                    emisorId,
-                                    emisorMap,
-                                    tipoMap,
-                                    contenidoMap
-                            );
-                            LinearLayoutManager llm = new LinearLayoutManager(root.getContext());
-                            llm.setOrientation(LinearLayoutManager.VERTICAL);
-                            list.setLayoutManager(llm);
-                            list.setAdapter(adapter);
                         }
                     }
                 });
     }
 
-    private void getPicto(){
-        fb.collection("activities")
-                .document(mParam1)
+    private void getPictoForo(){
+        fb.collection("forums")
+                .document(mParam2)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -217,17 +246,48 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                if(document.getData().get("Pictograma") != null) {
+                                if (document.getData().get("Pictograma") != null) {
                                     storageRef.child((String) document.getData().get("Pictograma"))
                                             .getDownloadUrl()
                                             .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            Glide.with(root)
-                                                    .load(uri)
-                                                    .into(picto);
-                                        }
-                                    });
+                                                @Override
+                                                public void onSuccess(Uri uri) {
+                                                    Glide.with(root)
+                                                            .load(uri)
+                                                            .into(picto);
+                                                }
+                                            });
+                                }
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
+    }
+    private void getPictoActivity(){
+        fb.collection("activities")
+                .document(mParam2)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                if (document.getData().get("Pictograma") != null) {
+                                    storageRef.child((String) document.getData().get("Pictograma"))
+                                            .getDownloadUrl()
+                                            .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri uri) {
+                                                    Glide.with(root)
+                                                            .load(uri)
+                                                            .into(picto);
+                                                }
+                                            });
                                 }
                             } else {
                                 Log.d(TAG, "No such document");
@@ -352,22 +412,42 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     }
 
     private void sendData(Map<String, Object> data){
-        fb.collection("activities")
-                .document(mParam1)
-                .collection("Chat")
-                .document(MainActivity.sesion)
-                .collection("Messages")
-                .add(data)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId()); }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+        if (mParam1 == "Forum") {
+            fb.collection("forums")
+                    .document(mParam2)
+                    .collection("Messages")
+                    .add(data)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+        } else {
+            fb.collection("activities")
+                    .document(mParam2)
+                    .collection("Chat")
+                    .document(MainActivity.sesion)
+                    .collection("Messages")
+                    .add(data)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error adding document", e);
+                        }
+                    });
+        }
     }
 }

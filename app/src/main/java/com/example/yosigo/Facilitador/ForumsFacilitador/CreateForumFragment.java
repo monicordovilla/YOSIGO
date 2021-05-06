@@ -95,7 +95,7 @@ public class CreateForumFragment extends Fragment {
             return;
         }
 
-        StorageReference filePath_picto = storageRef.child("pictogramas").child(uri_picto.getLastPathSegment());
+        StorageReference filePath_picto = storageRef.child("foros").child(uri_picto.getLastPathSegment());
         filePath_picto.putFile(uri_picto).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
             @Override

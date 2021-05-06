@@ -38,41 +38,9 @@ public class PersonasViewModel extends ViewModel {
         return list;
     }
 
-    /*private void loadUsers(){
-        Map<String, String> userMap = new HashMap<>();
-        List<String> userList = new ArrayList<String>();
-
-        // TODO: Cargar los asociados al facilitador actual (variable session de SharedPreferences)
-        FirebaseFirestore.getInstance().collection("users")
-                .whereEqualTo("Rol", "Persona")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String full_name = document.getData().get("Nombre") + " " +
-                                        document.getData().get("Apellidos") + " (" +
-                                        document.getData().get("Apodo") + ")";
-                                userList.add(full_name);
-                                userMap.put(full_name, document.getId());
-
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
-                                //Log.d(TAG,  "Guardo: " + full_name);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                        mText.setValue(userMap);
-                        list.setValue(userList);
-                    }
-                });
-    }*/
-
     private void loadUsers(){
         Map<String, String> userMap = new HashMap<>();
         List<String> userList = new ArrayList<String>();
-        //List<String> idArray = new ArrayList<String>();
 
         fb.collection("users")
                 .document(MainActivity.sesion)

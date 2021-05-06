@@ -119,7 +119,8 @@ public class ActivityViewFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
-                bundle.putString("param1", mParam1);
+                bundle.putString("param1", "Chat");
+                bundle.putString("param2", mParam1);
                 Navigation.findNavController(view).navigate(R.id.action_activityViewFragment2_to_chatPersonaFragment, bundle);
             }
         });

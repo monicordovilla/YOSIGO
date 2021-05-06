@@ -29,6 +29,7 @@ public class GridAdapter extends ArrayAdapter {
     private final List<String> id;
     private final Map<String,String> item_name;
     private final Map<String,String> item_picto;
+    private static final String TAG = "GRID ADAPTER ";
 
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -59,15 +60,6 @@ public class GridAdapter extends ArrayAdapter {
                 Glide.with(context)
                         .load(uri)
                         .into(pictograma);
-
-                pictograma.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("param1", id_item);
-                        Navigation.findNavController(view).navigate(R.id.action_nav_calendar_to_activityViewFragment22, bundle);
-                    }
-                });
             }
         });
         titulo.setText(item_name.get(id_item));

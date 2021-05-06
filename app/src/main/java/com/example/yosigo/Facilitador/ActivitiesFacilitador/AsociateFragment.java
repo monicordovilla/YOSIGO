@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -49,7 +50,7 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
 
     private PersonasViewModel mViewModel;
     private static final String ARG_PARAM1 = "param1";
-    private static final String TAG = "ASOCIAR ACTIVIDAD" ;
+    private static final String TAG = "ASOCIAR ACTIVIDAD";
     private String mParam1;
     private ListView list, list_dias_semana;
     EditText fecha_inicio, fecha_fin;
@@ -206,7 +207,7 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
                                 .document(id_user)
                                 .collection("activities")
                                 .document(mParam1)
-                                .set(data)
+                                .set(data, SetOptions.merge())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {

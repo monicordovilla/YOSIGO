@@ -7,11 +7,13 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -237,5 +239,14 @@ public class CalendarFragment extends Fragment {
                 actividades_pictos_filtradas
         );
         listado.setAdapter(adapter);
+
+        listado.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", actividades_id_filtradas.get(position));
+                Navigation.findNavController(view).navigate(R.id.action_nav_calendar_to_activityViewFragment22, bundle);
+            }
+        });
     }
 }

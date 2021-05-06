@@ -50,7 +50,7 @@ public class ForumsListFragment extends Fragment {
                 ArrayAdapter<String> adapter = new ForumListAdapter(root.getContext(), strings, nameList);
                 list.setAdapter(adapter);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override//
+                    @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Bundle bundle = new Bundle();
                         bundle.putString("param1", "Forum");
