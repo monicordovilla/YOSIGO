@@ -70,9 +70,10 @@ public class ListForumsPersona extends Fragment {
                                 list.setAdapter(adapter);
                                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("param1", ids.get(i));
+                                        bundle.putString("param1", "Forum");
+                                        bundle.putString("param2", ids.get(position));
                                         Navigation.findNavController(view).navigate(R.id.action_nav_forums_to_chatPersonaFragment, bundle);
                                     }
                                 });
@@ -80,16 +81,6 @@ public class ListForumsPersona extends Fragment {
                         });
                     }
                 });
-            }
-        });
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle bundle = new Bundle();
-                bundle.putString("param1", "Forum");
-                bundle.putString("param2", ids.get(position));
-                Navigation.findNavController(view).navigate(R.id.action_nav_forums_to_chatPersonaFragment, bundle);
             }
         });
         return root;

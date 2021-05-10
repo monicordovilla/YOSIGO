@@ -97,5 +97,10 @@
             app:argType="string"
             android:defaultValue="0"
             />
+        <argument
+            android:name="param2"
+            app:argType="string"
+            android:defaultValue="0"
+            />
     </fragment>
 </navigation>

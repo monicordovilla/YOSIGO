@@ -144,7 +144,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
         btn_send.setOnClickListener(this);
 
         getNombre();
-        if (mParam1 == "Forum") {
+        if (mParam1.equals("Forum")) {
             getMensajesForums();
         } else {
             getMensajesChatActivities();
@@ -233,7 +233,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     }
 
     private void getNombre(){
-        if (mParam1 == "Forum"){
+        if (mParam1.equals("Forum")){
             fb.collection("forums")
                     .document(mParam2)
                     .get()
@@ -388,10 +388,8 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     }
 
     private void sendData(Map<String, Object> data){
-        if (mParam1 != "Forum") {
-            fb.collection("activities")
-                    .document(mParam1)
-                    .collection("Chat")
+        if (mParam1.equals("Forum")){
+            fb.collection("forums")
                     .document(mParam2)
                     .collection("Messages")
                     .add(data)
@@ -408,7 +406,9 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                         }
                     });
         } else {
-            fb.collection("forums")
+            fb.collection("activities")
+                    .document(mParam1)
+                    .collection("Chat")
                     .document(mParam2)
                     .collection("Messages")
                     .add(data)

@@ -131,6 +131,8 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d(TAG, "Param 1: " + mParam1);
+        Log.d(TAG, "Param 2: " + mParam2);
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_chat_persona, container, false);
         picto = root.findViewById(R.id.imageView_chat_picto);
@@ -146,7 +148,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
         btn_foto.setOnClickListener(this);
         btn_send.setOnClickListener(this);
 
-        if (mParam1 == "Forum") {
+        if (mParam1.equals("Forum")) {
             getPictoForo();
             getMensajesForums();
         } else {
@@ -259,7 +261,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                                             });
                                 }
                             } else {
-                                Log.d(TAG, "No such document");
+                                Log.d(TAG, "No such Forum pictogram document");
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
@@ -290,7 +292,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                                             });
                                 }
                             } else {
-                                Log.d(TAG, "No such document");
+                                Log.d(TAG, "No such pictogram Activity document");
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task.getException());
@@ -412,7 +414,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     }
 
     private void sendData(Map<String, Object> data){
-        if (mParam1 == "Forum") {
+        if (mParam1.equals("Forum")) {
             fb.collection("forums")
                     .document(mParam2)
                     .collection("Messages")
