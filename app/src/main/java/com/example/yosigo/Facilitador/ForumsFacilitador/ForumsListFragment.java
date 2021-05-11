@@ -28,7 +28,7 @@ public class ForumsListFragment extends Fragment {
     private ForumsListViewModel ViewModelForums;
     private ListView list;
     private List<String> nameList = new ArrayList<>();
-    Map<String, String> forumsMap = new HashMap<>();
+    private Map<String, String> forumsMap = new HashMap<>();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

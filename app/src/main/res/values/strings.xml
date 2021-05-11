@@ -15,4 +15,5 @@
     <string name="ver_actividad">Ver Actividad</string>
     <string name="menu_calendar">Calendario</string>
     <string name="escribir_mensaje">Escribe un mensaje</string>
+    <string name="menu_category">Categorías</string>
 </resources>

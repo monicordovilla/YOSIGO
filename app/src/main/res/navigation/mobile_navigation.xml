@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_slideshow"
             app:destination="@id/nav_forums" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_category"
+            app:destination="@id/nav_category" />
     </fragment>
 
     <fragment
@@ -157,4 +160,18 @@
             android:defaultValue="0"
             />
     </fragment>
+    <fragment
+        android:id="@+id/nav_category"
+        android:name="com.example.yosigo.Facilitador.Category.CategoryListFragment"
+        android:label="@string/menu_category"
+        tools:layout="@layout/category_list_fragment" >
+        <action
+            android:id="@+id/action_categoryListFragment_to_createCategoryFragment"
+            app:destination="@id/createCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createCategoryFragment"
+        android:name="com.example.yosigo.Facilitador.Category.CreateCategoryFragment"
+        android:label="Crear categoría"
+        tools:layout="@layout/fragment_create_category" />
 </navigation>
