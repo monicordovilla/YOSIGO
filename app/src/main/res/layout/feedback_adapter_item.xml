@@ -10,12 +10,12 @@
     tools:context=".Persona.ActivitiesPersona.FeedbackAdapter"
     >
 
-
     <TextView
         android:id="@+id/show_date_persona_feedback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp"
+        android:contentDescription="Fecha"
         android:layout_gravity="center"
         android:typeface="monospace" />
 
@@ -33,6 +33,7 @@
         android:background="@color/colorPrimary"
         android:scaleType="fitCenter"
         android:layout_gravity="center"
+        android:contentDescription="Ver entrega"
         android:src="@drawable/ver" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

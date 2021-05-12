@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 public class CategoryListFragment extends Fragment {
 
+    private static final String TAG = "CATEGORIA ";
     private CategoryListViewModel mViewModel;
     private View root;
     private ListView list;
@@ -41,16 +43,26 @@ public class CategoryListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        mViewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
         root = inflater.inflate(R.layout.category_list_fragment, container, false);
 
         list = root.findViewById(R.id.list_categories);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter(
-                root.getContext(),
-                android.R.layout.simple_list_item_1,
-                categoryNameList
-        );
-        list.setAdapter(adapter);
+        mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                categoryNameList.clear();
+                categoryNameList = strings;
+                Log.d(TAG, "Lista: " + categoryNameList);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter(
+                        root.getContext(),
+                        android.R.layout.simple_list_item_1,
+                        categoryNameList
+                );
+                list.setAdapter(adapter);
+            }
+        });
 
         FloatingActionButton fab = root.findViewById(R.id.fab_category);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -60,14 +72,6 @@ public class CategoryListFragment extends Fragment {
             }
         });
 
-        return root;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
-
         mViewModel.getCategories().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
             @Override
             public void onChanged(Map<String, String> strings) {
@@ -76,12 +80,6 @@ public class CategoryListFragment extends Fragment {
             }
         });
 
-        mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
-            @Override
-            public void onChanged(List<String> strings) {
-                categoryNameList.clear();
-                categoryNameList = strings;
-            }
-        });
+        return root;
     }
 }

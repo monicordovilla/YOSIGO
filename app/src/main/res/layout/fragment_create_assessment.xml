@@ -20,6 +20,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="1"
+            android:contentDescription="Dificultad"
             android:src="@drawable/dificil" />
 
         <ImageView
@@ -27,6 +28,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="1"
+            android:contentDescription="Pregunta"
             android:src="@drawable/pregunta" />
 
         <ImageButton
@@ -35,6 +37,7 @@
             android:layout_height="90dp"
             android:layout_weight="1"
             android:scaleType="fitCenter"
+            android:contentDescription="Muy contento"
             android:src="@drawable/contento" />
 
         <ImageButton
@@ -43,6 +46,7 @@
             android:layout_height="90dp"
             android:layout_weight="1"
             android:scaleType="fitCenter"
+            android:contentDescription="Alegre"
             android:src="@drawable/alegre" />
 
         <ImageButton
@@ -51,6 +55,7 @@
             android:layout_height="90dp"
             android:layout_weight="1"
             android:scaleType="fitCenter"
+            android:contentDescription="Triste"
             android:src="@drawable/triste" />
     </LinearLayout>
 
@@ -65,6 +70,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="1"
+            android:contentDescription="Utilidad"
             android:src="@drawable/utilidad" />
 
         <ImageView
@@ -72,6 +78,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="1"
+            android:contentDescription="Pregunta"
             android:src="@drawable/pregunta" />
 
         <ImageButton
@@ -80,6 +87,7 @@
             android:layout_height="90dp"
             android:layout_weight="1"
             android:scaleType="fitCenter"
+            android:contentDescription="Muy contento"
             android:src="@drawable/contento" />
 
         <ImageButton
@@ -88,6 +96,7 @@
             android:layout_height="90dp"
             android:layout_weight="1"
             android:scaleType="fitCenter"
+            android:contentDescription="Alegre"
             android:src="@drawable/alegre" />
 
         <ImageButton
@@ -96,6 +105,7 @@
             android:layout_height="90dp"
             android:layout_weight="1"
             android:scaleType="fitCenter"
+            android:contentDescription="Triste"
             android:src="@drawable/triste" />
     </LinearLayout>
 
@@ -120,6 +130,7 @@
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
+            android:hint="Introduce tu sugerencia"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -138,6 +149,7 @@
                 android:layout_height="100dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/microfono"
+                android:contentDescription="Audio"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -148,6 +160,7 @@
                 android:layout_height="100dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/foto"
+                android:contentDescription="Foto"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_assess_add_file"
                 app:layout_constraintStart_toEndOf="@+id/btn_assess_add_audio"
@@ -159,6 +172,7 @@
                 android:layout_height="100dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/fichero"
+                android:contentDescription="Archivo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -177,6 +191,7 @@
             android:layout_height="100dp"
             android:scaleType="fitCenter"
             android:src="@drawable/enviar"
+            android:contentDescription="Enviar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

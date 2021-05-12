@@ -13,6 +13,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
+        android:contentDescription="Crear retroalimentacion"
         android:src="@drawable/anterior" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +27,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/fichero"
+            android:contentDescription="Fichero"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,6 +38,7 @@
             android:layout_marginTop="8dp"
             android:src="@drawable/enviar"
             android:scaleType="fitCenter"
+            android:contentDescription="Enviar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView5" />
@@ -46,6 +49,7 @@
             android:layout_height="100dp"
             android:layout_marginTop="8dp"
             android:src="@drawable/escribir"
+            android:contentDescription="Escribir entrega"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView3" />
 
@@ -56,6 +60,7 @@
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
+            android:hint="Escribir entrega"
             app:layout_constraintBottom_toBottomOf="@+id/imageView5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -68,6 +73,7 @@
             android:layout_height="100dp"
             android:scaleType="fitCenter"
             android:src="@drawable/subir"
+            android:contentDescription="Subir fichero"
             app:layout_constraintBottom_toBottomOf="@+id/imageView3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView3"
@@ -79,6 +85,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
+        android:contentDescription="Retroalimentaciones anteriores"
         android:src="@drawable/posterior" />
     <ListView
         android:layout_marginTop="10dp"

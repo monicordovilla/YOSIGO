@@ -173,5 +173,9 @@
         android:id="@+id/createCategoryFragment"
         android:name="com.example.yosigo.Facilitador.Category.CreateCategoryFragment"
         android:label="Crear categoría"
-        tools:layout="@layout/fragment_create_category" />
+        tools:layout="@layout/fragment_create_category" >
+        <action
+            android:id="@+id/action_createCategoryFragment_to_nav_category"
+            app:destination="@id/nav_category" />
+    </fragment>
 </navigation>

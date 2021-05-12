@@ -49,18 +49,21 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
+            android:contentDescription="Enviar"
             android:src="@drawable/enviar"/>
         <ImageButton
             android:id="@+id/btn_enviar_foto_persona"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
+            android:contentDescription="Foto"
             android:src="@drawable/foto"/>
         <ImageButton
             android:id="@+id/btn_enviar_audio_persona"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="fitCenter"
+            android:contentDescription="Audio"
             android:src="@drawable/microfono"/>
 
     </LinearLayout>

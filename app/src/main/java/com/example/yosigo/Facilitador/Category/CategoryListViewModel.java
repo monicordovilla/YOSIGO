@@ -26,6 +26,7 @@ public class CategoryListViewModel extends ViewModel {
 
     public CategoryListViewModel() {
         categories = new MutableLiveData<>();
+        nameList = new MutableLiveData<>();
         loadCategories();
     }
 

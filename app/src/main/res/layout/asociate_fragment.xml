@@ -18,6 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="Insertar fecha de inicio"
         android:inputType="date"
         android:maxLines="1"
         android:focusable="false"
@@ -55,6 +56,7 @@
         android:maxLines="1"
         android:focusable="false"
         android:clickable="true"
+        android:hint="Insertar fecha de fin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.71"
         app:layout_constraintStart_toEndOf="@+id/textView2"
@@ -68,6 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextFin">
     <ListView
         android:id="@+id/list_asociate_dias"
+        android:contentDescription="Seleccionar días de la semana"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -87,6 +90,7 @@
         android:id="@+id/list_asociate_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:contentDescription="Seleccionar personas"
         android:layout_weight="1"
         android:layout_marginTop="16dp" />
 
@@ -99,6 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Asociar"
+            android:contentDescription="Asociar actividad"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

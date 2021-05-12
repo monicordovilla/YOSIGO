@@ -16,4 +16,7 @@
     <string name="menu_calendar">Calendario</string>
     <string name="escribir_mensaje">Escribe un mensaje</string>
     <string name="menu_category">Categorías</string>
+    <string name="actividades">Actividades</string>
+    <string name="foros">Foros</string>
+    <string name="calendario">Calendario</string>
 </resources>

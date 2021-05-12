@@ -15,7 +15,7 @@ import com.example.yosigo.R;
 
 public class HomeFragment extends Fragment {
 
-    private Button btn_activities, btn_forums;
+    private Button btn_activities, btn_forums, btn_categories;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -23,8 +23,11 @@ public class HomeFragment extends Fragment {
 
         btn_activities = (Button) root.findViewById(R.id.button_facilitador_activities);
         btn_forums = (Button) root.findViewById(R.id.button_facilitador_forum);
+        btn_categories = (Button) root.findViewById(R.id.button_facilitador_categoria);
+
         btn_activities.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_activity, null));
         btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_forums, null));
+        btn_categories.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_category, null));
 
 
         return root;
