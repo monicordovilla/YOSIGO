@@ -1,4 +1,4 @@
-package com.example.yosigo.Facilitador.Category;
+package com.example.yosigo.Facilitador.Goals;
 
 import android.util.Log;
 
@@ -19,29 +19,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CategoryListViewModel extends ViewModel {
-    private MutableLiveData<Map<String, String>> categories;
+public class GoalsListViewModel extends ViewModel {
+    private MutableLiveData<Map<String, String>> goals;
     private MutableLiveData<List<String>> nameList;
     private static final String TAG = "CATEGORIA View Model";
 
-    public CategoryListViewModel() {
-        categories = new MutableLiveData<>();
+    public GoalsListViewModel() {
+        goals = new MutableLiveData<>();
         nameList = new MutableLiveData<>();
-        loadCategories();
+        loadGoals();
     }
 
     public LiveData<Map<String, String>> getCategories() {
-        return categories;
+        return goals;
     }
     public LiveData<List<String>> getNames() {
         return nameList;
     }
 
-    private void loadCategories(){
-        Map<String, String> categoryMap = new HashMap<>();
-        List<String> categoryList = new ArrayList<>();
+    private void loadGoals(){
+        Map<String, String> goalsMap = new HashMap<>();
+        List<String> goalsList = new ArrayList<>();
 
-        FirebaseFirestore.getInstance().collection("categories")
+        FirebaseFirestore.getInstance().collection("goals")
                 .whereEqualTo("Facilitador" , MainActivity.sesion)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -49,14 +49,14 @@ public class CategoryListViewModel extends ViewModel {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                categoryMap.put((String) document.getData().get("Nombre"), (String) document.getId());
-                                categoryList.add((String) document.getData().get("Nombre"));
+                                goalsMap.put((String) document.getData().get("Nombre"), (String) document.getId());
+                                goalsList.add((String) document.getData().get("Nombre"));
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        categories.setValue(categoryMap);
-                        nameList.setValue(categoryList);
+                        goals.setValue(goalsMap);
+                        nameList.setValue(goalsList);
                     }
                 });
     }

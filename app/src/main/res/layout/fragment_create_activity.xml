@@ -8,25 +8,6 @@
     android:padding="10dp"
     tools:context=".Facilitador.ActivitiesFacilitador.CreateActivity">
 
-
-    <EditText
-        android:id="@+id/input_name_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@+id/textView_nombre"  />
-
-    <Button
-        android:id="@+id/btn_up_picto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Subir imagen"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.24"
-        app:layout_constraintStart_toEndOf="@+id/textView_imagen"
-        app:layout_constraintTop_toBottomOf="@+id/input_name_activity" />
-
     <TextView
         android:id="@+id/textView_nombre"
         android:layout_width="wrap_content"
@@ -38,74 +19,106 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView_imagen"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/input_name_activity"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Imagen"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_up_picto"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_up_picto" />
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@+id/textView_nombre"  />
 
-    <TextView
-        android:id="@+id/textView_meta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Meta"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_up_meta"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_up_meta" />
-
-    <Button
-        android:id="@+id/btn_up_meta"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/up_picto"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Subir meta"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.27"
-        app:layout_constraintStart_toEndOf="@+id/textView_meta"
-        app:layout_constraintTop_toBottomOf="@+id/btn_up_picto" />
-
-    <TextView
-        android:id="@+id/textView_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Categoría"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_up_category"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_up_category" />
+        app:layout_constraintTop_toBottomOf="@+id/input_name_activity">
 
-    <Button
-        android:id="@+id/btn_up_category"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView_imagen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="Imagen" />
+
+        <Button
+            android:id="@+id/btn_up_picto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subir imagen" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/up_meta"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Subir categoria"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.22"
-        app:layout_constraintStart_toEndOf="@+id/textView_category"
-        app:layout_constraintTop_toBottomOf="@+id/btn_up_meta" />
-
-    <TextView
-        android:id="@+id/textView_actividad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Actividad"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_up_actividad"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_up_actividad" />
+        app:layout_constraintTop_toBottomOf="@+id/up_picto">
 
-    <Button
-        android:id="@+id/btn_up_actividad"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView_meta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="Meta" />
+
+        <Button
+            android:id="@+id/btn_up_meta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subir meta" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/up_category"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Subir actividad"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.22"
-        app:layout_constraintStart_toEndOf="@+id/textView_actividad"
-        app:layout_constraintTop_toBottomOf="@+id/btn_up_category" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/up_meta">
+
+        <TextView
+            android:id="@+id/textView_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="Categoría" />
+
+        <Spinner
+            android:id="@+id/spinner_up_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="Subir categoria" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/up_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/up_category">
+
+        <TextView
+            android:id="@+id/textView_actividad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="Actividad" />
+
+        <Button
+            android:id="@+id/btn_up_actividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subir actividad" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_create_activity"
@@ -115,7 +128,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_up_actividad"
         app:layout_constraintVertical_bias="1.0" />
 
 

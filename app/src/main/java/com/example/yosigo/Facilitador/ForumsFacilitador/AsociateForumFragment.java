@@ -145,16 +145,16 @@ public class AsociateForumFragment extends Fragment {
     }
 
     private void setAsociados(){
-        SparseBooleanArray checked = list.getCheckedItemPositions();
-        int len = checked.size();
-        List<String> selected = new ArrayList<>();
-
         mViewModel.getUsers().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>(){
             @Override
             public void onChanged(Map<String, String> strings) {
                 userMap = strings;
             }
         });
+
+        SparseBooleanArray checked = list.getCheckedItemPositions();
+        int len = checked.size();
+        List<String> selected = new ArrayList<>();
 
         for (int i = 0; i < len; i++) {
             if (checked.get(i)) {

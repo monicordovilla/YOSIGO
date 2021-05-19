@@ -24,11 +24,12 @@ public class HomeFragment extends Fragment {
         btn_activities = (Button) root.findViewById(R.id.button_facilitador_activities);
         btn_forums = (Button) root.findViewById(R.id.button_facilitador_forum);
         btn_categories = (Button) root.findViewById(R.id.button_facilitador_categoria);
+        btn_categories = (Button) root.findViewById(R.id.button_facilitador_metas);
 
         btn_activities.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_activity, null));
         btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_forums, null));
         btn_categories.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_category, null));
-
+        btn_categories.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_goals, null));
 
         return root;
     }

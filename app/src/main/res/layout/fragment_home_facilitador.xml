@@ -8,52 +8,65 @@
 
     <Button
         android:id="@+id/button_facilitador_activities"
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:background="@color/colorActivities"
-        android:text="actividades"
+        android:text="@string/actividades"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_facilitador_forum"
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
         android:background="@color/colorForums"
-        android:text="foros"
+        android:text="@string/foros"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_facilitador_activities" />
 
     <Button
+        android:id="@+id/button_facilitador_categoria"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/colorPrimary"
+        android:text="categoría"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_facilitador_forum" />
+
+    <Button
+        android:id="@+id/button_facilitador_metas"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/goals"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_facilitador_categoria" />
+
+    <Button
         android:id="@+id/button_facilitador_group"
-        android:layout_width="120dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:layout_marginTop="50dp"
         android:background="@color/colorPrimary"
         android:text="grupos"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_facilitador_categoria" />
-
-    <Button
-        android:id="@+id/button_facilitador_categoria"
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="50dp"
-        android:background="@color/colorPrimary"
-        android:text="categoria"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_facilitador_forum" />
+        app:layout_constraintTop_toBottomOf="@+id/button_facilitador_metas" />
 </androidx.constraintlayout.widget.ConstraintLayout>

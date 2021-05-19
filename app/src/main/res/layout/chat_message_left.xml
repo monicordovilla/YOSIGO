@@ -46,8 +46,8 @@
 
     <ImageButton
         android:id="@+id/show_btn_hear_message"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@drawable/oir"
         android:scaleType="fitCenter"
         android:layout_gravity="center"

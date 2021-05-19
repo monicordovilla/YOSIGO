@@ -22,7 +22,7 @@ import com.example.yosigo.R;
 
 public class HomePersonaFragment extends Fragment {
 
-    private Button btn_calendar, btn_forums;
+    private Button btn_calendar, btn_forums, btn_activities;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -30,8 +30,11 @@ public class HomePersonaFragment extends Fragment {
 
         btn_calendar = (Button) root.findViewById(R.id.button_persona_calendar);
         btn_forums = (Button) root.findViewById(R.id.button_persona_forum);
+        btn_activities = (Button) root.findViewById(R.id.button_persona_activities);
+
         btn_calendar.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_home_to_nav_calendar));
         btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_home_to_nav_slideshow));
+        btn_activities.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_home_to_nav_activities));
 
         /*MainActivity mainActivity = new MainActivity();
         mainActivity.setToolbar_image(R.drawable.inicio);*/

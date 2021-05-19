@@ -20,5 +20,9 @@
             android:id="@+id/nav_category"
             android:icon="@drawable/ic_category"
             android:title="@string/menu_category" />
+        <item
+            android:id="@+id/nav_goals"
+            android:icon="@drawable/ic_goal"
+            android:title="@string/goals" />
     </group>
 </menu>

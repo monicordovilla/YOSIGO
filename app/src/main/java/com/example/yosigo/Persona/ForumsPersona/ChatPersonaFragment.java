@@ -257,6 +257,8 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                                                     Glide.with(root)
                                                             .load(uri)
                                                             .into(picto);
+
+                                                    picto.setContentDescription( (String) document.getData().get("Nombre"));
                                                 }
                                             });
                                 }

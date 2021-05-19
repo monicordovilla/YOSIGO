@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_calendar"
             app:destination="@id/nav_calendar" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_activities"
+            app:destination="@id/nav_activities" />
     </fragment>
 
     <fragment
@@ -62,7 +65,7 @@
     <fragment
         android:id="@+id/createFeedbackFragment"
         android:name="com.example.yosigo.Persona.ActivitiesPersona.CreateFeedbackFragment"
-        android:label="Retroalimentación"
+        android:label="Entrega"
         tools:layout="@layout/fragment_create_feedback" >
         <argument
             android:name="param1"
@@ -102,5 +105,14 @@
             app:argType="string"
             android:defaultValue="0"
             />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_activities"
+        android:name="com.example.yosigo.Persona.ActivitiesPersona.ListActivitiesPersonaFragment"
+        android:label="@string/actividades"
+        tools:layout="@layout/list_activities_persona_fragment" >
+        <action
+            android:id="@+id/action_nav_activities_to_activityViewFragment2"
+            app:destination="@id/activityViewFragment2" />
     </fragment>
 </navigation>

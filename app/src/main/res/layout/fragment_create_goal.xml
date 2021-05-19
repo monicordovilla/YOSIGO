@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    tools:context=".Facilitador.Goals.CreateGoalFragment">
+
+    <TextView
+        android:id="@+id/textView_nombre_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre meta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/input_name_goal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+
+        android:text="Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_nombre_goal" />
+
+    <TextView
+        android:id="@+id/textView_imagen_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Imagen"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_up_picto_goal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_up_picto_goal" />
+
+    <Button
+        android:id="@+id/btn_up_picto_goal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Subir imagen"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.24"
+        app:layout_constraintStart_toEndOf="@+id/textView_imagen_goal"
+        app:layout_constraintTop_toBottomOf="@+id/input_name_goal" />
+
+    <ImageView
+        android:id="@+id/image_create_goal"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_menu_gallery"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_imagen_goal" />
+
+    <Button
+        android:id="@+id/btn_create_goal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Crear meta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

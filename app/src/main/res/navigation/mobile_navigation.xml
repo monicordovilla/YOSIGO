@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_category"
             app:destination="@id/nav_category" />
+        <action
+            android:id="@+id/action_nav_home_to_goalsListFragment"
+            app:destination="@id/nav_goals" />
     </fragment>
 
     <fragment
@@ -91,7 +94,7 @@
     <fragment
         android:id="@+id/feedbackFacilitadorFragment"
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.FeedbackFacilitadorFragment"
-        android:label="Retroalimentaciones"
+        android:label="Entregas"
         tools:layout="@layout/fragment_feedback_facilitador">
         <argument
             android:name="param1"
@@ -177,5 +180,23 @@
         <action
             android:id="@+id/action_createCategoryFragment_to_nav_category"
             app:destination="@id/nav_category" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_goals"
+        android:name="com.example.yosigo.Facilitador.Goals.GoalsListFragment"
+        android:label="@string/goals"
+        tools:layout="@layout/goals_list_fragment" >
+        <action
+            android:id="@+id/action_nav_goals_to_createGoalFragment"
+            app:destination="@id/createGoalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createGoalFragment"
+        android:name="com.example.yosigo.Facilitador.Goals.CreateGoalFragment"
+        android:label="fragment_create_goal"
+        tools:layout="@layout/fragment_create_goal" >
+        <action
+            android:id="@+id/action_createGoalFragment_to_nav_goals"
+            app:destination="@id/nav_goals" />
     </fragment>
 </navigation>

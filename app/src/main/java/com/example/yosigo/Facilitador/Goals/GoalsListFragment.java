@@ -1,4 +1,4 @@
-package com.example.yosigo.Facilitador.Category;
+package com.example.yosigo.Facilitador.Goals;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,11 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.yosigo.Facilitador.ForumsFacilitador.ForumListAdapter;
 import com.example.yosigo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -27,58 +25,52 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CategoryListFragment extends Fragment {
+public class GoalsListFragment extends Fragment {
 
-    private static final String TAG = "CATEGORIA ";
-    private CategoryListViewModel mViewModel;
+    private static final String TAG = "METAS";
+    private GoalsListViewModel mViewModel;
     private View root;
     private ListView list;
-    private Map<String, String> categoryMap = new HashMap<>();
-    private List<String> categoryNameList = new ArrayList<>();
+    private Map<String, String> goalsMap = new HashMap<>();
+    private List<String> goalsNameList = new ArrayList<>();
 
-    public static CategoryListFragment newInstance() {
-        return new CategoryListFragment();
+    public static GoalsListFragment newInstance() {
+        return new GoalsListFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
-        root = inflater.inflate(R.layout.category_list_fragment, container, false);
+        mViewModel = new ViewModelProvider(this).get(GoalsListViewModel.class);
+        root = inflater.inflate(R.layout.goals_list_fragment, container, false);
 
-        list = root.findViewById(R.id.list_categories);
+        list = root.findViewById(R.id.list_goals);
 
         mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                categoryNameList.clear();
-                categoryNameList = strings;
+                goalsNameList.clear();
+                goalsNameList = strings;
+                Log.d(TAG, "Lista: " + goalsNameList);
 
                 ArrayAdapter<String> adapter = new ArrayAdapter(
                         root.getContext(),
                         android.R.layout.simple_list_item_1,
-                        categoryNameList
+                        goalsNameList
                 );
                 list.setAdapter(adapter);
             }
         });
 
-        FloatingActionButton fab = root.findViewById(R.id.fab_category);
+        FloatingActionButton fab = root.findViewById(R.id.fab_goals);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_categoryListFragment_to_createCategoryFragment);
-            }
-        });
-
-        mViewModel.getCategories().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
-            @Override
-            public void onChanged(Map<String, String> strings) {
-                categoryMap.clear();
-                categoryMap = strings;
+                Navigation.findNavController(view).navigate(R.id.action_nav_goals_to_createGoalFragment);
             }
         });
 
         return root;
     }
+
 }
