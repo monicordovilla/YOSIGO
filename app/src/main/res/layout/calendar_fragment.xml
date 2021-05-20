@@ -12,10 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
+        <ImageButton
             android:id="@+id/button_lunes"
             android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_height="120dp"
             android:background="#FFFFFF"
             android:color="@color/white"
             android:foreground="@drawable/lunes"
@@ -24,10 +24,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_martes"
             android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_height="120dp"
             android:foreground="@drawable/martes"
             android:text="Martes"
             android:contentDescription="Martes"
@@ -35,20 +35,20 @@
             app:layout_constraintStart_toEndOf="@+id/button_lunes"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_miercoles"
             android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_height="120dp"
             android:text="Miercoles"
             android:contentDescription="Miércoles"
             android:foreground="@drawable/miercoles"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_jueves"
             android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_height="120dp"
             android:layout_marginTop="8dp"
             android:foreground="@drawable/jueves"
             android:text="Jueves"
@@ -57,10 +57,10 @@
             app:layout_constraintStart_toEndOf="@+id/button_lunes"
             app:layout_constraintTop_toBottomOf="@+id/button_lunes" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_viernes"
             android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_height="120dp"
             android:layout_marginTop="8dp"
             android:foreground="@drawable/viernes"
             android:text="Viernes"
@@ -69,10 +69,10 @@
             app:layout_constraintStart_toEndOf="@+id/button_martes"
             app:layout_constraintTop_toBottomOf="@+id/button_miercoles" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_sabado"
             android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_height="120dp"
             android:layout_marginTop="8dp"
             android:foreground="@drawable/sabado"
             android:text="Sabado"
@@ -81,10 +81,10 @@
             app:layout_constraintStart_toStartOf="@+id/button_viernes"
             app:layout_constraintTop_toBottomOf="@+id/button_viernes" />
 
-        <Button
+        <ImageButton
             android:id="@+id/button_domingo"
             android:layout_width="120dp"
-            android:layout_height="60dp"
+            android:layout_height="120dp"
             android:layout_marginTop="8dp"
             android:foreground="@drawable/domingo"
             android:text="Domingo"
@@ -94,20 +94,5 @@
             app:layout_constraintTop_toBottomOf="@+id/button_jueves" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="10dp"
-        >
-        <GridView
-            android:id="@+id/grid_calendar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:horizontalSpacing="10dp"
-            android:numColumns="3"
-            android:verticalSpacing="10dp" />
-    </LinearLayout>
-
 
 </androidx.appcompat.widget.LinearLayoutCompat>

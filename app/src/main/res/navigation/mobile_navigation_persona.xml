@@ -28,8 +28,8 @@
         android:label="@string/menu_calendar"
         tools:layout="@layout/list_activities_facilitador" >
         <action
-            android:id="@+id/action_nav_calendar_to_activityViewFragment22"
-            app:destination="@id/activityViewFragment2" />
+            android:id="@+id/action_nav_calendar_to_selectDayFragment"
+            app:destination="@id/selectDayFragment" />
     </fragment>
 
     <fragment
@@ -114,5 +114,19 @@
         <action
             android:id="@+id/action_nav_activities_to_activityViewFragment2"
             app:destination="@id/activityViewFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectDayFragment"
+        android:name="com.example.yosigo.Persona.CalendarPersona.SelectDayFragment"
+        android:label="@string/actividades"
+        tools:layout="@layout/fragment_select_day" >
+        <action
+            android:id="@+id/action_selectDayFragment_to_activityViewFragment2"
+            app:destination="@id/activityViewFragment2" />
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
     </fragment>
 </navigation>

@@ -58,9 +58,6 @@ public class ListForumsPersona extends Fragment {
                             public void onChanged(@Nullable List<String> idList) {
                                 ids = idList;
 
-                                Log.d(TAG, "ID" + " => " + ids + ".\n" +
-                                        "Nombre" + " => " + nombres + ".\n" +
-                                        " Pictograma: " + pictos + ".\n");
                                 GridAdapter adapter = new GridAdapter(
                                         root.getContext(),
                                         ids,

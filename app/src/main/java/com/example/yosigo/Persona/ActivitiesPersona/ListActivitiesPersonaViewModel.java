@@ -67,8 +67,8 @@ public class ListActivitiesPersonaViewModel extends ViewModel {
                                 DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
                                 Date fecha_inicio = document.getDate("Fecha Inicio", behavior);
                                 Date fecha_fin = document.getDate("Fecha Fin", behavior);
-                                new_activity.setFecha_fin(fecha_inicio);
-                                new_activity.setFecha_inicio(fecha_fin);
+                                new_activity.setFecha_fin(fecha_fin);
+                                new_activity.setFecha_inicio(fecha_inicio);
 
                                 //Insertar identificador de actividad
                                 String id = document.getId();
@@ -87,11 +87,11 @@ public class ListActivitiesPersonaViewModel extends ViewModel {
                                                     DocumentSnapshot document_activity = activity.getResult();
                                                     if (document_activity.exists()) {
                                                         String nombre = document_activity.getData().get("Nombre").toString();
-                                                        new_activity.setImagen(nombre);
+                                                        new_activity.setNombre(nombre);
                                                         namesMap.put(id, nombre);
 
                                                         String picto = document_activity.getData().get("Pictograma").toString();
-                                                        new_activity.setNombre(picto);
+                                                        new_activity.setImagen(picto);
                                                         pictosMap.put(id, picto);
 
                                                         Log.d(TAG, "ID: " + id + "=>" + document_activity.getData());

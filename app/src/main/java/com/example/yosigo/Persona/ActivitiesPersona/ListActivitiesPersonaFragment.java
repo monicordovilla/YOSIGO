@@ -61,10 +61,6 @@ public class ListActivitiesPersonaFragment extends Fragment {
                             public void onChanged(List<String> stringList) {
                                 ids = stringList;
 
-                                Log.d(TAG, "ID" + " => " + ids + ".\n" +
-                                        "Nombre" + " => " + nombres + ".\n" +
-                                        " Pictograma: " + pictos + ".\n");
-
                                 GridAdapter adapter = new GridAdapter(
                                         root.getContext(),
                                         ids,

@@ -43,16 +43,8 @@ public class CalendarFragment extends Fragment {
     private static final String TAG = "CALENDARIO" ;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    private Button btn_l, btn_m , btn_x, btn_j, btn_v, btn_s, btn_d;
-    private GridView listado;
+    private ImageButton btn_l, btn_m , btn_x, btn_j, btn_v, btn_s, btn_d;
     private View root;
-    private List<String> actividades_id = new ArrayList<>();
-    private Map<String, String> actividades_nombre = new HashMap<>();
-    private Map<String, String> actividades_pictos = new HashMap<>();
-    private Map<String, Integer> dias_actividades = new HashMap<>();
-    private List<String> actividades_id_filtradas = new ArrayList<>();
-    private Map<String, String> actividades_nombre_filtradas = new HashMap<>();
-    private Map<String, String> actividades_pictos_filtradas = new HashMap<>();
 
     //Dias semana
     int flag; //Aqui guardas tus propiedades booleanas, también conocidas como banderas
@@ -73,29 +65,14 @@ public class CalendarFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         root =  inflater.inflate(R.layout.calendar_fragment, container, false);
 
-        //Limpiar datos
-        actividades_id.clear();
-        actividades_nombre.clear();
-        actividades_pictos.clear();
-        dias_actividades.clear();
-        actividades_id_filtradas.clear();
-        actividades_nombre_filtradas.clear();
-        actividades_pictos_filtradas.clear();
-
         //Botones
-        btn_l = (Button) root.findViewById(R.id.button_lunes);
-        btn_m = (Button) root.findViewById(R.id.button_martes);
-        btn_x = (Button) root.findViewById(R.id.button_miercoles);
-        btn_j= (Button) root.findViewById(R.id.button_jueves);
-        btn_v = (Button) root.findViewById(R.id.button_viernes);
-        btn_s= (Button) root.findViewById(R.id.button_sabado);
-        btn_d= (Button) root.findViewById(R.id.button_domingo);
-
-        //Listado
-        listado= (GridView) root.findViewById(R.id.grid_calendar);
-
-        //Cargar datos
-        getActivities();
+        btn_l = root.findViewById(R.id.button_lunes);
+        btn_m = root.findViewById(R.id.button_martes);
+        btn_x = root.findViewById(R.id.button_miercoles);
+        btn_j= root.findViewById(R.id.button_jueves);
+        btn_v = root.findViewById(R.id.button_viernes);
+        btn_s= root.findViewById(R.id.button_sabado);
+        btn_d= root.findViewById(R.id.button_domingo);
 
         //Cargar acciones de los botones
         btn_l.setOnClickListener(new View.OnClickListener(){
@@ -149,104 +126,10 @@ public class CalendarFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    private void getActivities(){
-        String sesion = MainActivity.sesion;
-        if(MainActivity.sesion == null){
-            //Obtenemos la referencia al archvivo datos
-            SharedPreferences preferencias= getActivity().getSharedPreferences("datos", Context.MODE_PRIVATE);
-            //Extraemos del archivo datos el campo email, si este no existe se devuelve un campo vacío
-            sesion = preferencias.getString("sesion","");
-        }
-        //Comprobar las actividades que tiene asignadas
-        db.collection("users").document(sesion).collection("activities")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Comprobar la fecha, para ver si está asignada la tarea actualmente
-                                DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
-                                Date fecha_inicio = document.getDate("Fecha Inicio", behavior) ;
-                                Date fecha_fin = document.getDate("Fecha Fin", behavior) ;
-
-                                if (new Date().after(fecha_inicio) && new Date().before(fecha_fin)) {
-                                    String id = document.getId();
-                                    Log.d(TAG, id + " => " + document.getData());
-                                    //Guardar los días que tiene asignada la actividad actual
-                                    dias_actividades.put(id, Integer.valueOf(document.getData().get("Dias semana").toString()));
-
-                                    //Obtener la información de cada actividad que tiene asingada
-                                    db.collection("activities").document(id).get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> activity) {
-                                                    if (activity.isSuccessful()) {
-                                                        DocumentSnapshot document_activity = activity.getResult();
-                                                        if (document_activity.exists()) {
-                                                            actividades_id.add(id);
-                                                            actividades_nombre.put(id, document_activity.getData().get("Nombre").toString());
-                                                            actividades_pictos.put(id, document_activity.getData().get("Pictograma").toString());
-                                                        } else {
-                                                            Log.d(TAG, "No such document");
-                                                        }
-                                                    } else {
-                                                        Log.d(TAG, "get failed with ", activity.getException());
-                                                    }
-
-                                                    //Filtrar actividades para que aparezcan las que tocan hoy
-                                                    Calendar cal = Calendar.getInstance();
-                                                    int dia = cal.get(Calendar.DAY_OF_WEEK);
-                                                    if (dia == 1) filtrarActividades(DOMINGO);
-                                                    else if (dia == 2) filtrarActividades(LUNES);
-                                                    else if (dia == 3) filtrarActividades(MARTES);
-                                                    else if (dia == 4) filtrarActividades(MIERCOLES);
-                                                    else if (dia == 5) filtrarActividades(JUEVES);
-                                                    else if (dia == 6) filtrarActividades(VIERNES);
-                                                    else if (dia == 7) filtrarActividades(SABADO);
-                                                }
-                                            });
-                                }
-                            }
-                            if(task.getResult().isEmpty()){
-                                Toast.makeText(getContext(), "No tiene actividades asociadas", Toast.LENGTH_LONG).show();
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
-
-    public void filtrarActividades(int dia) {
-        actividades_nombre_filtradas.clear();
-        actividades_pictos_filtradas.clear();
-        actividades_id_filtradas.clear();
-
-        for(String id: actividades_id){
-            Integer dias = dias_actividades.get(id);
-            if((dias & dia) == dia){
-                actividades_id_filtradas.add(id);
-                actividades_nombre_filtradas.put(id, actividades_nombre.get(id));
-                actividades_pictos_filtradas.put(id, actividades_pictos.get(id));
-            }
-        }
-        Log.d(TAG, "Dia" + dia + "=> " + actividades_nombre_filtradas);
-        GridAdapter adapter = new GridAdapter(
-                root.getContext(),
-                actividades_id_filtradas,
-                actividades_nombre_filtradas,
-                actividades_pictos_filtradas
-        );
-        listado.setAdapter(adapter);
-
-        listado.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle bundle = new Bundle();
-                bundle.putString("param1", actividades_id_filtradas.get(position));
-                Navigation.findNavController(view).navigate(R.id.action_nav_calendar_to_activityViewFragment22, bundle);
-            }
-        });
+    private void filtrarActividades(int dia){
+        Bundle bundle = new Bundle();
+        Log.d(TAG, "Paso :" + dia);
+        bundle.putString("param1", String.valueOf(dia));
+        Navigation.findNavController(root).navigate(R.id.action_nav_calendar_to_selectDayFragment, bundle);
     }
 }

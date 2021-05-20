@@ -23,6 +23,18 @@ public class Activity {
     public void setFecha_inicio(Date fecha_inicio) { this.fecha_inicio = fecha_inicio; }
     public void setFecha_fin(Date fecha_fin) { this.fecha_fin = fecha_fin; }
     public void setDias(int dias) { this.dias = dias; }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "id='" + id + '\n' +
+                ", nombre='" + nombre + '\n' +
+                ", imagen='" + imagen + '\n' +
+                ", dias=" + dias + '\n' +
+                ", fecha_inicio=" + fecha_inicio + '\n' +
+                ", fecha_fin=" + fecha_fin +
+                '}';
+    }
 }
 
 
