@@ -52,12 +52,26 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ListView
-        android:id="@+id/list_array_activities_persona"
-        android:layout_marginTop="10dp"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
+        android:layout_marginTop="10dp"
+        android:layout_weight="1" >
+
+        <ImageView
+            android:id="@+id/icon_click"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="Pulsar"
+            android:src="@drawable/pulsar" />
+
+        <ListView
+            android:id="@+id/list_array_activities_persona"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

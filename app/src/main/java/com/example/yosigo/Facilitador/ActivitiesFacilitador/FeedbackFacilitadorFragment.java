@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.yosigo.MainActivity;
@@ -45,11 +46,12 @@ public class FeedbackFacilitadorFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private final String TAG = "FEEDBACK";
-    private final FirebaseFirestore FB = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore fb = FirebaseFirestore.getInstance();
 
     private String mParam1;
     private View root;
     private ListView list;
+    private TextView textView;
     private List<String> id = new ArrayList<>();
     private Map<String, String> map_file = new HashMap<>();
     private Map<String, String> map_type = new HashMap<>();
@@ -89,8 +91,28 @@ public class FeedbackFacilitadorFragment extends Fragment {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_feedback_facilitador, container, false);
         list = root.findViewById(R.id.list_feedback_facilitador);
+        textView = root.findViewById(R.id.name_activity_feedback);
+
         getFeedbacks();
+        getName();
+
         return root;
+    }
+
+    private void getName(){
+        fb.collection("activities")
+                .document(mParam1).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                textView.setText(document.getData().get("Nombre").toString());
+                            }
+                        }
+                    }
+                });
     }
 
     private void getFeedbacks(){
@@ -100,7 +122,7 @@ public class FeedbackFacilitadorFragment extends Fragment {
         map_date.clear();
         map_user.clear();
 
-        FB.collection("activities")
+        fb.collection("activities")
                 .document(mParam1).collection("Feedback")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -113,7 +135,7 @@ public class FeedbackFacilitadorFragment extends Fragment {
                                 id.add(doc_id);
 
                                 //Obtener usuario
-                                FB.collection("users")
+                                fb.collection("users")
                                         .document(document.getData().get("Persona").toString()).get()
                                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>(){
                                             @Override

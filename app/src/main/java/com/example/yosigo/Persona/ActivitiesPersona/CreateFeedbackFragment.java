@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.yosigo.MainActivity;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,6 +69,7 @@ public class CreateFeedbackFragment extends Fragment {
     private Map<String, Date> map_date = new HashMap<>();
     private ImageButton btn_send_feedback, btn_save_feedback;
     private ListView list_previous_feedback;
+    private ImageView imageView;
     private EditText text_input;
     private Uri uri_feedback;
 
@@ -110,6 +112,10 @@ public class CreateFeedbackFragment extends Fragment {
         text_input = root.findViewById(R.id.text_input_feedback);
         list_previous_feedback = root.findViewById(R.id.show_activity_feedback_persona);
 
+        //Mostrar icono de actividad
+        imageView = root.findViewById(R.id.image_activity_feedback);
+        getImage();
+
         btn_save_feedback.setOnClickListener( new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -137,6 +143,33 @@ public class CreateFeedbackFragment extends Fragment {
         if (requestCode == FEEDBACK_INTENT && resultCode == RESULT_OK) {
             uri_feedback = data.getData();
         }
+    }
+
+    private void getImage(){
+        fb.collection("activities")
+                .document(mParam1).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                if(document.getData().get("Pictograma") != null) {
+                                    storageRef.child((String) document.getData().get("Pictograma")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Glide.with(root)
+                                                    .load(uri)
+                                                    .into(imageView);
+                                        }
+                                    });
+                                } else {
+                                    imageView.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     private void agregarActividad(){

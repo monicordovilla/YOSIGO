@@ -23,14 +23,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.yosigo.MainActivity;
 import com.example.yosigo.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -66,6 +71,7 @@ public class CreateAssessmentFragment extends Fragment {
 
     private View root;
     private EditText text_assessment;
+    private ImageView imageView;
     private ImageButton btn_difficult_high, btn_difficult_medium, btn_difficult_low,
             btn_utility_high, btn_utility_medium, btn_utility_low,
             btn_audio, btn_photo, btn_file, btn_send;
@@ -114,6 +120,10 @@ public class CreateAssessmentFragment extends Fragment {
         btn_send = root.findViewById(R.id.btn_send_assessment);
         text_assessment = root.findViewById(R.id.editTextTextMultiLine_assessment);
         tipo="";
+
+        //Mostrar icono de actividad
+        imageView = root.findViewById(R.id.image_activity_assessment);
+        getImage();
 
         //Botones de valoración
         btn_difficult_high = root.findViewById(R.id.btn_assess_difficult_high);
@@ -223,6 +233,33 @@ public class CreateAssessmentFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private void getImage(){
+        fb.collection("activities")
+                .document(mParam1).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                if(document.getData().get("Pictograma") != null) {
+                                    storageRef.child((String) document.getData().get("Pictograma")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            Glide.with(root)
+                                                    .load(uri)
+                                                    .into(imageView);
+                                        }
+                                    });
+                                } else {
+                                    imageView.setVisibility(View.GONE);
+                                }
+                            }
+                        }
+                    }
+                });
     }
 
     @Override

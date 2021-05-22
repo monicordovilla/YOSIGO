@@ -8,6 +8,16 @@
     android:layout_margin="10dp"
     tools:context=".Facilitador.ActivitiesFacilitador.FeedbackFacilitadorFragment">
 
+    <TextView
+        android:id="@+id/name_activity_feedback"
+        android:layout_width="match_parent"
+        android:text="@string/actividades"
+        android:textAlignment="center"
+        android:textStyle="normal"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"/>
+
     <ListView
         android:id="@+id/list_feedback_facilitador"
         android:layout_width="match_parent"

@@ -9,12 +9,11 @@
     tools:context=".Persona.ActivitiesPersona.CreateFeedbackFragment">
 
     <ImageView
-        android:id="@+id/imageView_anterior"
+        android:id="@+id/image_activity_feedback"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:contentDescription="Crear retroalimentacion"
-        android:src="@drawable/anterior" />
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

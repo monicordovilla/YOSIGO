@@ -10,6 +10,13 @@
     tools:context=".Persona.ActivitiesPersona.CreateAssessmentFragment">
 
 
+    <ImageView
+        android:id="@+id/image_activity_assessment"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -119,14 +126,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sugerencia"
-            android:textSize="30dp"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editTextTextMultiLine_assessment"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="match_parent"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
