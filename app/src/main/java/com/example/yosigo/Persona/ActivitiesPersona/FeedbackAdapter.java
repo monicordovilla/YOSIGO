@@ -83,6 +83,7 @@ public class FeedbackAdapter extends ArrayAdapter {
                     });
                 }
             });
+            texto.setVisibility(View.GONE);
         }
 
         return rowView;

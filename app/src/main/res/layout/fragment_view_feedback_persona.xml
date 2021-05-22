@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    tools:context=".Persona.ActivitiesPersona.ViewFeedbackPersonaFragment">
+
+    <ImageView
+        android:id="@+id/image_activity_previous_feedback"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center" />
+
+    <ListView
+        android:layout_marginTop="10dp"
+        android:id="@+id/show_activity_feedback_persona"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

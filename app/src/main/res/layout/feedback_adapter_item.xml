@@ -28,8 +28,8 @@
 
     <ImageButton
         android:id="@+id/button_watch_feedback_persona"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@color/colorPrimary"
         android:scaleType="fitCenter"
         android:layout_gravity="center"

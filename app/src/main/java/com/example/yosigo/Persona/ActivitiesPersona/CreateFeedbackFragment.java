@@ -63,12 +63,7 @@ public class CreateFeedbackFragment extends Fragment {
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
 
     private String mParam1;
-    private final List<String> id = new ArrayList<>();
-    private Map<String, String> map_file = new HashMap<>();
-    private Map<String, String> map_type = new HashMap<>();
-    private Map<String, Date> map_date = new HashMap<>();
-    private ImageButton btn_send_feedback, btn_save_feedback;
-    private ListView list_previous_feedback;
+    private ImageButton btn_send_feedback, btn_save_feedback, btn_previous;
     private ImageView imageView;
     private EditText text_input;
     private Uri uri_feedback;
@@ -109,8 +104,8 @@ public class CreateFeedbackFragment extends Fragment {
 
         btn_send_feedback = root.findViewById(R.id.upload_file_feedback);
         btn_save_feedback = root.findViewById(R.id.upload_feedback);
+        btn_previous = root.findViewById(R.id.button_go_previous_feedback);
         text_input = root.findViewById(R.id.text_input_feedback);
-        list_previous_feedback = root.findViewById(R.id.show_activity_feedback_persona);
 
         //Mostrar icono de actividad
         imageView = root.findViewById(R.id.image_activity_feedback);
@@ -131,7 +126,14 @@ public class CreateFeedbackFragment extends Fragment {
             }
         });
 
-        getAnteriores();
+        btn_previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_createFeedbackFragment_to_viewFeedbackPersonaFragment, bundle);
+            }
+        });
 
         return root;
     }
@@ -246,46 +248,7 @@ public class CreateFeedbackFragment extends Fragment {
             Toast.makeText(getContext(), "No se ha introducido nada", Toast.LENGTH_LONG).show();
             return;
         }
-
-        //Volvemos a obtener las anteriores
-        getAnteriores();
     }
 
-    private void getAnteriores(){
-        //Limpiamos datos
-        id.clear();
-        map_date.clear();
-        map_type.clear();
-        map_file.clear();
 
-        //Obtenemos datos de base de datos
-        fb.collection("activities")
-                .document(mParam1)
-                .collection("Feedback")
-                .whereEqualTo("Persona", MainActivity.sesion)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
-                                String doc_id = document.getId();
-                                id.add(doc_id);
-                                map_date.put(doc_id , document.getDate("Fecha", behavior));
-                                map_type.put(doc_id , document.getData().get("Tipo").toString());
-                                map_file.put(doc_id , document.getData().get("Archivo").toString());
-                            }
-                            FeedbackAdapter adapter = new FeedbackAdapter(
-                                    root.getContext(),
-                                    id,
-                                    map_date,
-                                    map_file,
-                                    map_type
-                            );
-                            list_previous_feedback.setAdapter(adapter);
-                        }
-                    }
-                });
-    }
 }

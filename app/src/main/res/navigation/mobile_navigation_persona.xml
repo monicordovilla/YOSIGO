@@ -75,6 +75,9 @@
         <action
             android:id="@+id/action_createFeedbackFragment_to_activityViewFragment2"
             app:destination="@id/activityViewFragment2" />
+        <action
+            android:id="@+id/action_createFeedbackFragment_to_viewFeedbackPersonaFragment"
+            app:destination="@id/viewFeedbackPersonaFragment" />
     </fragment>
     <fragment
         android:id="@+id/createAssessmentFragment"
@@ -123,6 +126,17 @@
         <action
             android:id="@+id/action_selectDayFragment_to_activityViewFragment2"
             app:destination="@id/activityViewFragment2" />
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/viewFeedbackPersonaFragment"
+        android:name="com.example.yosigo.Persona.ActivitiesPersona.ViewFeedbackPersonaFragment"
+        android:label="Retroalimentaciones anteriores"
+        tools:layout="@layout/fragment_view_feedback_persona" >
         <argument
             android:name="param1"
             app:argType="string"
