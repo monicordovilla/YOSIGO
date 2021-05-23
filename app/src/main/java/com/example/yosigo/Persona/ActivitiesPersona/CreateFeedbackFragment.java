@@ -1,6 +1,7 @@
 package com.example.yosigo.Persona.ActivitiesPersona;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.example.yosigo.MainActivity;
@@ -54,8 +57,10 @@ import static android.app.Activity.RESULT_OK;
  */
 public class CreateFeedbackFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_VIDEO_CAPTURE = 2;
+
     private View root;
     private static final int FEEDBACK_INTENT = 5;
     private final String TAG = "CREATE FEEDBACK";
@@ -63,10 +68,11 @@ public class CreateFeedbackFragment extends Fragment {
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
 
     private String mParam1;
-    private ImageButton btn_send_feedback, btn_save_feedback, btn_previous;
-    private ImageView imageView;
+    private ImageButton btn_send_feedback, btn_save_feedback, btn_previous, btn_photo, btn_video, btn_preview;
+    private ImageView imageView, imagePreview;
     private EditText text_input;
     private Uri uri_feedback;
+    private String type = "texto";
 
     public CreateFeedbackFragment() {
         // Required empty public constructor
@@ -102,10 +108,17 @@ public class CreateFeedbackFragment extends Fragment {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_create_feedback, container, false);
 
+        //Guardar datos
         btn_send_feedback = root.findViewById(R.id.upload_file_feedback);
         btn_save_feedback = root.findViewById(R.id.upload_feedback);
         btn_previous = root.findViewById(R.id.button_go_previous_feedback);
+        btn_photo = root.findViewById(R.id.upload_photo);
+        btn_video = root.findViewById(R.id.upload_video);
         text_input = root.findViewById(R.id.text_input_feedback);
+
+        //Previsualizar datos
+        btn_preview = root.findViewById(R.id.file_feedback_preview);
+        imagePreview = root.findViewById(R.id.image_feedback_preview);
 
         //Mostrar icono de actividad
         imageView = root.findViewById(R.id.image_activity_feedback);
@@ -135,6 +148,26 @@ public class CreateFeedbackFragment extends Fragment {
             }
         });
 
+        btn_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+            }
+        });
+
+        btn_video.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+                }
+            }
+        });
+
         return root;
     }
 
@@ -144,6 +177,41 @@ public class CreateFeedbackFragment extends Fragment {
 
         if (requestCode == FEEDBACK_INTENT && resultCode == RESULT_OK) {
             uri_feedback = data.getData();
+            type = "archivo";
+            btn_preview.setOnClickListener( new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uri_feedback);
+                    getActivity().startActivity(launchBrowser);
+                }
+            });
+
+            btn_preview.setVisibility(View.VISIBLE);
+            imagePreview.setVisibility(View.GONE);
+        }
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK) {
+            uri_feedback = data.getData();
+            type = "video";
+            btn_preview.setOnClickListener( new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uri_feedback);
+                    getActivity().startActivity(launchBrowser);
+                }
+            });
+
+            btn_preview.setVisibility(View.VISIBLE);
+            imagePreview.setVisibility(View.GONE);
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imagePreview.setImageBitmap(imageBitmap);
+            type = "imagen";
+            uri_feedback = data.getData();
+
+            btn_preview.setVisibility(View.GONE);
+            imagePreview.setVisibility(View.VISIBLE);
         }
     }
 

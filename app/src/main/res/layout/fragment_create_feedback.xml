@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,83 +16,156 @@
         android:layout_marginBottom="10dp"
         android:layout_gravity="center" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/fichero"
-            android:contentDescription="Fichero"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
 
-        <ImageButton
-            android:id="@+id/upload_feedback"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/enviar"
-            android:scaleType="fitCenter"
-            android:contentDescription="Enviar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="750dp"
+                android:paddingTop="10dp">
 
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/escribir"
-            android:contentDescription="Escribir entrega"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="Fichero"
+                    android:src="@drawable/fichero"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/image_video" />
 
-        <EditText
-            android:id="@+id/text_input_feedback"
-            android:layout_width="250dp"
-            android:layout_height="100dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            android:hint="Escribir entrega"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+                <ImageButton
+                    android:id="@+id/upload_feedback"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Enviar"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/enviar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageButton
-            android:id="@+id/upload_file_feedback"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/subir"
-            android:contentDescription="Subir fichero"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
-            app:layout_constraintTop_toTopOf="@+id/imageView3" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/image_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Foto"
+                    android:src="@drawable/foto"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+                <ImageButton
+                    android:id="@+id/upload_photo"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sacar foto"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/sacar_foto"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_photo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/image_photo"
+                    app:layout_constraintTop_toTopOf="@+id/image_photo" />
 
-        <ImageButton
-            android:id="@+id/button_go_previous_feedback"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="Ver anteriores"
-            android:scaleType="fitCenter"
-            android:src="@drawable/anterior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/image_video"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="Vídeo"
+                    android:src="@drawable/video"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/image_photo" />
+
+                <ImageButton
+                    android:id="@+id/upload_video"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Sacar video"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/grabar_video"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_video"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/image_video"
+                    app:layout_constraintTop_toTopOf="@+id/image_video" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="Escribir entrega"
+                    android:src="@drawable/escribir"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+                <EditText
+                    android:id="@+id/text_input_feedback"
+                    android:layout_width="250dp"
+                    android:layout_height="100dp"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:hint="Escribir entrega"
+                    android:inputType="textMultiLine"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toEndOf="@+id/imageView5"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+                <ImageButton
+                    android:id="@+id/upload_file_feedback"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Subir fichero"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/guardar"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView3"
+                    app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+                <ImageButton
+                    android:id="@+id/button_go_previous_feedback"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:contentDescription="Ver anteriores"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/anterior"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <ImageView
+                    android:id="@+id/image_feedback_preview"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"
+                    android:contentDescription="Vista imagen"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView5"
+                    tools:src="@tools:sample/avatars" />
+
+                <ImageButton
+                    android:id="@+id/file_feedback_preview"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ver"
+                    android:visibility="gone"
+                    android:contentDescription="Vista archivo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
