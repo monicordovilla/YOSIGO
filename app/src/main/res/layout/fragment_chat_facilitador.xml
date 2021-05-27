@@ -49,17 +49,42 @@
             android:scaleType="fitCenter"
             android:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_send"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_camara_foto_facilitador"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="60dp"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_photo_camera"/>
+        <ImageButton
+            android:id="@+id/btn_camara_video_facilitador"
+            android:layout_height="60dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            android:backgroundTint="@color/colorPrimary"
+            android:src="@drawable/ic_video_camera"/>
         <ImageButton
             android:id="@+id/btn_enviar_foto_facilitador"
-            android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:scaleType="fitCenter"
             android:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_add_photo"/>
         <ImageButton
             android:id="@+id/btn_enviar_audio_facilitador"
-            android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:scaleType="fitCenter"
             android:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_audio"/>

@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
@@ -49,7 +52,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         TextView nombre;
         TextView message;
         ImageView photo;
-        ImageButton btn_audio;
+        VideoView video;
+        ImageButton play, pause, stop;
+        LinearLayout btn_audio;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,7 +62,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             nombre = (TextView) itemView.findViewById(R.id.show_name_sender);
             message = (TextView) itemView.findViewById(R.id.show_message);
             photo = itemView.findViewById(R.id.show_image_message);
+            video = itemView.findViewById(R.id.show_video_message);
             btn_audio = itemView.findViewById(R.id.show_btn_hear_message);
+            play = itemView.findViewById(R.id.btn_hear_play);
+            pause = itemView.findViewById(R.id.btn_hear_pause);
+            stop = itemView.findViewById(R.id.btn_hear_stop);
         }
 
         public TextView getFecha() { return fecha; }
@@ -66,9 +75,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             return message;
         }
         public ImageView getPhoto() { return photo; }
-        public ImageButton getBtn_audio() {return btn_audio;}
-
-
+        public VideoView getVideo() { return video; }
+        //Reproducir audio
+        public LinearLayout getBtn_audio() {return btn_audio;}
+        public ImageButton getPlay() { return play; }
+        public ImageButton getPause() { return pause; }
+        public ImageButton getStop() { return stop; }
     }
 
     public MessageAdapter(Context context, List<String> id, Map<String, Date> item_date, Map<String, String> emisorId,
@@ -97,9 +109,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String id_item = id.get(position);
-        Log.d("Contenido", "DocumentSnapshot data: " + item_content.get(id_item));
-        Log.d("Contenido", "DocumentSnapshot data: " + item_content.get(id_item));
-        Log.d("Contenido", "DocumentSnapshot data: " + item_content.get(id_item));
 
         //Convertir fecha a String
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
@@ -112,6 +121,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             setAudio(holder, id_item);
         } else if(item_type.get(id_item).equals("Imagen")){
             setImage(holder, id_item);
+        } else if(item_type.get(id_item).equals("Video")){
+            setVideo(holder, id_item);
         } else {
             setTexto(holder, id_item);
         }
@@ -132,37 +143,50 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     private void setTexto(ViewHolder holder, String id){
-        holder.getPhoto().setVisibility(View.GONE);
-        holder.getBtn_audio().setVisibility(View.GONE);
+        holder.getMessage().setVisibility(View.VISIBLE);
         holder.getMessage().setText(item_content.get(id));
     }
 
     private void setAudio(ViewHolder holder, String id){
-        holder.getMessage().setVisibility(View.GONE);
-        holder.getPhoto().setVisibility(View.GONE);
+        holder.getBtn_audio().setVisibility(View.VISIBLE);
 
-        holder.getBtn_audio().setOnClickListener( new View.OnClickListener(){
+        FirebaseStorage.getInstance().getReference().
+                child(item_content.get(id))
+                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onClick(View view) {
-                FirebaseStorage.getInstance().getReference().
-                        child(item_content.get(id))
-                        .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        if( mediaPlayer != null ){
-                            mediaPlayer.release();
-                            mediaPlayer = null;
-                        }
-                        mediaPlayer = new MediaPlayer();
-                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        try {
-                            mediaPlayer.setDataSource(context, uri);
-                            mediaPlayer.prepare();
-                            mediaPlayer.start();
+            public void onSuccess(Uri uri) {
+                if( mediaPlayer != null ){
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                }
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                try {
+                    mediaPlayer.setDataSource(context, uri);
+                    mediaPlayer.prepare();
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                holder.getPlay().setOnClickListener( new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        mediaPlayer.start();
+                    }
+                });
+
+                holder.getPause().setOnClickListener( new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        mediaPlayer.pause();
+                    }
+                });
+
+                holder.getStop().setOnClickListener( new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        mediaPlayer.stop();
                     }
                 });
             }
@@ -170,8 +194,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     private void setImage(ViewHolder holder, String id){
-        holder.getMessage().setVisibility(View.GONE);
-        holder.getBtn_audio().setVisibility(View.GONE);
+        holder.getPhoto().setVisibility(View.VISIBLE);
 
         storageRef.child(item_content.get(id)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -179,6 +202,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 Glide.with(context)
                         .load(uri)
                         .into(holder.getPhoto());
+            }
+        });
+    }
+
+    private void setVideo(ViewHolder holder, String id){
+        VideoView videoView = holder.getVideo();
+        holder.getVideo().setVisibility(View.VISIBLE);
+
+        storageRef.child(item_content.get(id)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                videoView.setVideoURI(uri);
+                videoView.setMediaController(new MediaController(context));
+                videoView.start();
             }
         });
     }

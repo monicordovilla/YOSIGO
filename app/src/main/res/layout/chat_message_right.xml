@@ -19,7 +19,7 @@
             android:textColor="@color/black"
             android:textSize="18sp"
             android:typeface="monospace"
-            android:text="Nombre"
+            android:text="Fecha"
             android:padding="8dp"/>
 
         <TextView
@@ -39,6 +39,7 @@
             android:textColor="@color/black"
             android:textSize="22sp"
             android:text="Nombre"
+            android:visibility="gone"
             android:padding="8dp"/>
 
         <ImageView
@@ -46,15 +47,59 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="fitCenter"
+            android:visibility="gone"
             android:adjustViewBounds="true"/>
 
-        <ImageButton
-            android:id="@+id/show_btn_hear_message"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/oir"
+        <VideoView
+            android:id="@+id/show_video_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="fitCenter"
-            android:layout_gravity="center"/>
+            android:visibility="gone"
+            android:adjustViewBounds="true"/>
+
+        <LinearLayout
+            android:id="@+id/show_btn_hear_message"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/oir"
+                />
+            <ImageButton
+                android:id="@+id/btn_hear_play"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/ic_play"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:background="@color/black"
+                />
+            <ImageButton
+                android:id="@+id/btn_hear_pause"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginRight="8dp"
+                android:src="@drawable/ic_pause"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:background="@color/black"
+                />
+            <ImageButton
+                android:id="@+id/btn_hear_stop"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_stop"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+                android:background="@color/black"
+                />
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

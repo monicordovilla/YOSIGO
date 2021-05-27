@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        facilitador = false;
+        facilitador = true;
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home, R.id.nav_activity, R.id.nav_forums)
+                    R.id.nav_home, R.id.nav_activity, R.id.nav_forums,
+                    R.id.nav_category, R.id.nav_goals, R.id.nav_group)
                     .setDrawerLayout(drawer)
                     .build();
 
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home, R.id.nav_calendar, R.id.nav_forums, R.id.nav_category)
+                    R.id.nav_home, R.id.nav_calendar, R.id.nav_forums)
                     .setDrawerLayout(drawer)
                     .build();
 

@@ -15,7 +15,7 @@ import com.example.yosigo.R;
 
 public class HomeFragment extends Fragment {
 
-    private Button btn_activities, btn_forums, btn_categories;
+    private Button btn_activities, btn_forums, btn_categories, btn_goals, btn_group;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -24,12 +24,14 @@ public class HomeFragment extends Fragment {
         btn_activities = (Button) root.findViewById(R.id.button_facilitador_activities);
         btn_forums = (Button) root.findViewById(R.id.button_facilitador_forum);
         btn_categories = (Button) root.findViewById(R.id.button_facilitador_categoria);
-        btn_categories = (Button) root.findViewById(R.id.button_facilitador_metas);
+        btn_goals = (Button) root.findViewById(R.id.button_facilitador_metas);
+        btn_group = (Button) root.findViewById(R.id.button_facilitador_group);
 
         btn_activities.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_activity, null));
         btn_forums.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_forums, null));
         btn_categories.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_category, null));
-        btn_categories.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_goals, null));
+        btn_goals.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_goals, null));
+        btn_group.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.nav_group, null));
 
         return root;
     }

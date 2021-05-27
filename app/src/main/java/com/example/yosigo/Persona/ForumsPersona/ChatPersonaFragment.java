@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,10 +52,14 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -70,6 +75,8 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "CHAT";
     private static final int FOTO_INTENT = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 2;
+    static final int REQUEST_VIDEO_CAPTURE = 3;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -83,10 +90,10 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     private View root;
     private ImageView picto;
     private EditText mensaje;
-    private ImageButton btn_audio, btn_foto, btn_send;
+    private ImageButton btn_audio, btn_foto, btn_send, btn_take_photo, btn_video;
     private MediaRecorder mRecorder;
     private String tipo, ruta;
-    private Uri uri_audio, uri_photo;
+    private Uri uri_audio, uri_photo, uri_video;
     private RecyclerView list;
 
     //Save data
@@ -143,10 +150,14 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
         btn_audio = root.findViewById(R.id.btn_enviar_audio_persona);
         btn_foto = root.findViewById(R.id.btn_enviar_foto_persona);
         btn_send = root.findViewById(R.id.btn_enviar_mensaje_persona);
+        btn_take_photo = root.findViewById(R.id.btn_camara_foto_persona);
+        btn_video = root.findViewById(R.id.btn_camara_video_persona);
 
         btn_audio.setOnClickListener(this);
         btn_foto.setOnClickListener(this);
         btn_send.setOnClickListener(this);
+        btn_take_photo.setOnClickListener(this);
+        btn_video.setOnClickListener(this);
 
         if (mParam1.equals("Forum")) {
             getPictoForo();
@@ -328,6 +339,20 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
             case R.id.btn_enviar_audio_persona:
                 Recorder();
                 break;
+
+            case R.id.btn_camara_foto_persona:
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+                break;
+
+            case R.id.btn_camara_video_persona:
+                Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+                }
+                break;
         }
     }
 
@@ -339,6 +364,14 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
             uri_photo = data.getData();
             tipo = "Imagen";
             SavePhoto();
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            uri_photo = data.getData();
+            tipo = "Imagen";
+            SavePhoto();
+        } else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
+            uri_video = data.getData();
+            tipo = "Video";
+            SaveVideo();
         }
     }
 
@@ -356,7 +389,15 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     public void Recorder(){
         Drawable imageButtonAudio;
         if( mRecorder == null){
-            ruta = getActivity().getExternalCacheDir().getAbsolutePath() + "Grabación.mp3";
+            String[] firstName = new String[] {"g","a","b","a","c","i","o","n","x"};
+            List<String> strList = Arrays.asList(firstName);
+            Random random = new Random();
+            int num =  random.nextInt();
+            Collections.shuffle(strList);
+            ruta = getActivity().getExternalCacheDir().getAbsolutePath() +
+                    strList.toString() +
+                    num +
+                    ".mp3";
             mRecorder = new MediaRecorder();
             mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -395,6 +436,22 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                 data.put("Contenido", filePath.getPath());
                 sendData(data);
                 uri_audio=null;
+            }
+        });
+    }
+
+    private void SaveVideo(){
+        StorageReference filePath = storageRef.child("chat_video" + tipo).child(uri_video.getLastPathSegment());
+        filePath.putFile(uri_video).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("Fecha", Timestamp.now());
+                data.put("Emisor", MainActivity.sesion);
+                data.put("Tipo", tipo);
+                data.put("Contenido", filePath.getPath());
+                sendData(data);
+                uri_video=null;
             }
         });
     }

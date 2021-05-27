@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_nav_home_to_goalsListFragment"
             app:destination="@id/nav_goals" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_group"
+            app:destination="@id/nav_group" />
     </fragment>
 
     <fragment
@@ -193,10 +196,28 @@
     <fragment
         android:id="@+id/createGoalFragment"
         android:name="com.example.yosigo.Facilitador.Goals.CreateGoalFragment"
-        android:label="fragment_create_goal"
+        android:label="Crear meta"
         tools:layout="@layout/fragment_create_goal" >
         <action
             android:id="@+id/action_createGoalFragment_to_nav_goals"
             app:destination="@id/nav_goals" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_group"
+        android:name="com.example.yosigo.Facilitador.Groups.GroupListFragment"
+        android:label="@string/groups"
+        tools:layout="@layout/group_list_fragment" >
+        <action
+            android:id="@+id/action_nav_group_to_createGroupFragment"
+            app:destination="@id/createGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createGroupFragment"
+        android:name="com.example.yosigo.Facilitador.Groups.CreateGroupFragment"
+        android:label="Crear grupo"
+        tools:layout="@layout/fragment_create_group" >
+        <action
+            android:id="@+id/action_createGroupFragment_to_nav_group"
+            app:destination="@id/nav_group" />
     </fragment>
 </navigation>

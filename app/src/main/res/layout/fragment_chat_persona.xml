@@ -29,7 +29,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_chat_persona"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         android:layout_weight="1"/>
 
     <LinearLayout
@@ -51,20 +51,63 @@
             android:scaleType="fitCenter"
             android:contentDescription="Enviar"
             android:src="@drawable/enviar"/>
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_camara_foto_persona"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="Sacar foto"
+            android:scaleType="fitCenter"
+            android:src="@drawable/sacar_foto"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_camara_video_persona"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Grabar video"
+            android:scaleType="fitCenter"
+            android:src="@drawable/grabar_video"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_enviar_audio_persona"
+            app:layout_constraintHorizontal_bias="0.20"
+            app:layout_constraintStart_toEndOf="@+id/btn_camara_foto_persona"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/btn_enviar_foto_persona"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:scaleType="fitCenter"
+            android:layout_marginEnd="8dp"
             android:contentDescription="Foto"
-            android:src="@drawable/foto"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/foto"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_enviar_audio_persona"
+            app:layout_constraintHorizontal_bias="0.80"
+            app:layout_constraintStart_toEndOf="@+id/btn_camara_foto_persona"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/btn_enviar_audio_persona"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:scaleType="fitCenter"
             android:contentDescription="Audio"
-            android:src="@drawable/microfono"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/microfono"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

@@ -67,6 +67,8 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "CHAT";
     private static final int FOTO_INTENT = 1;
+    static final int REQUEST_IMAGE_CAPTURE = 2;
+    static final int REQUEST_VIDEO_CAPTURE = 3;
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -80,10 +82,10 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     private View root;
     private TextView text_name;
     private EditText mensaje;
-    private ImageButton btn_audio, btn_foto, btn_send;
+    private ImageButton btn_audio, btn_foto, btn_send, btn_take_photo, btn_video;
     private MediaRecorder mRecorder;
     private String tipo, ruta;
-    private Uri uri_audio, uri_photo;
+    private Uri uri_audio, uri_photo, uri_video;
     private RecyclerView list;
 
     //Save data
@@ -138,6 +140,8 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
         btn_audio = root.findViewById(R.id.btn_enviar_audio_facilitador);
         btn_foto = root.findViewById(R.id.btn_enviar_foto_facilitador);
         btn_send = root.findViewById(R.id.btn_enviar_mensaje_facilitador);
+        btn_take_photo = root.findViewById(R.id.btn_camara_foto_facilitador);
+        btn_video = root.findViewById(R.id.btn_camara_video_facilitador);
 
         btn_audio.setOnClickListener(this);
         btn_foto.setOnClickListener(this);
@@ -311,6 +315,14 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
             uri_photo = data.getData();
             tipo = "Imagen";
             SavePhoto();
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            uri_photo = data.getData();
+            tipo = "Imagen";
+            SavePhoto();
+        } else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
+            uri_video = data.getData();
+            tipo = "Video";
+            SaveVideo();
         }
     }
 
@@ -383,6 +395,22 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                 data.put("Contenido", filePath.getPath());
                 sendData(data);
                 uri_photo=null;
+            }
+        });
+    }
+
+    private void SaveVideo(){
+        StorageReference filePath = storageRef.child("chat_video" + tipo).child(uri_video.getLastPathSegment());
+        filePath.putFile(uri_video).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("Fecha", Timestamp.now());
+                data.put("Emisor", MainActivity.sesion);
+                data.put("Tipo", tipo);
+                data.put("Contenido", filePath.getPath());
+                sendData(data);
+                uri_video=null;
             }
         });
     }
