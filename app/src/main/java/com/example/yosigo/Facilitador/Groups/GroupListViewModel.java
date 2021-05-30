@@ -30,7 +30,7 @@ public class GroupListViewModel extends ViewModel {
         loadGroups();
     }
 
-    public LiveData<Map<String, String>> getCategories() {
+    public LiveData<Map<String, String>> getGroups() {
         return groups;
     }
     public LiveData<List<String>> getNames() {

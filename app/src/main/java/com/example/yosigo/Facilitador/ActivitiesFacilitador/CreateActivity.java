@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +20,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.yosigo.Facilitador.Category.CategoryListViewModel;
+import com.example.yosigo.Facilitador.Goals.GoalsListViewModel;
 import com.example.yosigo.MainActivity;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,39 +47,48 @@ public class CreateActivity extends Fragment {
 
     private EditText nombre_actividad;
     private final String TAG = "Crear actividad";
-    private CategoryListViewModel mViewModel;
+    private CategoryListViewModel categoryListViewModel;
+    private GoalsListViewModel goalsListViewModel;
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+
+    private View root;
     private String picto, meta, categoría;
-    private Button btn_picto, btn_meta, btn_actividad, btn_create;
-    private Spinner spinner_categoria;
+    private Button btn_picto, btn_actividad, btn_create;
+    private Spinner spinner_categoria, spinner_meta;
+    private ImageView preview_picto;
+
+    private static final int PICTO_INTENT = 1;
+    private static final int ACT_INTENT = 2;
     private Uri uri_picto, uri_meta;
     private ArrayList<Uri> uri_activities = new ArrayList<>();
-    private static final int PICTO_INTENT = 1;
-    private static final int META_INTENT = 2;
-    private static final int CAT_INTENT = 3;
-    private static final int ACT_INTENT = 4;
-    private View root;
     private ArrayList<String> activities = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mViewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
+        categoryListViewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
+        goalsListViewModel = new ViewModelProvider(this).get(GoalsListViewModel.class);
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_create_activity, container, false);
         Context context = this.getContext();
 
         //Obtenemos referencia del Edit Text
         nombre_actividad = (EditText) root.findViewById(R.id.input_name_activity);
+
         //Obtenemos la referencia a los botones
         btn_picto = (Button) root.findViewById(R.id.btn_up_picto);
-        btn_meta = (Button) root.findViewById(R.id.btn_up_meta);
-        spinner_categoria = root.findViewById(R.id.spinner_up_category);
         btn_actividad = (Button) root.findViewById(R.id.btn_up_actividad);
         btn_create = (Button) root.findViewById(R.id.btn_create_activity);
 
-        mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+        //Obtenemos referencia de los spinners
+        spinner_meta = root.findViewById(R.id.spinner_up_meta);
+        spinner_categoria = root.findViewById(R.id.spinner_up_category);
+
+        //Obtenemos referencia de las previsualizacione
+        preview_picto = root.findViewById(R.id.activity_preview_picto);
+
+        categoryListViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
                 categories = strings;
@@ -86,21 +98,22 @@ public class CreateActivity extends Fragment {
             }
         });
 
+        goalsListViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                categories = strings;
+                ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, categories);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_meta.setAdapter(adapter);
+            }
+        });
+
         btn_picto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType("image/");
                 startActivityForResult(intent, PICTO_INTENT);
-            }
-        });
-
-        btn_meta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/");
-                startActivityForResult(intent, META_INTENT);
             }
         });
 
@@ -135,13 +148,8 @@ public class CreateActivity extends Fragment {
             Toast.makeText(getContext(), "No se ha introducido pictograma descriptivo", Toast.LENGTH_LONG).show();
             return;
         }
-        if (uri_meta == null) {
-            Toast.makeText(getContext(), "No se ha introducido meta", Toast.LENGTH_LONG).show();
-            return;
-        }
 
         StorageReference filePath_picto = storageRef.child("pictogramas").child(uri_picto.getLastPathSegment());
-        StorageReference filePath_meta = storageRef.child("metas").child(uri_meta.getLastPathSegment());
 
         filePath_picto.putFile(uri_picto).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -150,46 +158,42 @@ public class CreateActivity extends Fragment {
                 data.put("Pictograma", picto);
                 Log.d(TAG, "Agregado: " + picto);
 
-                filePath_meta.putFile(uri_meta).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                //Agregar meta
+                goalsListViewModel.getGoals().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
                     @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        meta = filePath_meta.getPath();
+                    public void onChanged(Map<String, String> categoriesMap) {
+                        meta = categoriesMap.get(spinner_meta.getSelectedItem());
                         data.put("Meta", meta);
-
-                        //Agregar categoría
-                        mViewModel.getCategories().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
-                            @Override
-                            public void onChanged(Map<String, String> categoriesMap) {
-                                categoría = categoriesMap.get(spinner_categoria.getSelectedItem());
-                            }
-                        });
-                        data.put("Categoria", categoría);
-
-                        //Agregar tarea
-                        data.put("Tarea", activities);
-                        FirebaseFirestore.getInstance().collection("activities")
-                                .add(data)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.w(TAG, "Error adding document", e);
-                                    }
-                                });
-
-                        Toast.makeText(getContext(), "Se creado la actividad con exito", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "No se ha podido subir", e);
                     }
                 });
+
+                //Agregar categoría
+                categoryListViewModel.getCategories().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
+                    @Override
+                    public void onChanged(Map<String, String> categoriesMap) {
+                        categoría = categoriesMap.get(spinner_categoria.getSelectedItem());
+                        data.put("Categoria", categoría);
+                    }
+                });
+
+                //Agregar tarea
+                data.put("Tarea", activities);
+                FirebaseFirestore.getInstance().collection("activities")
+                        .add(data)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                Toast.makeText(getContext(), "Se creado la actividad con exito", Toast.LENGTH_SHORT).show();
+                                Navigation.findNavController(root).navigate(R.id.action_createActivity_to_nav_activity);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -205,8 +209,8 @@ public class CreateActivity extends Fragment {
 
         if(requestCode == PICTO_INTENT && resultCode == RESULT_OK ){
             uri_picto = data.getData();
-        } else if(requestCode == META_INTENT && resultCode == RESULT_OK ){
-            uri_meta = data.getData();
+            preview_picto.setImageURI(uri_picto);
+            preview_picto.setVisibility(View.VISIBLE);
         } else if(requestCode == ACT_INTENT && resultCode == RESULT_OK ){
             Uri uri = data.getData();
             StorageReference filePath = storageRef.child("actividades").child(uri.getLastPathSegment());

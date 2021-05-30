@@ -49,16 +49,17 @@ public class ActivityViewFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String TAG = "VER ACTIVIDAD" ;
     private PersonasViewModel mViewModel;
-
-    private String mParam1;
+    private FirebaseFirestore fb = FirebaseFirestore.getInstance();
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    private View root;
 
+    private View root;
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
     private Button btn_go_feedback, btn_go_valoracion, btn_go_mensajes;
     private ListView list_actividades, list_usurarios;
+
     private List<String> participantes = new ArrayList<>();
+    private String mParam1;
 
     public ActivityViewFragment() {
         // Required empty public constructor
@@ -95,11 +96,14 @@ public class ActivityViewFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(PersonasViewModel.class);
 
         text_name = (TextView) root.findViewById(R.id.show_activity_name);
+
         img_picto = (ImageView) root.findViewById(R.id.show_picto_activity);
         img_meta = (ImageView) root.findViewById(R.id.show_meta_pic);
         img_cat = (ImageView) root.findViewById(R.id.show_cat_pic);
+
         list_actividades = root.findViewById(R.id.show_activity_pic);
         list_usurarios = root.findViewById(R.id.show_activity_name_users);
+
         btn_go_feedback = root.findViewById(R.id.button_go_retroalimentacion);
         btn_go_valoracion = root.findViewById(R.id.button_go_valoracion);
         btn_go_mensajes = root.findViewById(R.id.button_go_mensajes);
@@ -139,7 +143,7 @@ public class ActivityViewFragment extends Fragment {
 
     private void getParticipantes(){
         participantes.clear();
-        FirebaseFirestore.getInstance().collection("users")
+        fb.collection("users")
                 .whereEqualTo("Rol", "Persona")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -195,8 +199,8 @@ public class ActivityViewFragment extends Fragment {
     }
 
     private void getDatos(){
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("activities").document(mParam1);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        fb.collection("activities").document(mParam1)
+        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
@@ -217,25 +221,11 @@ public class ActivityViewFragment extends Fragment {
                         }
 
                         if(document.getData().get("Categoria") != null) {
-                            storageRef.child((String) document.getData().get("Categoria")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Glide.with(root)
-                                            .load(uri)
-                                            .into(img_cat);
-                                }
-                            });
+                            getCategory((String) document.getData().get("Categoria"));
                         }
 
                         if(document.getData().get("Meta") != null) {
-                            storageRef.child((String) document.getData().get("Meta")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Glide.with(root)
-                                            .load(uri)
-                                            .into(img_meta);
-                                }
-                            });
+                            getGoal((String) document.getData().get("Meta"));
                         }
 
                         if(document.getData().get("Meta") != null) {
@@ -267,6 +257,56 @@ public class ActivityViewFragment extends Fragment {
                     }
                 } else {
                     Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void getCategory(String id){
+        fb.collection("categories").document(id)
+        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        storageRef
+                                .child((String) document.getData().get("Pictograma"))
+                                .getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Glide.with(root)
+                                                .load(uri)
+                                                .into(img_cat);
+                                    }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+    private void getGoal(String id){
+        fb.collection("goals").document(id)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        storageRef
+                                .child((String) document.getData().get("Pictograma"))
+                                .getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Glide.with(root)
+                                                .load(uri)
+                                                .into(img_meta);
+                                    }
+                                });
+                    }
                 }
             }
         });

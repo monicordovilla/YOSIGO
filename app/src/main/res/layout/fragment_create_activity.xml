@@ -33,7 +33,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_name_activity">
+        app:layout_constraintTop_toBottomOf="@+id/up_category">
 
         <TextView
             android:id="@+id/textView_imagen"
@@ -58,7 +58,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/up_picto">
+        app:layout_constraintTop_toBottomOf="@+id/input_name_activity">
 
         <TextView
             android:id="@+id/textView_meta"
@@ -67,11 +67,11 @@
             android:layout_marginRight="16dp"
             android:text="Meta" />
 
-        <Button
-            android:id="@+id/btn_up_meta"
+        <Spinner
+            android:id="@+id/spinner_up_meta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Subir meta" />
+            android:autofillHints="Selecciona meta" />
     </LinearLayout>
 
     <LinearLayout
@@ -94,8 +94,18 @@
             android:id="@+id/spinner_up_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="Subir categoria" />
+            android:autofillHints="Selecciona categoria" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/activity_preview_picto"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/up_picto" />
 
     <LinearLayout
         android:id="@+id/up_activity"
@@ -104,7 +114,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/up_category">
+        app:layout_constraintTop_toBottomOf="@+id/activity_preview_picto" >
 
         <TextView
             android:id="@+id/textView_actividad"

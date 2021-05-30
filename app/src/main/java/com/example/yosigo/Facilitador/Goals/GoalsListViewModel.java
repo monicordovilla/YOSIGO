@@ -30,9 +30,7 @@ public class GoalsListViewModel extends ViewModel {
         loadGoals();
     }
 
-    public LiveData<Map<String, String>> getCategories() {
-        return goals;
-    }
+    public LiveData<Map<String, String>> getGoals() { return goals; }
     public LiveData<List<String>> getNames() {
         return nameList;
     }

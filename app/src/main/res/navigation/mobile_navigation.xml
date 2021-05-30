@@ -62,7 +62,11 @@
         android:id="@+id/createActivity"
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.CreateActivity"
         android:label="@string/create_activity"
-        tools:layout="@layout/fragment_create_activity" />
+        tools:layout="@layout/fragment_create_activity" >
+        <action
+            android:id="@+id/action_createActivity_to_nav_activity"
+            app:destination="@id/nav_activity" />
+    </fragment>
     <fragment
         android:id="@+id/activityViewFragment"
         android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.ActivityViewFragment"

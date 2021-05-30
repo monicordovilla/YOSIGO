@@ -185,9 +185,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
                 holder.getStop().setOnClickListener( new View.OnClickListener(){
                     @Override
-                    public void onClick(View view) {
-                        mediaPlayer.stop();
-                    }
+                    public void onClick(View view) { mediaPlayer.stop(); }
                 });
             }
         });
