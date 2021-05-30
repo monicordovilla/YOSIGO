@@ -38,8 +38,8 @@ public class GroupListViewModel extends ViewModel {
     }
 
     private void loadGroups(){
-        Map<String, String> goalsMap = new HashMap<>();
-        List<String> goalsList = new ArrayList<>();
+        Map<String, String> groupsMap = new HashMap<>();
+        List<String> groupsList = new ArrayList<>();
 
         FirebaseFirestore.getInstance().collection("groups")
                 .whereEqualTo("Facilitador" , MainActivity.sesion)
@@ -49,14 +49,14 @@ public class GroupListViewModel extends ViewModel {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                goalsMap.put((String) document.getData().get("Nombre"), (String) document.getId());
-                                goalsList.add((String) document.getData().get("Nombre"));
+                                groupsMap.put((String) document.getData().get("Nombre"), (String) document.getId());
+                                groupsList.add((String) document.getData().get("Nombre"));
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        groups.setValue(goalsMap);
-                        nameList.setValue(goalsList);
+                        groups.setValue(groupsMap);
+                        nameList.setValue(groupsList);
                     }
                 });
     }

@@ -24,7 +24,7 @@ import java.util.Map;
 public class PersonasViewModel extends ViewModel {
     private MutableLiveData<Map<String, String>> mText;
     private MutableLiveData<List<String>> list;
-    private static final String TAG = "ACTIVIDADES ";
+    private static final String TAG = "PERSONAS VIEW MODEL";
     FirebaseFirestore fb = FirebaseFirestore.getInstance();
 
     public PersonasViewModel() {
@@ -52,7 +52,6 @@ public class PersonasViewModel extends ViewModel {
                         DocumentSnapshot document_facilitador = task_facilitador.getResult();
                         if (document_facilitador.exists()) {
                             List<String> idArray = (List<String>) document_facilitador.get("Personas");
-                            Log.d(TAG, "Array user ids: " + idArray);
                             for (String id:idArray) {
                                 Log.d(TAG, "Viendo: " + id);
                                 fb.collection("users")
@@ -66,7 +65,6 @@ public class PersonasViewModel extends ViewModel {
                                                         document_persona.getData().get("Apellidos") + " (" +
                                                         document_persona.getData().get("Apodo") + ")";
 
-                                                Log.d(TAG, "Añadir: " + full_name);
                                                 userList.add(full_name);
                                                 userMap.put(full_name, document_persona.getId());
 

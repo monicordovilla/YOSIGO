@@ -23,7 +23,7 @@ public class ListActivitiesViewModel extends ViewModel {
 
     private MutableLiveData<Map<String, String>> mText;
     private MutableLiveData<List<String>> list;
-    private static final String TAG = "ACTIVIDADES ";
+    private static final String TAG = "LISTADO ACTIVIDADES";
     private String sesion;
 
     public ListActivitiesViewModel() {
@@ -48,8 +48,6 @@ public class ListActivitiesViewModel extends ViewModel {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 activitiesList.put((String) document.getData().get("Nombre"), (String) document.getId());
-
-                                Log.d(TAG, document.getId() + " => " + document.getData() + ". Cuyo nombre es: " + document.getData().get("Nombre"));
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

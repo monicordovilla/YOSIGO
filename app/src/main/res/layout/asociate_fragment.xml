@@ -6,8 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
+    android:padding="8dp"
     tools:context=".Facilitador.ActivitiesFacilitador.AsociateFragment">
+
+    <TextView
+        android:id="@+id/asociate_activity_name"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actividad"/>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -62,37 +72,46 @@
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/editTextInicio" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <LinearLayout
-        android:id="@+id/linear_list_asociate_dias"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextFin">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Días de la semana"/>
+
     <ListView
         android:id="@+id/list_asociate_dias"
         android:contentDescription="Seleccionar días de la semana"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_height="100dp"
         />
-    </LinearLayout>
 
     <TextView
-        android:id="@+id/textView4"
+        android:layout_marginTop="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Personas"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_list_asociate_dias" />
+        android:text="Seleccionar grupos"/>
+
+    <ListView
+        android:id="@+id/list_asociate_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Seleccionar grupo"
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar personas"/>
 
     <ListView
         android:id="@+id/list_asociate_user"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="Seleccionar personas"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp" />
+        android:layout_weight="1"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
