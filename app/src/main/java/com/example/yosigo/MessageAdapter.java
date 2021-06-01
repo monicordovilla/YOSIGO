@@ -44,6 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private final Map<String,String> item_type;
     private final Map<String,String> item_content;
     private MediaPlayer mediaPlayer = null;
+    private int posPause = 0;
 
     private final StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
@@ -155,37 +156,42 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                if( mediaPlayer != null ){
-                    mediaPlayer.release();
-                    mediaPlayer = null;
-                }
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                try {
-                    mediaPlayer.setDataSource(context, uri);
-                    mediaPlayer.prepare();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
                 holder.getPlay().setOnClickListener( new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
-                        mediaPlayer.start();
+                        if(mediaPlayer == null) {
+                            mediaPlayer = new MediaPlayer();
+                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                            try {
+                                mediaPlayer.setDataSource(context, uri);
+                                mediaPlayer.prepare();
+                                mediaPlayer.start();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            mediaPlayer.seekTo(posPause);
+                            mediaPlayer.start();
+                        }
                     }
                 });
 
                 holder.getPause().setOnClickListener( new View.OnClickListener(){
                     @Override
                     public void onClick(View view) {
-                        mediaPlayer.pause();
+                        if(mediaPlayer != null) {
+                            mediaPlayer.pause();
+                            posPause = mediaPlayer.getCurrentPosition();
+                        }
                     }
                 });
 
                 holder.getStop().setOnClickListener( new View.OnClickListener(){
                     @Override
-                    public void onClick(View view) { mediaPlayer.stop(); }
+                    public void onClick(View view) {
+                        mediaPlayer.stop();
+                        mediaPlayer = null;
+                    }
                 });
             }
         });

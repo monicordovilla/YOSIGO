@@ -53,9 +53,9 @@
         <VideoView
             android:id="@+id/show_video_message"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
+            android:layout_height="300dp"
             android:visibility="gone"
+            android:backgroundTint="@color/black"
             android:adjustViewBounds="true"/>
 
         <LinearLayout
