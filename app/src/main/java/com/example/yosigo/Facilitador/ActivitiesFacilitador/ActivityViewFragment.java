@@ -228,7 +228,7 @@ public class ActivityViewFragment extends Fragment {
                             getGoal((String) document.getData().get("Meta"));
                         }
 
-                        if(document.getData().get("Meta") != null) {
+                        if(document.getData().get("Tarea") != null) {
                             ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                                     root.getContext(),
                                     android.R.layout.simple_list_item_1,

@@ -16,8 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yosigo.Facilitador.ActivitiesFacilitador.PersonasViewModel;
+import com.example.yosigo.Facilitador.Groups.GroupListViewModel;
 import com.example.yosigo.MainActivity;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,19 +45,20 @@ public class AsociateForumFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
     private static final String TAG = "ASOCIAR FORO" ;
-    private PersonasViewModel mViewModel;
+    private PersonasViewModel personasViewModel;
+    private GroupListViewModel groupListViewModel;
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
 
-    private String mParam1;
-    private List<String> users = new ArrayList<>();
-    private Map<String, String> userMap = new HashMap<>();
     private View root;
-    private ListView list;
+    private TextView forum_name;
+    private ListView list_personas, list_grupos;
     private Button btn_asociate;
 
-    public AsociateForumFragment() {
-        // Required empty public constructor
-    }
+    private Map<String, String> userMap = new HashMap<>();
+    private Map<String, String> groupMap = new HashMap<>();
+    private List<String> users = new ArrayList<>();
+    private List<String> groups = new ArrayList<>();
+    private String mParam1;
 
     /**
      * Use this factory method to create a new instance of
@@ -83,13 +87,18 @@ public class AsociateForumFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //Obtener personas asociadas al facilitador
-        mViewModel = new ViewModelProvider(this).get(PersonasViewModel.class);
+        personasViewModel = new ViewModelProvider(this).get(PersonasViewModel.class);
+        groupListViewModel = new ViewModelProvider(this).get(GroupListViewModel.class);
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_asociate_forum, container, false);
 
         //Obtener elementos del layout
-        list = root.findViewById(R.id.list_asociate_forum);
+        list_personas = root.findViewById(R.id.list_asociate_personas_forum);
+        list_grupos = root.findViewById(R.id.list_asociate_grupos_forum);
         btn_asociate = root.findViewById(R.id.btn_asociate_forum);
+        forum_name = root.findViewById(R.id.asociate_forum_name);
+
+        getName();
 
         btn_asociate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +110,27 @@ public class AsociateForumFragment extends Fragment {
         getAsociados();
 
         return root;
+    }
+
+    private void getName() {
+        fb.collection("forums")
+                .document(mParam1)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                forum_name.setText(document.getData().get("Nombre").toString());
+                            } else {
+                                Log.d(TAG, "No such document");
+                            }
+                        } else {
+                            Log.d(TAG, "get failed with ", task.getException());
+                        }
+                    }
+                });
     }
 
     private void getAsociados(){
@@ -115,27 +145,41 @@ public class AsociateForumFragment extends Fragment {
                             if (document_facilitador.exists()) {
                                 List<String> idArray = (List<String>) document_facilitador.get("Personas");
 
-                                mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>(){
+                                personasViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>(){
                                     @Override
                                     public void onChanged(List<String> strings) {
                                         users = strings;
-                                        list.setAdapter(new ArrayAdapter<String>(
+                                        list_personas.setAdapter(new ArrayAdapter<String>(
                                                 root.getContext(),
                                                 android.R.layout.simple_list_item_multiple_choice,
                                                 users
                                                 )
                                         );
-                                        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                                        list_personas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
                                         if(idArray != null) {
                                             for (int i = 0; i < users.size(); i++) {
                                                 for (String id : idArray) {
                                                     if (strings.get(i).equals(id)) {
-                                                        list.setItemChecked(i, true);
+                                                        list_personas.setItemChecked(i, true);
                                                     }
                                                 }
                                             }
                                         }
+                                    }
+                                });
+
+                                groupListViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>(){
+                                    @Override
+                                    public void onChanged(List<String> strings) {
+                                        groups = strings;
+                                        list_grupos.setAdapter(new ArrayAdapter<String>(
+                                                        root.getContext(),
+                                                        android.R.layout.simple_list_item_multiple_choice,
+                                                        groups
+                                                )
+                                        );
+                                        list_grupos.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
                                     }
                                 });
                             }
@@ -145,14 +189,22 @@ public class AsociateForumFragment extends Fragment {
     }
 
     private void setAsociados(){
-        mViewModel.getUsers().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>(){
+        personasViewModel.getUsers().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>(){
             @Override
             public void onChanged(Map<String, String> strings) {
                 userMap = strings;
             }
         });
 
-        SparseBooleanArray checked = list.getCheckedItemPositions();
+        groupListViewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>(){
+            @Override
+            public void onChanged(Map<String, String> strings) {
+                groupMap = strings;
+            }
+        });
+
+        //Asociar personas individuales
+        SparseBooleanArray checked = list_personas.getCheckedItemPositions();
         int len = checked.size();
         List<String> selected = new ArrayList<>();
 
@@ -163,23 +215,59 @@ public class AsociateForumFragment extends Fragment {
             }
         }
 
-        Map<String, Object> data = new HashMap<>();
-        data.put("Personas", selected);
+        //Asociar grupo
+        checked = list_grupos.getCheckedItemPositions();
+        len = checked.size();
+        for (int i = 0; i < len; i++) {
+            if (checked.get(i)) {
+                String item = groups.get(i);
+                String id_group = groupMap.get(item);
 
-        fb.collection("forums")
-                .document(mParam1)
-                .set(data, SetOptions.merge())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
-                    }
-                });
+                fb.collection("groups")
+                        .document(id_group)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        ArrayList<String> userlist = (ArrayList<String>) document.getData().get("Usuarios");
+
+                                        Log.d(TAG, userlist.toString());
+                                        for (String id_user: userlist){
+                                            selected.add(id_user);
+                                        }
+                                    }
+                                }
+
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("Personas", selected);
+
+                                fb.collection("forums")
+                                        .document(mParam1)
+                                        .set(data, SetOptions.merge())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error writing document", e);
+                                            }
+                                        });
+
+                                Toast.makeText(
+                                        getContext(),
+                                        "Se asociado a los participantes seleccionados al foro con éxito",
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
+                        });
+            }
+        }
     }
 }

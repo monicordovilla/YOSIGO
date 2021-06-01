@@ -5,10 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="8dp"
     tools:context=".Facilitador.ForumsFacilitador.AsociateForumFragment">
 
+    <TextView
+        android:id="@+id/asociate_forum_name"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Foro"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar grupo"/>
     <ListView
-        android:id="@+id/list_asociate_forum"
+        android:id="@+id/list_asociate_grupos_forum"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seleccionar persona"/>
+    <ListView
+        android:id="@+id/list_asociate_personas_forum"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />

@@ -282,8 +282,6 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
         }
 
         checked = list_grupos.getCheckedItemPositions();
-        Log.d(TAG, "Seleccionados: " + checked.toString());
-        Log.d(TAG, "GroupMap: " + groupMap);
         len = checked.size();
         for (int i = 0; i < len; i++) {
             if (checked.get(i)) {

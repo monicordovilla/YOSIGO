@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        facilitador = true;
+        facilitador = false;
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
