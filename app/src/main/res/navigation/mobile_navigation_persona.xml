@@ -135,7 +135,7 @@
     <fragment
         android:id="@+id/viewFeedbackPersonaFragment"
         android:name="com.example.yosigo.Persona.ActivitiesPersona.ViewFeedbackPersonaFragment"
-        android:label="Retroalimentaciones anteriores"
+        android:label="Entregas anteriores"
         tools:layout="@layout/fragment_view_feedback_persona" >
         <argument
             android:name="param1"

@@ -41,6 +41,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private final Map<String,Date> item_date;
     private final Map<String,String> item_user;
     private final Map<String,String> item_name;
+    private final Map<String,String> item_user_picto;
     private final Map<String,String> item_type;
     private final Map<String,String> item_content;
     private MediaPlayer mediaPlayer = null;
@@ -53,6 +54,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         TextView nombre;
         TextView message;
         ImageView photo;
+        ImageView imageSender;
         VideoView video;
         ImageButton play, pause, stop;
         LinearLayout btn_audio;
@@ -68,6 +70,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             play = itemView.findViewById(R.id.btn_hear_play);
             pause = itemView.findViewById(R.id.btn_hear_pause);
             stop = itemView.findViewById(R.id.btn_hear_stop);
+            imageSender = itemView.findViewById(R.id.image_sender);
         }
 
         public TextView getFecha() { return fecha; }
@@ -77,6 +80,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
         public ImageView getPhoto() { return photo; }
         public VideoView getVideo() { return video; }
+        public ImageView getImageSender() { return imageSender; }
+
         //Reproducir audio
         public LinearLayout getBtn_audio() {return btn_audio;}
         public ImageButton getPlay() { return play; }
@@ -84,13 +89,16 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public ImageButton getStop() { return stop; }
     }
 
-    public MessageAdapter(Context context, List<String> id, Map<String, Date> item_date, Map<String, String> emisorId,
-                          Map<String, String> item_name, Map<String, String> item_type, Map<String, String> item_content) {
+    public MessageAdapter(Context context, List<String> id, Map<String, Date> item_date,
+                          Map<String, String> emisorId, Map<String, String> item_name,
+                          Map<String, String> emisorImage, Map<String, String> item_type,
+                          Map<String, String> item_content) {
         this.context = context;
         this.id = id;
         this.item_date = item_date;
         this.item_user = emisorId;
         this.item_name = item_name;
+        this.item_user_picto = emisorImage;
         this.item_type = item_type;
         this.item_content = item_content;
     }
@@ -117,6 +125,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         holder.getFecha().setText(strDate);
 
         holder.getNombre().setText(item_name.get(id_item));
+        Uri uriImage = Uri.parse(item_user_picto.get(id_item));
+        Glide.with(context)
+                .load(uriImage)
+                .into(holder.getImageSender());
 
         if(item_type.get(id_item).equals("Audio")){
             setAudio(holder, id_item);
@@ -139,9 +151,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     @Override
-    public int getItemCount() {
-        return this.id.size();
-    }
+    public int getItemCount() { return this.id.size(); }
 
     private void setTexto(ViewHolder holder, String id){
         holder.getMessage().setVisibility(View.VISIBLE);

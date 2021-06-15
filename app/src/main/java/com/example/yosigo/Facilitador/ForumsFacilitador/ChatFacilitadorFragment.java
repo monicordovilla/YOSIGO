@@ -95,6 +95,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
     Map<String, String> emisorId = new HashMap<>();
     Map<String, String> tipoMap = new HashMap<>();
     Map<String, String> contenidoMap = new HashMap<>();
+    Map<String, String> userpicto = new HashMap<>();
 
     public ChatFacilitadorFragment() {
         // Required empty public constructor
@@ -177,6 +178,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                             dateMap.put(document.getId(), document.getDate("Fecha", behavior));
                             emisorMap.put(document.getId(), full_name);
                             emisorId.put(document.getId(), document.getData().get("Emisor").toString());
+                            userpicto.put(document.getId(), doc_user.getData().get("Imagen").toString());
                             tipoMap.put(document.getId(), document.getData().get("Tipo").toString());
                             contenidoMap.put(document.getId(), document.getData().get("Contenido").toString());
 
@@ -186,6 +188,7 @@ public class ChatFacilitadorFragment extends Fragment implements View.OnClickLis
                                     dateMap,
                                     emisorId,
                                     emisorMap,
+                                    userpicto,
                                     tipoMap,
                                     contenidoMap
                             );

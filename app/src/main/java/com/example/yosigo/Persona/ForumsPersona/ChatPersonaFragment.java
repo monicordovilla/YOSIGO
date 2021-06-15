@@ -103,6 +103,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
     Map<String, String> emisorId = new HashMap<>();
     Map<String, String> tipoMap = new HashMap<>();
     Map<String, String> contenidoMap = new HashMap<>();
+    Map<String, String> userpicto = new HashMap<>();
 
     public ChatPersonaFragment() {
         // Required empty public constructor
@@ -191,6 +192,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                             emisorMap.put(document.getId(), full_name);
                             emisorId.put(document.getId(), document.getData().get("Emisor").toString());
                             tipoMap.put(document.getId(), document.getData().get("Tipo").toString());
+                            userpicto.put(document.getId(), doc_user.getData().get("Imagen").toString());
                             contenidoMap.put(document.getId(), document.getData().get("Contenido").toString());
                         }
 
@@ -200,6 +202,7 @@ public class ChatPersonaFragment extends Fragment implements View.OnClickListene
                                 dateMap,
                                 emisorId,
                                 emisorMap,
+                                userpicto,
                                 tipoMap,
                                 contenidoMap
                         );
