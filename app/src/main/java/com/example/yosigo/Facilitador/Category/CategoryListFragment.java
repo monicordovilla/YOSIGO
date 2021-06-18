@@ -10,14 +10,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.yosigo.Facilitador.ActivitiesFacilitador.ActivityListAdapter;
 import com.example.yosigo.Facilitador.ForumsFacilitador.ForumListAdapter;
 import com.example.yosigo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,6 +37,8 @@ public class CategoryListFragment extends Fragment {
     private CategoryListViewModel mViewModel;
     private View root;
     private ListView list;
+    private EditText searchBar;
+
     private Map<String, String> categoryMap = new HashMap<>();
     private List<String> categoryNameList = new ArrayList<>();
 
@@ -47,6 +53,7 @@ public class CategoryListFragment extends Fragment {
         root = inflater.inflate(R.layout.category_list_fragment, container, false);
 
         list = root.findViewById(R.id.list_categories);
+        searchBar = root.findViewById(R.id.search_category_name);
 
         mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
@@ -63,6 +70,20 @@ public class CategoryListFragment extends Fragment {
             }
         });
 
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String newText = editable.toString();
+                filterCategories(newText);
+            }
+        });
+
         FloatingActionButton fab = root.findViewById(R.id.fab_category);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,14 +92,31 @@ public class CategoryListFragment extends Fragment {
             }
         });
 
-        mViewModel.getCategories().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
-            @Override
-            public void onChanged(Map<String, String> strings) {
-                categoryMap.clear();
-                categoryMap = strings;
-            }
-        });
-
         return root;
+    }
+
+    private void filterCategories(String text) {
+        if(text.isEmpty()){
+            ArrayAdapter<String> adapter = new ArrayAdapter(
+                    root.getContext(),
+                    android.R.layout.simple_list_item_1,
+                    categoryNameList
+            );
+            list.setAdapter(adapter);
+        } else {
+            List<String> filterList = new ArrayList<>();
+            filterList.clear();
+            for (String name : categoryNameList) {
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    filterList.add(name);
+                }
+            }
+            ArrayAdapter<String> adapter = new ArrayAdapter(
+                    root.getContext(),
+                    android.R.layout.simple_list_item_1,
+                    filterList
+            );
+            list.setAdapter(adapter);
+        }
     }
 }
