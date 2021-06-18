@@ -4,8 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    tools:context=".Facilitador.ForumsFacilitador.ChatUsersListFragment">
+    android:layout_margin="8dp"
+    android:orientation="vertical"
+    tools:context=".Facilitador.ForumsFacilitador.ChatUsersListFragment"
+    >
+
+    <EditText
+        android:imeOptions="actionSearch"
+        android:drawableLeft="@drawable/ic_search"
+        android:id="@+id/search_person_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
 
     <ListView
         android:id="@+id/list_chat_users"

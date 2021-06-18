@@ -6,14 +6,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.yosigo.Facilitador.ActivitiesFacilitador.ActivityListAdapter;
 import com.example.yosigo.MainActivity;
 import com.example.yosigo.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +29,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +47,10 @@ public class ChatUsersListFragment extends Fragment {
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
     private View root;
     private ListView list;
+    private EditText searchBar;
+
+    List<String> participantes = new ArrayList<>();
+    List<String> user_id = new ArrayList<>();
 
     public ChatUsersListFragment() {
         // Required empty public constructor
@@ -76,13 +86,30 @@ public class ChatUsersListFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_chat_users_list, container, false);
         list = root.findViewById(R.id.list_chat_users);
 
+        //Set searchbar
+        searchBar = root.findViewById(R.id.search_person_name);
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String newText = editable.toString();
+                filterActivities(newText);
+            }
+        });
+
         getParticipantes();
         return root;
     }
 
     private void getParticipantes(){
-        List<String> participantes = new ArrayList<>();
-        List<String> user_id = new ArrayList<>();
+        participantes.clear();
+        user_id.clear();
+
         FirebaseFirestore.getInstance().collection("users")
                 .whereEqualTo("Rol", "Persona")
                 .get()
@@ -149,54 +176,50 @@ public class ChatUsersListFragment extends Fragment {
                 });
     }
 
-    private void getUsers(){
-        Log.d("CHAT LIST", mParam1);
-        List<String> users = new ArrayList<>();
-        fb.collection("activities")
-                .document(mParam1)
-                .collection("Chat")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d(TAG, "Documents: " + task.getResult().getDocuments());
-                        if (task.isSuccessful()) {
-                            //Obtener usuario
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                fb.collection("users")
-                                        .document(document.getData().get("Emisor").toString())
-                                        .get()
-                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task_user) {
-                                                if (task_user.isSuccessful()) {
-                                                    DocumentSnapshot doc_user = task_user.getResult();
-                                                    String full_name = doc_user.getData().get("Nombre") + " " +
-                                                            doc_user.getData().get("Apellidos") + " (" +
-                                                            doc_user.getData().get("Apodo") + ")";
-                                                    users.add(full_name);
-                                                }
-                                                list.setAdapter(new ArrayAdapter<String>(
-                                                                root.getContext(),
-                                                                android.R.layout.simple_list_item_1,
-                                                                users
-                                                        )
-                                                );
-                                                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                    @Override//
-                                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                        Bundle bundle = new Bundle();
-                                                        bundle.putString("param1", mParam1);
-                                                        bundle.putString("param2", users.get(position));
-                                                        Navigation.findNavController(view).navigate(R.id.action_chatUsersListFragment_to_chatFacilitadorFragment, bundle);
-                                                    }
-                                                });
-                                            }
-                                        });
-                            }
-                        }
-                    }
-                });
+    private void filterActivities(String text) {
+        if(text.isEmpty()){
+            ArrayAdapter<String> adapter = new ArrayAdapter(
+                    root.getContext(),
+                    android.R.layout.simple_list_item_1,
+                    participantes
+            );
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override//
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("param1", mParam1);
+                    bundle.putString("param2", user_id.get(position));
+                    Navigation.findNavController(view).navigate(R.id.action_chatUsersListFragment_to_chatFacilitadorFragment, bundle);
+                }
+            });
+        } else {
+            List<String> filterList = new ArrayList<>();
+            List<String> filterId = new ArrayList<>();
+
+            for (int i=0; i < user_id.size(); i++) {
+                String name = participantes.get(i);
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    filterList.add(name);
+                    filterId.add(user_id.get(i));
+                }
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter(
+                    root.getContext(),
+                    android.R.layout.simple_list_item_1,
+                    filterList
+            );
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override//
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("param1", mParam1);
+                    bundle.putString("param2", filterId.get(position));
+                    Navigation.findNavController(view).navigate(R.id.action_chatUsersListFragment_to_chatFacilitadorFragment, bundle);
+                }
+            });
+        }
     }
 }
