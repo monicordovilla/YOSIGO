@@ -7,12 +7,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Facilitador.Groups.GroupListFragment">
 
+    <EditText
+        android:imeOptions="actionSearch"
+        android:drawableLeft="@drawable/ic_search"
+        android:id="@+id/search_group_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ListView
         android:id="@+id/list_groups"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="205dp"
-        tools:layout_editor_absoluteY="246dp" />
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/search_group_name"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_groups"
