@@ -15,6 +15,14 @@
         android:layout_marginBottom="10dp"
         android:layout_gravity="center"/>
 
+    <EditText
+        android:imeOptions="actionSearch"
+        android:drawableLeft="@drawable/ic_search"
+        android:id="@+id/search_calendar_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"/>
+
     <GridView
         android:id="@+id/grid_calendar"
         android:layout_width="match_parent"

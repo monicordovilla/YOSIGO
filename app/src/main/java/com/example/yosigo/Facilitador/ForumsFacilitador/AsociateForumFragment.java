@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -52,6 +54,7 @@ public class AsociateForumFragment extends Fragment {
     private View root;
     private TextView forum_name;
     private ListView list_personas, list_grupos;
+    private EditText searchBar;
     private Button btn_asociate;
 
     private Map<String, String> userMap = new HashMap<>();
@@ -95,6 +98,7 @@ public class AsociateForumFragment extends Fragment {
         //Obtener elementos del layout
         list_personas = root.findViewById(R.id.list_asociate_personas_forum);
         list_grupos = root.findViewById(R.id.list_asociate_grupos_forum);
+        searchBar = root.findViewById(R.id.search_name_forum);
         btn_asociate = root.findViewById(R.id.btn_asociate_forum);
         forum_name = root.findViewById(R.id.asociate_forum_name);
 
@@ -104,6 +108,20 @@ public class AsociateForumFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 setAsociados();
+            }
+        });
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String newText = editable.toString();
+                filterNames(newText);
             }
         });
 
@@ -268,6 +286,59 @@ public class AsociateForumFragment extends Fragment {
                             }
                         });
             }
+        }
+    }
+
+    private void filterNames(String text) {
+        if(text.isEmpty()){
+            //Set groups
+            list_grupos.setAdapter(new ArrayAdapter<String>(
+                    root.getContext(),
+                    android.R.layout.simple_list_item_multiple_choice,
+                    groups
+                )
+            );
+            list_grupos.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+            //Set personas
+            list_personas.setAdapter(new ArrayAdapter<String>(
+                            root.getContext(),
+                            android.R.layout.simple_list_item_multiple_choice,
+                            users
+                    )
+            );
+            list_personas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        } else {
+            List<String> filterGroupsList = new ArrayList<>();
+            List<String> filterPersonList = new ArrayList<>();
+
+            //Set groups
+            for (String name : groups) {
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    filterGroupsList.add(name);
+                }
+            }
+            list_grupos.setAdapter(new ArrayAdapter<String>(
+                            root.getContext(),
+                            android.R.layout.simple_list_item_multiple_choice,
+                            filterGroupsList
+                    )
+            );
+            list_grupos.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+            //Set personas
+            for (String name : users) {
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    filterPersonList.add(name);
+                }
+            }
+            list_personas.setAdapter(new ArrayAdapter<String>(
+                            root.getContext(),
+                            android.R.layout.simple_list_item_multiple_choice,
+                            filterPersonList
+                    )
+            );
+            list_personas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         }
     }
 }

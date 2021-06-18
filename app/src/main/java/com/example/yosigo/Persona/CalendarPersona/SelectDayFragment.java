@@ -14,11 +14,14 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -56,9 +59,15 @@ public class SelectDayFragment extends Fragment {
 
     private String mParam1;
     private ListActivitiesPersonaViewModel mViewModel;
+
+    private View root;
     private GridView list;
+    private EditText searchBar;
+
     private List<Activity> actividades = new ArrayList<>();
-    View root;
+    List<String> ids = new ArrayList<>();
+    Map<String, String> names = new HashMap<>();
+    Map<String, String> images = new HashMap<>();
 
     public SelectDayFragment() {
         // Required empty public constructor
@@ -96,6 +105,7 @@ public class SelectDayFragment extends Fragment {
 
         //Listado
         list = (GridView) root.findViewById(R.id.grid_calendar);
+        searchBar = root.findViewById(R.id.search_calendar_name);
         ImageView imageDay = root.findViewById(R.id.select_day);
 
         switch (Integer.parseInt(mParam1)){
@@ -135,14 +145,28 @@ public class SelectDayFragment extends Fragment {
             }
         });
 
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String newText = editable.toString();
+                filterNames(newText);
+            }
+        });
+
         return root;
     }
 
     private void getActivities(List<Activity> activities){
         actividades.clear();
-        List<String> ids = new ArrayList<>();
-        Map<String, String> names = new HashMap<>();
-        Map<String, String> images = new HashMap<>();
+        ids.clear();
+        names.clear();
+        images.clear();
 
         for(Activity activity : activities) {
             Date fecha_inicio = activity.getFecha_inicio();
@@ -175,5 +199,54 @@ public class SelectDayFragment extends Fragment {
                 Navigation.findNavController(view).navigate(R.id.action_selectDayFragment_to_activityViewFragment2, bundle);
             }
         });
+    }
+
+    private void filterNames(String text) {
+        if(text.isEmpty()){
+            GridAdapter adapter = new GridAdapter(
+                    root.getContext(),
+                    ids,
+                    names,
+                    images
+            );
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("param1", ids.get(position));
+                    Navigation.findNavController(view).navigate(R.id.action_selectDayFragment_to_activityViewFragment2, bundle);
+                }
+            });
+        } else {
+            List<String> filterIdsList = new ArrayList<>();
+            Map<String, String> filterNameMap = new HashMap<>();
+            Map<String, String> filterPictosMap = new HashMap<>();
+
+            for (String key : names.keySet()) {
+                String name = names.get(key);
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    filterIdsList.add(key);
+                    filterNameMap.put(key, names.get(key));
+                    filterPictosMap.put(key, images.get(key));
+                }
+            }
+
+            GridAdapter adapter = new GridAdapter(
+                    root.getContext(),
+                    filterIdsList,
+                    filterNameMap,
+                    filterPictosMap
+            );
+            list.setAdapter(adapter);
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("param1", filterIdsList.get(position));
+                    Navigation.findNavController(view).navigate(R.id.action_selectDayFragment_to_activityViewFragment2, bundle);
+                }
+            });
+        }
     }
 }

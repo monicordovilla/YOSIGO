@@ -17,6 +17,15 @@
         android:layout_height="wrap_content"
         android:text="Foro"/>
 
+    <EditText
+        android:imeOptions="actionSearch"
+        android:drawableLeft="@drawable/ic_search"
+        android:id="@+id/search_name_forum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,6 +51,6 @@
         android:id="@+id/btn_asociate_forum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Asociar usuarios al foro" />
+        android:text="Asociar personas al foro" />
 
 </LinearLayout>

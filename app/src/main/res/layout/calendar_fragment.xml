@@ -74,24 +74,24 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="8dp"
+            android:contentDescription="Sábado"
             android:foreground="@drawable/sabado"
             android:text="Sabado"
-            android:contentDescription="Sábado"
-            app:layout_constraintEnd_toEndOf="@+id/button_viernes"
-            app:layout_constraintStart_toStartOf="@+id/button_viernes"
-            app:layout_constraintTop_toBottomOf="@+id/button_viernes" />
+            app:layout_constraintEnd_toEndOf="@+id/button_jueves"
+            app:layout_constraintStart_toStartOf="@+id/button_jueves"
+            app:layout_constraintTop_toBottomOf="@+id/button_jueves" />
 
         <ImageButton
             android:id="@+id/button_domingo"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="8dp"
+            android:contentDescription="Domingo"
             android:foreground="@drawable/domingo"
             android:text="Domingo"
-            android:contentDescription="Domingo"
-            app:layout_constraintEnd_toEndOf="@+id/button_jueves"
-            app:layout_constraintStart_toStartOf="@+id/button_jueves"
-            app:layout_constraintTop_toBottomOf="@+id/button_jueves" />
+            app:layout_constraintEnd_toEndOf="@+id/button_viernes"
+            app:layout_constraintStart_toStartOf="@+id/button_viernes"
+            app:layout_constraintTop_toBottomOf="@+id/button_viernes" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

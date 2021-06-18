@@ -9,6 +9,14 @@
     android:layout_margin="8dp"
     tools:context=".Persona.ForumsPersona.ListForumsPersona">
 
+    <EditText
+        android:imeOptions="actionSearch"
+        android:drawableLeft="@drawable/ic_search"
+        android:id="@+id/search_forum_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"/>
+
     <GridView
         android:id="@+id/grid_forum"
         android:layout_width="match_parent"

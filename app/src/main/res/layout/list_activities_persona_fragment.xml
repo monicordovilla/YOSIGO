@@ -5,7 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:orientation="vertical"
     tools:context=".Persona.ActivitiesPersona.ListActivitiesPersonaFragment">
+
+    <EditText
+        android:imeOptions="actionSearch"
+        android:drawableLeft="@drawable/ic_search"
+        android:id="@+id/search_activity_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"/>
 
     <GridView
         android:id="@+id/grid_activities"

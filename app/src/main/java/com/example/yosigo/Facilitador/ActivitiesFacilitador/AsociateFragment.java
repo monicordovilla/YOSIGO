@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -63,6 +65,7 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
     private EditText fecha_inicio, fecha_fin;
     private TextView name_activity;
     private Button btn_asociar;
+    private EditText searchBar;
 
     private Map<String, String> userMap = new HashMap<>();
     private Map<String, String> groupMap = new HashMap<>();
@@ -98,6 +101,7 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
         personasViewModel = new ViewModelProvider(this).get(PersonasViewModel.class);
         groupListViewModel = new ViewModelProvider(this).get(GroupListViewModel.class);
         root = inflater.inflate(R.layout.asociate_fragment, container, false);
+        searchBar = root.findViewById(R.id.search_name_activity);
 
         //Obtener nombre de actividad
         name_activity = root.findViewById(R.id.asociate_activity_name);
@@ -173,6 +177,20 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
                         )
                 );
                 list_personas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            }
+        });
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String newText = editable.toString();
+                filterNames(newText);
             }
         });
 
@@ -359,5 +377,58 @@ public class AsociateFragment extends Fragment implements View.OnClickListener {
     private String twoDigits(int number){
         if (number <= 9) return "0" + number;
         else return String.valueOf(number);
+    }
+
+    private void filterNames(String text) {
+        if(text.isEmpty()){
+            //Set groups
+            list_grupos.setAdapter(new ArrayAdapter<String>(
+                            root.getContext(),
+                            android.R.layout.simple_list_item_multiple_choice,
+                    grupos
+                    )
+            );
+            list_grupos.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+            //Set personas
+            list_personas.setAdapter(new ArrayAdapter<String>(
+                            root.getContext(),
+                            android.R.layout.simple_list_item_multiple_choice,
+                            users
+                    )
+            );
+            list_personas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        } else {
+            List<String> filterGroupsList = new ArrayList<>();
+            List<String> filterPersonList = new ArrayList<>();
+
+            //Set groups
+            for (String name : grupos) {
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    filterGroupsList.add(name);
+                }
+            }
+            list_grupos.setAdapter(new ArrayAdapter<String>(
+                            root.getContext(),
+                            android.R.layout.simple_list_item_multiple_choice,
+                            filterGroupsList
+                    )
+            );
+            list_grupos.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+            //Set personas
+            for (String name : users) {
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    filterPersonList.add(name);
+                }
+            }
+            list_personas.setAdapter(new ArrayAdapter<String>(
+                            root.getContext(),
+                            android.R.layout.simple_list_item_multiple_choice,
+                            filterPersonList
+                    )
+            );
+            list_personas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        }
     }
 }
