@@ -32,6 +32,7 @@
         android:text="Seleccionar grupo"/>
     <ListView
         android:id="@+id/list_asociate_grupos_forum"
+        android:fadeScrollbars="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />
@@ -43,6 +44,7 @@
         android:text="Seleccionar persona"/>
     <ListView
         android:id="@+id/list_asociate_personas_forum"
+        android:fadeScrollbars="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />

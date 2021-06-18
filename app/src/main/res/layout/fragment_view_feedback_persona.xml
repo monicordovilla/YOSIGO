@@ -17,6 +17,7 @@
 
     <ListView
         android:layout_marginTop="10dp"
+        android:fadeScrollbars="false"
         android:id="@+id/show_activity_feedback_persona"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

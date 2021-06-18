@@ -85,6 +85,7 @@
 
     <ListView
         android:id="@+id/show_activity_pic"
+        android:fadeScrollbars="false"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
@@ -104,6 +105,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
     <ListView
         android:id="@+id/show_activity_name_users"
+        android:fadeScrollbars="false"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"

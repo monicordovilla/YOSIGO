@@ -81,6 +81,7 @@
 
     <ListView
         android:id="@+id/list_asociate_dias"
+        android:fadeScrollbars="false"
         android:contentDescription="Seleccionar días de la semana"
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -102,6 +103,7 @@
 
     <ListView
         android:id="@+id/list_asociate_group"
+        android:fadeScrollbars="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="Seleccionar grupo"
@@ -115,6 +117,7 @@
 
     <ListView
         android:id="@+id/list_asociate_user"
+        android:fadeScrollbars="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="Seleccionar personas"
