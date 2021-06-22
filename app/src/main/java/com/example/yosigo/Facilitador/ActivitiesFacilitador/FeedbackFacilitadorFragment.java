@@ -7,12 +7,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -52,6 +55,8 @@ public class FeedbackFacilitadorFragment extends Fragment {
     private View root;
     private ListView list;
     private TextView textView;
+    private EditText searchBar;
+
     private List<String> id = new ArrayList<>();
     private Map<String, String> map_file = new HashMap<>();
     private Map<String, String> map_type = new HashMap<>();
@@ -92,9 +97,24 @@ public class FeedbackFacilitadorFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_feedback_facilitador, container, false);
         list = root.findViewById(R.id.list_feedback_facilitador);
         textView = root.findViewById(R.id.name_activity_feedback);
+        searchBar = root.findViewById(R.id.search_feedback_name);
 
         getFeedbacks();
         getName();
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String newText = editable.toString();
+                filterNames(newText);
+            }
+        });
 
         return root;
     }
@@ -172,5 +192,48 @@ public class FeedbackFacilitadorFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void filterNames(String text) {
+        if(text.isEmpty()){
+            FeedbackFacilitadorAdapter adapter = new FeedbackFacilitadorAdapter(
+                    root.getContext(),
+                    id,
+                    map_date,
+                    map_file,
+                    map_type,
+                    map_user
+            );
+            list.setAdapter(adapter);
+        } else {
+            List<String> FilterId = new ArrayList<>();
+            Map<String, String> FilterFileMap = new HashMap<>();
+            Map<String, String> FilterTypeMap = new HashMap<>();
+            Map<String, Date> FilterDateMap = new HashMap<>();
+            Map<String, String> FilterUserMap = new HashMap<>();
+            Map<String, Integer> FilterDifficultMap = new HashMap<>();
+            Map<String, Integer> FilterUtilityMap = new HashMap<>();
+
+            for (String key : id) {
+                String name = map_user.get(key);
+
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    FilterId.add(key);
+                    FilterFileMap.put(key, map_file.get(key));
+                    FilterTypeMap.put(key, map_type.get(key));
+                    FilterDateMap.put(key, map_date.get(key));
+                    FilterUserMap.put(key, name);
+                }
+            }
+            FeedbackFacilitadorAdapter adapter = new FeedbackFacilitadorAdapter(
+                    root.getContext(),
+                    FilterId,
+                    FilterDateMap,
+                    FilterFileMap,
+                    FilterTypeMap,
+                    FilterUserMap
+            );
+            list.setAdapter(adapter);
+        }
     }
 }

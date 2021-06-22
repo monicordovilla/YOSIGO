@@ -6,12 +6,14 @@ public class Activity {
     private String id;
     private String nombre;
     private String imagen;
+    private String categoria;
     private int dias;
     private Date fecha_inicio;
     private Date fecha_fin;
 
     public String getImagen() { return imagen; }
     public String getNombre() { return nombre; }
+    public String getCategoria() { return categoria; }
     public String getId() { return id; }
     public int getDias() { return dias; }
     public Date getFecha_fin() { return fecha_fin; }
@@ -19,6 +21,7 @@ public class Activity {
 
     public void setImagen(String imagen) { this.imagen = imagen; }
     public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
     public void setId(String id) { this.id = id; }
     public void setFecha_inicio(Date fecha_inicio) { this.fecha_inicio = fecha_inicio; }
     public void setFecha_fin(Date fecha_fin) { this.fecha_fin = fecha_fin; }

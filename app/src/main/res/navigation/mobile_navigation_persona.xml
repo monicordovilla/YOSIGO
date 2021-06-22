@@ -117,6 +117,14 @@
         <action
             android:id="@+id/action_nav_activities_to_activityViewFragment2"
             app:destination="@id/activityViewFragment2" />
+        <action
+            android:id="@+id/action_nav_activities_to_searchCategory"
+            app:destination="@id/searchCategory" />
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
     </fragment>
     <fragment
         android:id="@+id/selectDayFragment"
@@ -142,5 +150,14 @@
             app:argType="string"
             android:defaultValue="0"
             />
+    </fragment>
+    <fragment
+        android:id="@+id/searchCategory"
+        android:name="com.example.yosigo.Persona.ActivitiesPersona.SearchCategory"
+        android:label="Buscar categoría"
+        tools:layout="@layout/search_category_fragment" >
+        <action
+            android:id="@+id/action_searchCategory_to_nav_activities"
+            app:destination="@id/nav_activities" />
     </fragment>
 </navigation>

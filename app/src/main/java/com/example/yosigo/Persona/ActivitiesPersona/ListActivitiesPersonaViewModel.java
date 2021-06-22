@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -27,35 +28,25 @@ import java.util.Map;
 
 public class ListActivitiesPersonaViewModel extends ViewModel {
     private MutableLiveData<List<Activity>> activities;
-    private MutableLiveData<Map<String, String>> activities_names;
-    private MutableLiveData<Map<String, String>> activities_pictos;
-    private MutableLiveData<List<String>> activities_ids;
-    private static final String TAG = "ACTIVIDAD View Model";private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private static final String TAG = "ACTIVIDAD View Model";
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     public ListActivitiesPersonaViewModel() {
         activities = new MutableLiveData<>();
-        activities_names = new MutableLiveData<>();
-        activities_pictos = new MutableLiveData<>();
-        activities_ids = new MutableLiveData<>();
 
         loadActivities();
     }
 
     public MutableLiveData<List<Activity>> getActivities() { return activities; }
-    public MutableLiveData<List<String>> getActivities_ids() { return activities_ids; }
-    public MutableLiveData<Map<String, String>> getActivities_names() { return activities_names; }
-    public MutableLiveData<Map<String, String>> getActivities_pictos() { return activities_pictos; }
 
     private void loadActivities(){
         List<Activity> activityList = new ArrayList<>();
-        List<String> idsList = new ArrayList<>();
-        Map<String, String> namesMap = new HashMap<>();
-        Map<String, String> pictosMap = new HashMap<>();
 
         String sesion = MainActivity.sesion;
         //Comprobar las actividades que tiene asignadas
         db.collection("users").document(sesion).collection("activities")
+                .orderBy("Fecha Inicio", Query.Direction.ASCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -73,7 +64,6 @@ public class ListActivitiesPersonaViewModel extends ViewModel {
                                 //Insertar identificador de actividad
                                 String id = document.getId();
                                 new_activity.setId(id);
-                                idsList.add(id);
 
                                 //Guardar los días que tiene asignada la actividad actual
                                 new_activity.setDias(Integer.valueOf(document.getData().get("Dias semana").toString()));
@@ -88,11 +78,12 @@ public class ListActivitiesPersonaViewModel extends ViewModel {
                                                     if (document_activity.exists()) {
                                                         String nombre = document_activity.getData().get("Nombre").toString();
                                                         new_activity.setNombre(nombre);
-                                                        namesMap.put(id, nombre);
 
                                                         String picto = document_activity.getData().get("Pictograma").toString();
                                                         new_activity.setImagen(picto);
-                                                        pictosMap.put(id, picto);
+
+                                                        String categoria = document_activity.getData().get("Categoria").toString();
+                                                        new_activity.setCategoria(categoria);
 
                                                         Log.d(TAG, "ID: " + id + "=>" + document_activity.getData());
                                                     } else {
@@ -101,9 +92,6 @@ public class ListActivitiesPersonaViewModel extends ViewModel {
 
                                                     activityList.add(new_activity);
                                                     activities.setValue(activityList);
-                                                    activities_ids.setValue(idsList);
-                                                    activities_names.setValue(namesMap);
-                                                    activities_pictos.setValue(pictosMap);
                                                 } else {
                                                     Log.d(TAG, "get failed with ", activity.getException());
                                                 }

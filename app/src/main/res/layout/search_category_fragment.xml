@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Persona.ActivitiesPersona.SearchCategory">
+
+    <ImageView
+        android:id="@+id/select_day"
+        android:contentDescription="Buscar por categoría"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        app:srcCompat="@drawable/buscar" />
+
+    <GridView
+        android:id="@+id/grid_category"
+        android:fadeScrollbars="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:horizontalSpacing="10dp"
+        android:numColumns="3"
+        android:verticalSpacing="10dp" />
+
+    <ImageButton
+        android:id="@+id/btn_back_activity_list"
+        android:layout_gravity="center"
+        android:contentDescription="Listado actividades"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/anterior"  />
+
+
+</LinearLayout>

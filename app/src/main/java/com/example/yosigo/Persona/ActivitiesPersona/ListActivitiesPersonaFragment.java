@@ -20,30 +20,50 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.example.yosigo.Persona.CalendarPersona.SelectDayFragment;
 import com.example.yosigo.Persona.GridAdapter;
 import com.example.yosigo.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ListActivitiesPersonaFragment extends Fragment {
 
+    private static final String ARG_PARAM1 = "param1";
+    private static final String TAG = "LIST ACTIVITIES";
+
     private ListActivitiesPersonaViewModel mViewModel;
+    private String mParam1;
+
     private View root;
     private GridView list;
     private EditText searchBar;
+    private ImageButton btnFilter;
 
     private List<String> ids = new ArrayList<>();
     Map<String, String> pictos = new HashMap<>();
     Map<String, String> nombres = new HashMap<>();
-    private static final String TAG = "LIST ACTIVITIES";
 
-    public static ListActivitiesPersonaFragment newInstance() {
-        return new ListActivitiesPersonaFragment();
+    public static ListActivitiesPersonaFragment newInstance(String param1) {
+        ListActivitiesPersonaFragment fragment = new ListActivitiesPersonaFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+        }
     }
 
     @Override
@@ -53,41 +73,19 @@ public class ListActivitiesPersonaFragment extends Fragment {
         root = inflater.inflate(R.layout.list_activities_persona_fragment, container, false);
         list = root.findViewById(R.id.grid_activities);
         searchBar = root.findViewById(R.id.search_activity_name);
+        btnFilter = root.findViewById(R.id.btn_filter_category);
 
-        mViewModel.getActivities_names().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
+        btnFilter.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onChanged(Map<String, String> stringStringMap) {
-                nombres = stringStringMap;
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate(R.id.action_nav_activities_to_searchCategory);
+            }
+        });
 
-                mViewModel.getActivities_pictos().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
-                    @Override
-                    public void onChanged(Map<String, String> stringStringMap) {
-                        pictos = stringStringMap;
-
-                        mViewModel.getActivities_ids().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
-                            @Override
-                            public void onChanged(List<String> stringList) {
-                                ids = stringList;
-
-                                GridAdapter adapter = new GridAdapter(
-                                        root.getContext(),
-                                        ids,
-                                        nombres,
-                                        pictos
-                                );
-                                list.setAdapter(adapter);
-                                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("param1", ids.get(position));
-                                        Navigation.findNavController(view).navigate(R.id.action_nav_activities_to_activityViewFragment2, bundle);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
+        mViewModel.getActivities().observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
+            @Override
+            public void onChanged(List<Activity> activities) {
+                getActivities(activities);
             }
         });
 
@@ -106,6 +104,36 @@ public class ListActivitiesPersonaFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private void getActivities(List<Activity> activities){
+        ids.clear();
+        nombres.clear();
+        pictos.clear();
+
+        for(Activity activity : activities) {
+            if( mParam1.equals("0") || mParam1.equals(activity.getCategoria()) ) {
+                ids.add(activity.getId());
+                nombres.put(activity.getId(), activity.getNombre());
+                pictos.put(activity.getId(), activity.getImagen());
+            }
+        }
+
+        GridAdapter adapter = new GridAdapter(
+                root.getContext(),
+                ids,
+                nombres,
+                pictos
+        );
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", ids.get(position));
+                Navigation.findNavController(view).navigate(R.id.action_nav_activities_to_activityViewFragment2, bundle);
+            }
+        });
     }
 
     private void filterNames(String text) {

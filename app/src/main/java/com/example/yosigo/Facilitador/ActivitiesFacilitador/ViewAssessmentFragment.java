@@ -5,14 +5,20 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,6 +49,8 @@ public class ViewAssessmentFragment extends Fragment {
     private View root;
     private ListView list;
     private TextView textView;
+    private EditText searchBar;
+
     private List<String> id = new ArrayList<>();
     private Map<String, String> map_file = new HashMap<>();
     private Map<String, String> map_type = new HashMap<>();
@@ -80,9 +88,24 @@ public class ViewAssessmentFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_view_assessment_list, container, false);
         list = root.findViewById(R.id.list_assessment_facilitador);
         textView = root.findViewById(R.id.name_activity_assessment);
+        searchBar = root.findViewById(R.id.search_assessment_name);
 
         getName();
         getAssessments();
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String newText = editable.toString();
+                filterNames(newText);
+            }
+        });
 
         return root;
     }
@@ -118,7 +141,6 @@ public class ViewAssessmentFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getData().toString());
                                 //Obtener id
                                 String doc_id = document.getId();
                                 id.add(doc_id);
@@ -138,7 +160,6 @@ public class ViewAssessmentFragment extends Fragment {
                                                     //Guardar datos
                                                     map_user.put(doc_id , full_name);
                                                 }
-                                                Log.d(TAG, doc_id);
                                                 DocumentSnapshot.ServerTimestampBehavior behavior = DocumentSnapshot.ServerTimestampBehavior.ESTIMATE;
                                                 map_date.put(doc_id , document.getDate("Fecha", behavior));
                                                 map_difficult.put(doc_id, Integer.parseInt(document.getData().get("Dificultad").toString()));
@@ -170,5 +191,54 @@ public class ViewAssessmentFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    private void filterNames(String text) {
+        if(text.isEmpty()){
+            AssessmentViewItemAdapter adapter = new AssessmentViewItemAdapter(
+                    root.getContext(),
+                    id,
+                    map_date,
+                    map_difficult,
+                    map_utility,
+                    map_file,
+                    map_type,
+                    map_user
+            );
+            list.setAdapter(adapter);
+        } else {
+            List<String> FilterId = new ArrayList<>();
+            Map<String, String> FilterFileMap = new HashMap<>();
+            Map<String, String> FilterTypeMap = new HashMap<>();
+            Map<String, Date> FilterDateMap = new HashMap<>();
+            Map<String, String> FilterUserMap = new HashMap<>();
+            Map<String, Integer> FilterDifficultMap = new HashMap<>();
+            Map<String, Integer> FilterUtilityMap = new HashMap<>();
+
+            for (String key : id) {
+                String name = map_user.get(key);
+
+                if( name.toLowerCase().contains(text.toLowerCase()) ) {
+                    FilterId.add(key);
+                    FilterFileMap.put(key, map_file.get(key));
+                    FilterTypeMap.put(key, map_type.get(key));
+                    FilterDateMap.put(key, map_date.get(key));
+                    FilterUserMap.put(key, name);
+                    FilterDifficultMap.put(key, map_difficult.get(key));
+                    FilterUtilityMap.put(key, map_utility.get(key));
+                }
+            }
+            AssessmentViewItemAdapter adapter = new AssessmentViewItemAdapter(
+                    root.getContext(),
+                    FilterId,
+                    FilterDateMap,
+                    FilterDifficultMap,
+                    FilterUtilityMap,
+                    FilterFileMap,
+                    FilterTypeMap,
+                    FilterUserMap
+            );
+            list.setAdapter(adapter);
+        }
     }
 }
