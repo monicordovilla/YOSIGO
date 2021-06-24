@@ -22,10 +22,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,75 +86,111 @@ public class itemAdapter extends ArrayAdapter {
                             }
                         });
                 } else if (type.equals("Category")) {
-                    FirebaseFirestore.getInstance().collection("categories").document(valuesList.get(name))
-                        .delete()
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                FirebaseFirestore.getInstance().collection("activities")
-                                    .whereEqualTo("Facilitador" , MainActivity.sesion)
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    DocumentReference CategoryDocument = FirebaseFirestore.getInstance().collection("categories").document(valuesList.get(name));
+                    CategoryDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    Log.d( "ITEM ADAPTER", "Ruta: " + document.get("Categoria"));
+                                    FirebaseStorage.getInstance().getReference().child((String) document.get("Pictograma")).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if (task.isSuccessful()) {
-                                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                                    if( document.getData().get("Categoria").equals(valuesList.get(name))){
-                                                        DocumentReference documentReference = FirebaseFirestore.getInstance()
-                                                            .collection("activities")
-                                                            .document(document.getId());
-                                                        Map<String,Object> updates = new HashMap<>();
-                                                        updates.put("Categoria", FieldValue.delete());
-                                                        documentReference.update(updates);
-                                                    }
+                                        public void onSuccess(Void aVoid) {
+                                            CategoryDocument.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    FirebaseFirestore.getInstance().collection("activities")
+                                                            .whereEqualTo("Facilitador" , MainActivity.sesion)
+                                                            .get()
+                                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                            if( document.getData().get("Categoria").equals(valuesList.get(name))){
+                                                                                DocumentReference documentReference = FirebaseFirestore.getInstance()
+                                                                                        .collection("activities")
+                                                                                        .document(document.getId());
+                                                                                Map<String,Object> updates = new HashMap<>();
+                                                                                updates.put("Categoria", FieldValue.delete());
+                                                                                documentReference.update(updates);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    Navigation.findNavController(view).navigate(R.id.action_nav_category_self);
+                                                                }
+                                                            });
                                                 }
-                                            }
-                                            Navigation.findNavController(view).navigate(R.id.action_nav_category_self);
+                                            })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Toast.makeText(context, "No se ha podido eliminar " + name, Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                            Toast.makeText(context, "No se ha eliminado la imagen" + name, Toast.LENGTH_SHORT).show();
                                         }
                                     });
+                                }
+                            } else {
+                                Log.e("ITEM ADAPTER", "get failed with ", task.getException());
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(context, "No se ha podido eliminar " + name, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        }
+                    });
                 } else if (type.equals("Goal")) {
-                    FirebaseFirestore.getInstance().collection("goals").document(valuesList.get(name))
-                            .delete()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    FirebaseFirestore.getInstance().collection("activities")
-                                            .whereEqualTo("Facilitador" , MainActivity.sesion)
-                                            .get()
-                                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                                            if( document.getData().get("Meta").equals(valuesList.get(name))){
-                                                                DocumentReference documentReference = FirebaseFirestore.getInstance()
-                                                                        .collection("activities")
-                                                                        .document(document.getId());
-                                                                Map<String,Object> updates = new HashMap<>();
-                                                                updates.put("Meta", FieldValue.delete());
-                                                                documentReference.update(updates);
+                    DocumentReference GoalDocument = FirebaseFirestore.getInstance().collection("goals").document(valuesList.get(name));
+
+                    GoalDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    FirebaseStorage.getInstance().getReference().child((String) document.get("Pictograma")).delete();
+
+                                    GoalDocument.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            FirebaseFirestore.getInstance().collection("activities")
+                                                    .whereEqualTo("Facilitador" , MainActivity.sesion)
+                                                    .get()
+                                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                            if (task.isSuccessful()) {
+                                                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                                                    if( document.getData().get("Meta").equals(valuesList.get(name))){
+                                                                        DocumentReference documentReference = FirebaseFirestore.getInstance()
+                                                                                .collection("activities")
+                                                                                .document(document.getId());
+                                                                        Map<String,Object> updates = new HashMap<>();
+                                                                        updates.put("Meta", FieldValue.delete());
+                                                                        documentReference.update(updates);
+                                                                    }
+                                                                }
                                                             }
+                                                            Navigation.findNavController(view).navigate(R.id.action_nav_goals_self);
                                                         }
-                                                    }
-                                                    Navigation.findNavController(view).navigate(R.id.action_nav_goals_self);
+                                                    });
+                                        }
+                                    })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(context, "No se ha podido eliminar " + name, Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(context, "No se ha podido eliminar " + name, Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                            } else {
+                                Log.e("ITEM ADAPTER", "get failed with ", task.getException());
+                            }
+                        }
+                    });
                 }
             }
         });
