@@ -55,13 +55,16 @@ import java.util.Map;
 public class SelectDayFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "DAY ACTIVITIES";
 
-    private String mParam1;
+    private String mParam1,mParam2;
     private ListActivitiesPersonaViewModel mViewModel;
 
     private View root;
     private GridView list;
+    private ImageView imageDay;
+    private ImageView btnFilter;
     private EditText searchBar;
 
     private List<Activity> actividades = new ArrayList<>();
@@ -80,10 +83,11 @@ public class SelectDayFragment extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment SelectDayFragment.
      */
-    public static SelectDayFragment newInstance(String param1) {
+    public static SelectDayFragment newInstance(String param1, String param2) {
         SelectDayFragment fragment = new SelectDayFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,6 +97,7 @@ public class SelectDayFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -106,7 +111,17 @@ public class SelectDayFragment extends Fragment {
         //Listado
         list = (GridView) root.findViewById(R.id.grid_calendar);
         searchBar = root.findViewById(R.id.search_calendar_name);
-        ImageView imageDay = root.findViewById(R.id.select_day);
+        imageDay = root.findViewById(R.id.select_day);
+        btnFilter = root.findViewById(R.id.btn_filter_category);
+
+        btnFilter.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_selectDayFragment_to_searchCategory, bundle);
+            }
+        });
 
         switch (Integer.parseInt(mParam1)){
             case CalendarFragment.LUNES:
@@ -174,7 +189,8 @@ public class SelectDayFragment extends Fragment {
 
             if (new Date().after(fecha_inicio) && new Date().before(fecha_fin)) {
                 int dia = Integer.parseInt(mParam1);
-                if((activity.getDias() & dia) == dia){
+                if(((activity.getDias() & dia)) == dia &&
+                        (mParam2.equals("0") || mParam2.equals(activity.getCategoria())) ) {
                     actividades.add(activity);
                     ids.add(activity.getId());
                     names.put(activity.getId(), activity.getNombre());

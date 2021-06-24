@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.yosigo.Facilitador.itemAdapter;
 import com.example.yosigo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -55,16 +56,23 @@ public class GroupListFragment extends Fragment {
         mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                groupsNameList.clear();
                 groupsNameList = strings;
-                Log.d(TAG, "Lista: " + groupsNameList);
 
-                ArrayAdapter<String> adapter = new ArrayAdapter(
-                        root.getContext(),
-                        android.R.layout.simple_list_item_1,
-                        groupsNameList
-                );
-                list.setAdapter(adapter);
+                mViewModel.getGroups().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
+                    @Override
+                    public void onChanged(Map<String, String> stringMap) {
+                        groupsMap = stringMap;
+                        String tipo = "Groups";
+
+                        itemAdapter adapter = new itemAdapter(
+                                root.getContext(),
+                                tipo,
+                                groupsMap,
+                                groupsNameList
+                        );
+                        list.setAdapter(adapter);
+                    }
+                });
             }
         });
 

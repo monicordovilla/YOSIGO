@@ -23,6 +23,7 @@ import android.widget.ListView;
 
 import com.example.yosigo.Facilitador.ActivitiesFacilitador.ActivityListAdapter;
 import com.example.yosigo.Facilitador.ForumsFacilitador.ForumListAdapter;
+import com.example.yosigo.Facilitador.itemAdapter;
 import com.example.yosigo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -58,15 +59,23 @@ public class CategoryListFragment extends Fragment {
         mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                categoryNameList.clear();
                 categoryNameList = strings;
 
-                ArrayAdapter<String> adapter = new ArrayAdapter(
-                        root.getContext(),
-                        android.R.layout.simple_list_item_1,
-                        categoryNameList
-                );
-                list.setAdapter(adapter);
+                mViewModel.getCategories().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
+                    @Override
+                    public void onChanged(Map<String, String> stringMap) {
+                        categoryMap = stringMap;
+                        String tipo = "Category";
+
+                        itemAdapter adapter = new itemAdapter(
+                                root.getContext(),
+                                tipo,
+                                categoryMap,
+                                categoryNameList
+                        );
+                        list.setAdapter(adapter);
+                    }
+                });
             }
         });
 

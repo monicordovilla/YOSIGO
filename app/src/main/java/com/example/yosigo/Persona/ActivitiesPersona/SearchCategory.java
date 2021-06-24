@@ -28,8 +28,12 @@ import java.util.Map;
 
 public class SearchCategory extends Fragment {
 
-    private SearchCategoryViewModel mViewModel;
+    private static final String ARG_PARAM1 = "param1";
     private static final String TAG = "LIST ACTIVITIES";
+
+    private SearchCategoryViewModel mViewModel;
+    private String mParam1;
+
     private View root;
     private GridView list;
     private ImageButton btn_anterior;
@@ -38,8 +42,20 @@ public class SearchCategory extends Fragment {
     Map<String, String> pictos = new HashMap<>();
     Map<String, String> nombres = new HashMap<>();
 
-    public static SearchCategory newInstance() {
-        return new SearchCategory();
+    public static SearchCategory newInstance(String param1) {
+        SearchCategory fragment = new SearchCategory();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+        }
     }
 
     @Override
@@ -53,7 +69,9 @@ public class SearchCategory extends Fragment {
         btn_anterior.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(view).navigate(R.id.action_searchCategory_to_nav_activities);
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_searchCategory_to_nav_activities, bundle);
             }
         });
 
@@ -84,8 +102,14 @@ public class SearchCategory extends Fragment {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                         Bundle bundle = new Bundle();
-                                        bundle.putString("param1", ids.get(position));
-                                        Navigation.findNavController(view).navigate(R.id.action_searchCategory_to_nav_activities, bundle);
+                                        if (mParam1.equals("0")) {
+                                            bundle.putString("param1", ids.get(position));
+                                            Navigation.findNavController(view).navigate(R.id.action_searchCategory_to_nav_activities, bundle);
+                                        } else {
+                                            bundle.putString("param1", mParam1);
+                                            bundle.putString("param2", ids.get(position));
+                                            Navigation.findNavController(view).navigate(R.id.action_searchCategory_to_selectDayFragment, bundle);
+                                        }
                                     }
                                 });
                             }

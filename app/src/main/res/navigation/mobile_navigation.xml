@@ -178,6 +178,9 @@
         <action
             android:id="@+id/action_categoryListFragment_to_createCategoryFragment"
             app:destination="@id/createCategoryFragment" />
+        <action
+            android:id="@+id/action_nav_category_self"
+            app:destination="@id/nav_category" />
     </fragment>
     <fragment
         android:id="@+id/createCategoryFragment"
@@ -196,6 +199,9 @@
         <action
             android:id="@+id/action_nav_goals_to_createGoalFragment"
             app:destination="@id/createGoalFragment" />
+        <action
+            android:id="@+id/action_nav_goals_self"
+            app:destination="@id/nav_goals" />
     </fragment>
     <fragment
         android:id="@+id/createGoalFragment"
@@ -214,6 +220,9 @@
         <action
             android:id="@+id/action_nav_group_to_createGroupFragment"
             app:destination="@id/createGroupFragment" />
+        <action
+            android:id="@+id/action_nav_group_self"
+            app:destination="@id/nav_group" />
     </fragment>
     <fragment
         android:id="@+id/createGroupFragment"

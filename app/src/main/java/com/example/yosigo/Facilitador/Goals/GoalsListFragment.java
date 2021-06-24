@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.yosigo.Facilitador.ActivitiesFacilitador.ActivityListAdapter;
+import com.example.yosigo.Facilitador.itemAdapter;
 import com.example.yosigo.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -56,16 +57,23 @@ public class GoalsListFragment extends Fragment {
         mViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                goalsNameList.clear();
                 goalsNameList = strings;
-                Log.d(TAG, "Lista: " + goalsNameList);
 
-                ArrayAdapter<String> adapter = new ArrayAdapter(
-                        root.getContext(),
-                        android.R.layout.simple_list_item_1,
-                        goalsNameList
-                );
-                list.setAdapter(adapter);
+                mViewModel.getGoals().observe(getViewLifecycleOwner(), new Observer<Map<String,String>>() {
+                    @Override
+                    public void onChanged(Map<String,String> stringMap) {
+                        goalsMap = stringMap;
+                        String tipo = "Goal";
+
+                        itemAdapter adapter = new itemAdapter(
+                                root.getContext(),
+                                tipo,
+                                goalsMap,
+                                goalsNameList
+                        );
+                        list.setAdapter(adapter);
+                    }
+                });
             }
         });
 

@@ -40,6 +40,7 @@ public class GroupListViewModel extends ViewModel {
     private void loadGroups(){
         Map<String, String> groupsMap = new HashMap<>();
         List<String> groupsList = new ArrayList<>();
+        List<String> idArray = new ArrayList<>();
 
         FirebaseFirestore.getInstance().collection("groups")
                 .whereEqualTo("Facilitador" , MainActivity.sesion)
