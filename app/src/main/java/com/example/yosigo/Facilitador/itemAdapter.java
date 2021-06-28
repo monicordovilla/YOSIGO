@@ -93,7 +93,6 @@ public class itemAdapter extends ArrayAdapter {
                             if (task.isSuccessful()) {
                                 DocumentSnapshot document = task.getResult();
                                 if (document.exists()) {
-                                    Log.d( "ITEM ADAPTER", "Ruta: " + document.get("Categoria"));
                                     FirebaseStorage.getInstance().getReference().child((String) document.get("Pictograma")).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
