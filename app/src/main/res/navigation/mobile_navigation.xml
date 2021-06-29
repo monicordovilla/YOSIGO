@@ -92,6 +92,9 @@
         <action
             android:id="@+id/action_activityViewFragment_to_chatUsersListFragment"
             app:destination="@id/chatUsersListFragment" />
+        <action
+            android:id="@+id/action_activityViewFragment_to_modifyActivityFragment"
+            app:destination="@id/modifyActivityFragment" />
     </fragment>
     <fragment
         android:id="@+id/asociateFragment"
@@ -238,5 +241,19 @@
         <action
             android:id="@+id/action_createGroupFragment_to_nav_group"
             app:destination="@id/nav_group" />
+    </fragment>
+    <fragment
+        android:id="@+id/modifyActivityFragment"
+        android:name="com.example.yosigo.Facilitador.ActivitiesFacilitador.ModifyActivityFragment"
+        android:label="Modificar actividad"
+        tools:layout="@layout/fragment_modify_activity" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+        <action
+            android:id="@+id/action_modifyActivityFragment_to_activityViewFragment"
+            app:destination="@id/activityViewFragment" />
     </fragment>
 </navigation>

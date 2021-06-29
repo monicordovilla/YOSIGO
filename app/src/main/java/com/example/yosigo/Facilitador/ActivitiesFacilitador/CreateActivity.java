@@ -45,7 +45,6 @@ import static android.app.Activity.RESULT_OK;
 
 public class CreateActivity extends Fragment {
 
-    private EditText nombre_actividad;
     private final String TAG = "Crear actividad";
     private CategoryListViewModel categoryListViewModel;
     private GoalsListViewModel goalsListViewModel;
@@ -53,6 +52,7 @@ public class CreateActivity extends Fragment {
 
     private View root;
     private String picto, meta, categoría;
+    private EditText nombre_actividad;
     private Button btn_picto, btn_actividad, btn_create;
     private Spinner spinner_categoria, spinner_meta;
     private ImageView preview_picto;
@@ -63,6 +63,7 @@ public class CreateActivity extends Fragment {
     private ArrayList<Uri> uri_activities = new ArrayList<>();
     private ArrayList<String> activities = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
+    private List<String> goals = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,7 +102,7 @@ public class CreateActivity extends Fragment {
         goalsListViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                categories = strings;
+                goals = strings;
                 ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, categories);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_meta.setAdapter(adapter);

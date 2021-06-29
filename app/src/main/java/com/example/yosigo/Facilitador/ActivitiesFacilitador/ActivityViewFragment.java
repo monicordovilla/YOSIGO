@@ -55,7 +55,7 @@ public class ActivityViewFragment extends Fragment {
     private View root;
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
-    private Button btn_go_feedback, btn_go_valoracion, btn_go_mensajes;
+    private Button btn_go_feedback, btn_go_valoracion, btn_go_mensajes, btn_go_modificar;
     private ListView list_actividades, list_usurarios;
 
     private List<String> participantes = new ArrayList<>();
@@ -107,6 +107,7 @@ public class ActivityViewFragment extends Fragment {
         btn_go_feedback = root.findViewById(R.id.button_go_retroalimentacion);
         btn_go_valoracion = root.findViewById(R.id.button_go_valoracion);
         btn_go_mensajes = root.findViewById(R.id.button_go_mensajes);
+        btn_go_modificar = root.findViewById(R.id.button_go_modificar);
 
         btn_go_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +133,15 @@ public class ActivityViewFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("param1", mParam1);
                 Navigation.findNavController(view).navigate(R.id.action_activityViewFragment_to_chatUsersListFragment, bundle);
+            }
+        });
+
+        btn_go_modificar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", mParam1);
+                Navigation.findNavController(view).navigate(R.id.action_activityViewFragment_to_modifyActivityFragment, bundle);
             }
         });
 

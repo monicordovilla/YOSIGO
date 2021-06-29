@@ -53,7 +53,6 @@ public class PersonasViewModel extends ViewModel {
                         if (document_facilitador.exists()) {
                             List<String> idArray = (List<String>) document_facilitador.get("Personas");
                             for (String id:idArray) {
-                                Log.d(TAG, "Viendo: " + id);
                                 fb.collection("users")
                                         .document(id)
                                         .get()

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".Facilitador.ActivitiesFacilitador.ModifyActivityFragment">
+
+    <TextView
+        android:id="@+id/textView_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Nombre actividad"/>
+
+    <EditText
+        android:id="@+id/input_name_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"  />
+
+    <LinearLayout
+        android:id="@+id/up_picto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/textView_imagen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="Imagen" />
+
+        <Button
+            android:id="@+id/btn_up_picto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subir imagen" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/activity_preview_picto"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"/>
+
+    <LinearLayout
+        android:id="@+id/up_meta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView_meta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="Meta" />
+
+        <Spinner
+            android:id="@+id/spinner_up_meta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="Selecciona meta" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/up_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/textView_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="Categoría" />
+
+        <Spinner
+            android:id="@+id/spinner_up_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="Selecciona categoria" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/up_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/textView_actividad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="Material" />
+
+        <Button
+            android:id="@+id/btn_up_actividad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subir material" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+        <Button
+            android:id="@+id/btn_create_activity"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear actividad"/>
+    </LinearLayout>
+
+</LinearLayout>
