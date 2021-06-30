@@ -184,7 +184,6 @@ public class ActivityViewFragment extends Fragment {
 
                                                             if (new Date().after(fecha_inicio) && new Date().before(fecha_fin)) {
                                                                 participantes.add(full_name);
-                                                                Log.d(TAG, "Participante: " + full_name);
                                                             }
                                                         }
                                                     }

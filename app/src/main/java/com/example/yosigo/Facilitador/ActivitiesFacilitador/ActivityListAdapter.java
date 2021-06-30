@@ -216,11 +216,6 @@ public class ActivityListAdapter extends ArrayAdapter {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 borrarMensajes(Activityid, document.getId());
-
-                                FirebaseFirestore.getInstance()
-                                        .collection("activities").document(Activityid)
-                                        .collection("Chat").document(document.getId())
-                                        .delete();
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -248,6 +243,11 @@ public class ActivityListAdapter extends ArrayAdapter {
                                         .collection("Messages").document(document.getId())
                                         .delete();
                             }
+
+                            FirebaseFirestore.getInstance()
+                                    .collection("activities").document(Activityid)
+                                    .collection("Chat").document(ChatID)
+                                    .delete();
                         }
                     }
                 });
