@@ -65,11 +65,23 @@ public class itemAdapter extends ArrayAdapter {
 
         //Buttons
         Button btn_delete = (Button) rowView.findViewById(R.id.delete_activity);
+        Button btn_modify = (Button) rowView.findViewById(R.id.modify_activity);
+
+        if(type.equals("Groups")) {
+            btn_modify.setVisibility(View.VISIBLE);
+            btn_modify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("param1", valuesList.get(name));
+                    Navigation.findNavController(view).navigate(R.id.action_nav_group_to_modifyGroupsFragment, bundle);
+                }
+            });
+        }
 
         btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if(type.equals("Groups")) {
                     FirebaseFirestore.getInstance().collection("groups").document(valuesList.get(name))
                         .delete()

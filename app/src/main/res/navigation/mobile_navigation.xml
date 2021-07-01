@@ -232,6 +232,9 @@
         <action
             android:id="@+id/action_nav_group_self"
             app:destination="@id/nav_group" />
+        <action
+            android:id="@+id/action_nav_group_to_modifyGroupsFragment"
+            app:destination="@id/modifyGroupsFragment" />
     </fragment>
     <fragment
         android:id="@+id/createGroupFragment"
@@ -255,5 +258,14 @@
         <action
             android:id="@+id/action_modifyActivityFragment_to_activityViewFragment"
             app:destination="@id/activityViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/modifyGroupsFragment"
+        android:name="com.example.yosigo.Facilitador.Groups.ModifyGroupsFragment"
+        android:label="Modificar grupo"
+        tools:layout="@layout/fragment_modify_groups" >
+        <action
+            android:id="@+id/action_modifyGroupsFragment_to_nav_group"
+            app:destination="@id/nav_group" />
     </fragment>
 </navigation>
