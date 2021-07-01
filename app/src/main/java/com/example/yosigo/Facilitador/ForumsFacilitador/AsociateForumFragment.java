@@ -176,13 +176,20 @@ public class AsociateForumFragment extends Fragment {
                                         list_personas.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
                                         if(idArray != null) {
-                                            for (int i = 0; i < users.size(); i++) {
-                                                for (String id : idArray) {
-                                                    if (strings.get(i).equals(id)) {
-                                                        list_personas.setItemChecked(i, true);
+                                            personasViewModel.getUsers().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>(){
+                                                @Override
+                                                public void onChanged(Map<String, String> strings) {
+                                                    userMap = strings;
+
+                                                    for (int i = 0; i < users.size(); i++) {
+                                                        for (String id : idArray) {
+                                                            if (userMap.get(users.get(i)).equals(id)) {
+                                                                list_personas.setItemChecked(i, true);
+                                                            }
+                                                        }
                                                     }
                                                 }
-                                            }
+                                            });
                                         }
                                     }
                                 });

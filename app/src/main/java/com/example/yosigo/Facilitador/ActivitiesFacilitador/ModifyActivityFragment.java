@@ -71,7 +71,7 @@ public class ModifyActivityFragment extends Fragment {
     private CategoryListViewModel categoryListViewModel;
     private GoalsListViewModel goalsListViewModel;
     private String mParam1;
-    private String picto, meta, categoría;
+    private String picto_antigua, meta, categoría;
     private Uri uri_picto;
     private Integer index=0;
     private List<String> categories = new ArrayList<>();
@@ -227,7 +227,9 @@ public class ModifyActivityFragment extends Fragment {
                     return;
                 }
                 nombre_actividad.setText(document.getData().get("Nombre").toString());
+
                 if(document.getData().get("Pictograma") != null) {
+                    picto_antigua = (String) document.getData().get("Pictograma");
                     storageRef.child((String) document.getData().get("Pictograma")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
@@ -312,6 +314,9 @@ public class ModifyActivityFragment extends Fragment {
 
         //Guardar fotos en firestore storage
         if (uri_picto != null) {
+            if(picto_antigua != null ) {
+                storageRef.child(picto_antigua).delete();
+            }
             StorageReference filePath_picto = storageRef.child("pictogramas").child(uri_picto.getLastPathSegment());
             filePath_picto.putFile(uri_picto).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
