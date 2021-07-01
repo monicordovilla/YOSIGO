@@ -72,14 +72,18 @@ public class MaterialAdapter extends ArrayAdapter {
             }
         });
 
-        btn_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                storageRef.child(name).delete();
-                FirebaseFirestore.getInstance().collection("activities").document(id)
-                        .update("Tarea", FieldValue.arrayRemove(name));
-            }
-        });
+        if(id == null) {
+            btn_delete.setVisibility(View.GONE);
+        } else {
+            btn_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    storageRef.child(name).delete();
+                    FirebaseFirestore.getInstance().collection("activities").document(id)
+                            .update("Tarea", FieldValue.arrayRemove(name));
+                }
+            });
+        }
 
         return rowView;
     }

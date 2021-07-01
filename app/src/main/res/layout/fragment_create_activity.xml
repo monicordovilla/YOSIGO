@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:orientation="vertical"
     tools:context=".Facilitador.ActivitiesFacilitador.CreateActivity">
 
     <TextView
@@ -13,27 +13,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Nombre actividad"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Nombre actividad" />
 
     <EditText
         android:id="@+id/input_name_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@+id/textView_nombre"  />
+        android:inputType="text" />
 
     <LinearLayout
         android:id="@+id/up_picto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/up_category">
+        android:layout_marginTop="16dp" >
 
         <TextView
             android:id="@+id/textView_imagen"
@@ -55,10 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_name_activity">
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/textView_meta"
@@ -78,10 +67,7 @@
         android:id="@+id/up_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/up_meta">
+        android:layout_marginTop="16dp" >
 
         <TextView
             android:id="@+id/textView_category"
@@ -102,19 +88,13 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="8dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/up_picto" />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/up_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_preview_picto" >
+        android:layout_marginTop="16dp" >
 
         <TextView
             android:id="@+id/textView_actividad"
@@ -130,15 +110,16 @@
             android:text="Subir material" />
     </LinearLayout>
 
+    <ListView
+        android:id="@+id/material_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fadeScrollbars="false" />
+
     <Button
         android:id="@+id/btn_create_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Crear actividad"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="Crear actividad" />
+</LinearLayout>

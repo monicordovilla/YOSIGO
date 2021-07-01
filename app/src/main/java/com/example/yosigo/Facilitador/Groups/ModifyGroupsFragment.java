@@ -122,36 +122,40 @@ public class ModifyGroupsFragment extends Fragment {
                             if (document_facilitador.exists()) {
                                 List<String> idArray = (List<String>) document_facilitador.get("Personas");
                                 for (String id:idArray) {
-                                    fb.collection("users")
-                                            .document(id)
-                                            .get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task_persona) {
-                                                    DocumentSnapshot document_persona = task_persona.getResult();
-                                                    String full_name = document_persona.getData().get("Nombre") + " " +
-                                                            document_persona.getData().get("Apellidos") + " (" +
-                                                            document_persona.getData().get("Apodo") + ")";
-                                                    users.add(full_name);
-                                                    userMap.put(full_name, document_persona.getId());
-
-                                                    list.setAdapter(new ArrayAdapter<String>(
-                                                                    root.getContext(),
-                                                                    android.R.layout.simple_list_item_multiple_choice,
-                                                                    users
-                                                            )
-                                                    );
-                                                    list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-                                                }
-                                            });
+                                    getUserInfo(id);
                                 }
-                                getData();
                             } else {
                                 Log.d(TAG, "No such document");
                             }
                         } else {
                             Log.d(TAG, "get failed with ", task_facilitador.getException());
                         }
+                    }
+                });
+    }
+
+    private void getUserInfo(String id){
+        fb.collection("users")
+                .document(id)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task_persona) {
+                        DocumentSnapshot document_persona = task_persona.getResult();
+                        String full_name = document_persona.getData().get("Nombre") + " " +
+                                document_persona.getData().get("Apellidos") + " (" +
+                                document_persona.getData().get("Apodo") + ")";
+                        users.add(full_name);
+                        userMap.put(full_name, document_persona.getId());
+
+                        list.setAdapter(new ArrayAdapter<String>(
+                                        root.getContext(),
+                                        android.R.layout.simple_list_item_multiple_choice,
+                                        users
+                                )
+                        );
+                        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                        getData();
                     }
                 });
     }

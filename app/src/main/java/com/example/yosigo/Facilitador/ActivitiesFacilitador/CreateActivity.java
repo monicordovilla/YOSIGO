@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -56,10 +57,11 @@ public class CreateActivity extends Fragment {
     private Button btn_picto, btn_actividad, btn_create;
     private Spinner spinner_categoria, spinner_meta;
     private ImageView preview_picto;
+    private ListView list;
 
     private static final int PICTO_INTENT = 1;
     private static final int ACT_INTENT = 2;
-    private Uri uri_picto, uri_meta;
+    private Uri uri_picto;
     private ArrayList<Uri> uri_activities = new ArrayList<>();
     private ArrayList<String> activities = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
@@ -88,6 +90,7 @@ public class CreateActivity extends Fragment {
 
         //Obtenemos referencia de las previsualizacione
         preview_picto = root.findViewById(R.id.activity_preview_picto);
+        list = root.findViewById(R.id.material_list);
 
         categoryListViewModel.getNames().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
             @Override
@@ -103,7 +106,7 @@ public class CreateActivity extends Fragment {
             @Override
             public void onChanged(List<String> strings) {
                 goals = strings;
-                ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, categories);
+                ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_spinner_item, goals);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_meta.setAdapter(adapter);
             }
@@ -204,6 +207,15 @@ public class CreateActivity extends Fragment {
         });
     }
 
+    private void setList(List<String> Tarea){
+        MaterialAdapter adapter = new MaterialAdapter(
+                root.getContext(),
+                null,
+                Tarea
+        );
+        list.setAdapter(adapter);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -221,6 +233,8 @@ public class CreateActivity extends Fragment {
                     String activityPath = filePath.getPath();
                     Log.d(TAG, "Subido: " + activityPath);
                     activities.add(activityPath);
+
+                    setList(activities);
                 }
             });
         }
