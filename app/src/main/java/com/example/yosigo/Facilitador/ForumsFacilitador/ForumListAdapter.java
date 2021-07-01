@@ -63,6 +63,8 @@ public class ForumListAdapter extends ArrayAdapter {
         Button btn_watch = (Button) rowView.findViewById(R.id.watch_activity);
         Button btn_asociate = (Button) rowView.findViewById(R.id.asociate_activity);
         Button btn_delete = (Button) rowView.findViewById(R.id.delete_activity);
+        Button btn_modify = (Button) rowView.findViewById(R.id.modify_forum);
+        btn_modify.setVisibility(View.VISIBLE);
 
         btn_watch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +82,15 @@ public class ForumListAdapter extends ArrayAdapter {
                 Bundle bundle = new Bundle();
                 bundle.putString("param1", valuesList.get(name));
                 Navigation.findNavController(view).navigate(R.id.action_nav_forums_to_asociateForumFragment, bundle);
+            }
+        });
+
+        btn_modify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", valuesList.get(name));
+                Navigation.findNavController(view).navigate(R.id.action_nav_forums_to_modifyForumFragment, bundle);
             }
         });
 

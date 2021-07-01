@@ -71,7 +71,6 @@ public class ModifyGroupsFragment extends Fragment {
      * @param param1 Parameter 1.
      * @return A new instance of fragment ModifyGroupsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ModifyGroupsFragment newInstance(String param1) {
         ModifyGroupsFragment fragment = new ModifyGroupsFragment();
         Bundle args = new Bundle();
@@ -207,8 +206,8 @@ public class ModifyGroupsFragment extends Fragment {
             }
         }
 
-        if(usuarios.size() == 0){
-            Toast.makeText(getContext(), "No se han introducido ningún usuario", Toast.LENGTH_LONG).show();
+        if(usuarios.size() < 2){
+            Toast.makeText(getContext(), "Debe introducir al menos 2 usuarios", Toast.LENGTH_LONG).show();
             return;
         }
 

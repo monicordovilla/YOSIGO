@@ -103,8 +103,8 @@ public class CreateGroupFragment extends Fragment {
             }
         }
 
-        if(usuarios.size() == 0){
-            Toast.makeText(getContext(), "No se han introducido ningún usuario", Toast.LENGTH_LONG).show();
+        if(usuarios.size() < 2){
+            Toast.makeText(getContext(), "Debe introducir al menos 2 usuarios", Toast.LENGTH_LONG).show();
             return;
         }
 

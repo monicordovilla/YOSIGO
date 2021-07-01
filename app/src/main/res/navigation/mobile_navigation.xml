@@ -63,6 +63,9 @@
         <action
             android:id="@+id/action_nav_forums_self"
             app:destination="@id/nav_forums" />
+        <action
+            android:id="@+id/action_nav_forums_to_modifyForumFragment"
+            app:destination="@id/modifyForumFragment" />
     </fragment>
     <fragment
         android:id="@+id/createActivity"
@@ -267,5 +270,19 @@
         <action
             android:id="@+id/action_modifyGroupsFragment_to_nav_group"
             app:destination="@id/nav_group" />
+    </fragment>
+    <fragment
+        android:id="@+id/modifyForumFragment"
+        android:name="com.example.yosigo.Facilitador.ForumsFacilitador.ModifyForumFragment"
+        android:label="Modificar foro"
+        tools:layout="@layout/fragment_modify_forum" >
+        <argument
+            android:name="param1"
+            app:argType="string"
+            android:defaultValue="0"
+            />
+        <action
+            android:id="@+id/action_modifyForumFragment_to_nav_forums"
+            app:destination="@id/nav_forums" />
     </fragment>
 </navigation>
