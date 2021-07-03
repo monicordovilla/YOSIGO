@@ -15,10 +15,12 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view_persona"
+        android:theme="@style/NavigationTheme"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
+        app:itemIconSize="80dp"
         app:menu="@menu/activity_main_drawer_persona" />
 </androidx.drawerlayout.widget.DrawerLayout>

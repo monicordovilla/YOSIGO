@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        facilitador = true;
+        facilitador = false;
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
             DrawerLayout drawer = findViewById(R.id.drawer_layout_persona);
             NavigationView navigationView = findViewById(R.id.nav_view_persona);
+            navigationView.setItemIconTintList(null);
 
             // Passing each menu ID as a set of Ids because each
             // menu should be considered as top level destinations.

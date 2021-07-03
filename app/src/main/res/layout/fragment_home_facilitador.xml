@@ -69,4 +69,15 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_facilitador_metas" />
+
+    <Button
+        android:id="@+id/button_facilitador_logout"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
+        android:text="cerrar sesión"
+        android:textColor="@color/white"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         //Recuperamos el email
         obtenerEmail();
-        guardarSesion(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        //guardarSesion(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
     private void obtenerEmail(){
