@@ -21,4 +21,6 @@
     <string name="goals">Metas</string>
     <string name="calendario">Calendario</string>
     <string name="groups">Grupos</string>
+    <string name="channel_name">Actividad Modificada</string>
+    <string name="channel_description">Canal de notificaciones</string>
 </resources>

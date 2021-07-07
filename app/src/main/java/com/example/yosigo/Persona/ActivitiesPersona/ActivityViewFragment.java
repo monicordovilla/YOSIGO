@@ -1,9 +1,16 @@
 package com.example.yosigo.Persona.ActivitiesPersona;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -35,9 +42,13 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -60,17 +71,18 @@ import java.util.Map;
 public class ActivityViewFragment extends Fragment {
 
     private static final String ARG_PARAM1 = "param1";
-    private static final String TAG = "VER ACTIVIDAD" ;
+    private static final String TAG = "VER ACTIVIDAD";
 
     private String mParam1;
+    private String CHANNEL_ID = "ag5fg54";
     private StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-    private View root;
     private FirebaseFirestore fb = FirebaseFirestore.getInstance();
 
     //Dias semana
     private int flag;
 
     //Elementos de la vista
+    private View root;
     private TextView text_name;
     private ImageView img_picto, img_meta, img_cat;
     private ListView list_actividades;
@@ -127,6 +139,8 @@ public class ActivityViewFragment extends Fragment {
 
         setButton();
         getDatosTarea();
+        createNotificationChannel();
+        notifychanges(this.getContext());
 
         return root;
     }
@@ -320,14 +334,7 @@ public class ActivityViewFragment extends Fragment {
                         }
 
                         if(document.getData().get("Meta") != null) {
-                            storageRef.child((String) document.getData().get("Meta")).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Glide.with(root)
-                                            .load(uri)
-                                            .into(img_meta);
-                                }
-                            });
+                            getGoal((String) document.getData().get("Meta"));
                         }
 
                         if(document.getData().get("Tarea") != null) {
@@ -363,5 +370,86 @@ public class ActivityViewFragment extends Fragment {
             }
         });
     }
+    private void getGoal(String id){
+        fb.collection("goals").document(id)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        storageRef
+                                .child((String) document.getData().get("Pictograma"))
+                                .getDownloadUrl()
+                                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        Glide.with(root)
+                                                .load(uri)
+                                                .into(img_meta);
+                                    }
+                                });
+                    }
+                }
+            }
+        });
+    }
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void notifychanges(Context context){
+        Bitmap icon = BitmapFactory.decodeResource(context.getResources(), R.drawable.cambiar);
+
+
+        fb.collection("activities")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot snapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "listen:error", e);
+                            return;
+                        }
+
+                        for (DocumentChange dc : snapshots.getDocumentChanges()) {
+                            if( dc.getDocument().getId().equals(mParam1) ) {
+                                switch (dc.getType()) {
+                                    case MODIFIED:
+                                        Log.d(TAG, "se ha modificado la actividad");
+                                        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                                                .setSmallIcon(R.drawable.ic_launcher_background)
+                                                .setContentTitle(text_name.getText().toString())
+                                                .setContentText("Modificada la actividad")
+                                                .setLargeIcon(icon)
+                                                .setStyle(new NotificationCompat.BigPictureStyle()
+                                                        .bigPicture(icon)
+                                                        .bigLargeIcon(null))
+                                                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                                        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+                                        // notificationId is a unique int for each notification that you must define
+                                        notificationManager.notify(1, builder.build());
+                                        break;
+                                }
+                            }
+                        }
+
+                    }
+                });
+    }
 }

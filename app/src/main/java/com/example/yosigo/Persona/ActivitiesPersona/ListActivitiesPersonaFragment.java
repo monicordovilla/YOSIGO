@@ -129,7 +129,9 @@ public class ListActivitiesPersonaFragment extends Fragment {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Navigation.findNavController(view).navigate(R.id.action_nav_activities_to_activityViewFragment2);
+                Bundle bundle = new Bundle();
+                bundle.putString("param1", ids.get(position));
+                Navigation.findNavController(view).navigate(R.id.action_nav_activities_to_activityViewFragment2, bundle);
             }
         });
     }
