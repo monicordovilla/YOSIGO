@@ -2,6 +2,7 @@ package com.example.yosigo.Facilitador.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +45,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
+                eliminarSesion();
                 Intent intent = new Intent(getContext(), LoginActivity.class);
                 startActivity(intent);
                 Log.d("CERRAR SESION",
@@ -52,5 +54,16 @@ public class HomeFragment extends Fragment {
         });
 
         return root;
+    }
+
+    public void eliminarSesion() {
+        //Obtenemos referencia del archivo datos
+        SharedPreferences preferencias=getActivity().getSharedPreferences("datos",Context.MODE_PRIVATE);
+        //Creamos un editor para editar el archivo
+        SharedPreferences.Editor editor=preferencias.edit();
+        //Almacenamos en el editor el valor de la sesion
+        editor.putString("sesion", "");
+        //Grabamos en el archivo el contenido de la sesion
+        editor.commit();
     }
 }

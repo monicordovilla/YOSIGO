@@ -2,18 +2,23 @@ package com.example.yosigo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -29,24 +34,89 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String TAG = "Comprobando rol";
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
     boolean facilitador;
     public ImageView toolbar_image;
     public static String sesion;
-    private int secondLeft = 6;
-    Timer timer = new Timer();
+    private String email;
+    private String Uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        facilitador = false;
+        //Obtenemos referencia del archivo datos
+        SharedPreferences preferencias=getSharedPreferences("datos", Context.MODE_PRIVATE);
+        //Extraemos del archivo datos el campo email, si este no existe se devuelve un campo vacío
+        email = preferencias.getString("email","");
+        //Extraemos del archivo datos el campo sesion, si este no existe se devuelve un campo vacío
+        sesion = preferencias.getString("sesion","");
+
+        if(email.equals("")){
+            Log.d(TAG, "No hay email");
+            Intent intent = new Intent (MainActivity.this, SaveEmail.class);
+            startActivity(intent);
+            finish();
+        } else if(sesion.equals("")){
+            Log.d(TAG, "No hay sesión");
+            Intent intent = new Intent (MainActivity.this, SaveEmail.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Log.d(TAG, "sesion" + sesion);
+            DocumentReference docRef = FirebaseFirestore.getInstance()
+                    .collection("users").document(sesion);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            String rol = document.getData().get("Rol").toString();
+
+                            if(rol.equals("Facilitador")){
+                                Log.d(TAG, "Puede ir a inicio facilitador");
+                                setFacilitador();
+                            }
+                            else if(rol.equals("Persona")){
+                                Log.d(TAG, "Puede ir a inicio persona");
+                                setPersona();
+                            }
+                            else{
+                                Log.d(TAG, "Debe darse de alta como facilitador o persona");
+                                Toast.makeText( getApplicationContext(),
+                                        "Pide que te de el administrador de alta", Toast.LENGTH_LONG);
+                                FirebaseAuth.getInstance().signOut();
+                                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        } else {
+                            Log.d(TAG, "No such document");
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } else {
+                        String TAG = "Ha ocurrido un error";
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+
+        /*
+         * GUARDADO PARA DESARROLLO
+         *
+
+        facilitador = true;
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         if(facilitador) {
-            mAuth.signInWithEmailAndPassword("e.monicordovilla@go.ugr.es", "123456").addOnCompleteListener(
+            mAuth.signInWithEmailAndPassword("e.monicordovilla@go.ugr.es", "c4Mc3sCa7").addOnCompleteListener(
                     this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -58,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
             );
 
         } else {
-            mAuth.signInWithEmailAndPassword("monicordovilla@correo.ugr.es", "123456").addOnCompleteListener(
+            mAuth.signInWithEmailAndPassword("monicordovilla@correo.ugr.es", "c4Mc3sCa7").addOnCompleteListener(
                     this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -68,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
             );
-        }
+        }*/
     }
 
     private void setFacilitador(){
@@ -129,32 +199,6 @@ public class MainActivity extends AppCompatActivity {
         //Grabamos en el archivo el contenido de la sesion
         editor.commit();
     }
-
-
-    public void begin(View view) {
-        timer.schedule(task, 1000, 1000);
-    }
-
-    TimerTask task = new TimerTask() {
-
-        @Override
-        public void run() {
-            // TODO Auto-generated method stub
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-                    // TODO Auto-generated method stub
-                    secondLeft--;
-                    Log.d("TIMERTASK","quedan: " + secondLeft);
-                    if (secondLeft < 0) {
-                        timer.cancel();
-                        Log.d("TIMERTASK","Fin de la cuenta regresiva: " + secondLeft);
-                    }
-                }
-            });
-        }
-    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

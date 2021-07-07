@@ -69,7 +69,6 @@ public class LoginActivity extends AppCompatActivity {
 
     /*BOTONES*/
     public void LogIn(View v){
-        password = "123456";
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -82,8 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                             //Obtenermos usuario actual
                             FirebaseUser user = mAuth.getCurrentUser();
                             //Guardamos ID usuario
-                            //Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                            //guardarSesion(Uid);
+                            guardarSesion(user.getUid());
 
                             Intent intent = new Intent (LoginActivity.this, MainActivity.class);
                             startActivity(intent);
